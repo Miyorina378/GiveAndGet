@@ -1,0 +1,25 @@
+.navbar {
+    display: flex;
+    justify-content: space-between; /* Space between left and right */
+    align-items: center; /* Align items vertically in the center */
+    padding: 10px 20px; /* Add some padding for better spacing */
+}
+
+.navbar-left {
+    display: flex;
+}
+
+.navbar_link {
+    margin-right: 20px; /* Add spacing between links */
+    text-decoration: none;
+    color: #000; /* Change color if necessary */
+}
+
+.navbar-right {
+    display: flex;
+    justify-content: flex-end; /* Align items to the right */
+}
+
+button {
+    padding: 10px 20px; /* Button styling */
+}
