@@ -1,25 +1,39 @@
+body {
+    background-color: rgb(27, 26, 26); /* Set background color to black */
+    color: white; /* Set text color to white for visibility */
+}
+
 .navbar {
     display: flex;
     justify-content: space-between; /* Space between left and right */
-    align-items: center; /* Align items vertically in the center */
-    padding: 10px 20px; /* Add some padding for better spacing */
+    align-items: center; /* Align all items vertically in the center */
+    padding: 10px 20px; /* Add padding for spacing */
 }
 
 .navbar-left {
-    display: flex;
+    display: flex; /* Display navbar links in a row */
 }
 
 .navbar_link {
-    margin-right: 20px; /* Add spacing between links */
+    margin-right: 20px; /* Space between the links */
     text-decoration: none;
-    color: #000; /* Change color if necessary */
+    color: #fff; /* White color for links */
 }
 
 .navbar-right {
-    display: flex;
-    justify-content: flex-end; /* Align items to the right */
+    display: flex; /* Display button on the right */
+    align-items: center; /* Center align the button vertically */
 }
 
 button {
     padding: 10px 20px; /* Button styling */
+    background-color: #333; /* Button background */
+    color: white; /* Button text color */
+    border: none; /* Remove border */
+    cursor: pointer; /* Change cursor to pointer on hover */
 }
+
+button:hover {
+    background-color: #555; /* Hover effect for the button */
+}
+

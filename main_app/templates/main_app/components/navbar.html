@@ -1,9 +1,10 @@
 {% load static %}
 <nav class="navbar">
-        <a class = "navbar_link">Give & Get</a>
-        <a class = "navbar_link" href="{% url 'home' %}">home</a>
-        <a class = "navbar_link" href="{% url 'about' %}">About</a>
-</nav>
-<nav class="navbar-right">
-    <button type="button">button</button>
+    <div class="navbar-left">
+        <a class="navbar_link" href="{% url 'home' %}">Home</a>
+        <a class="navbar_link" href="{% url 'about' %}">About</a>
+    </div>
+    <div class="navbar-right">
+        <button type="button">Button</button>
+    </div>
 </nav>
