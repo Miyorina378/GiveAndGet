@@ -1,5 +1,32 @@
 {% extends 'main_app/components/base.html' %}
+{% load static %}
 
 {% block content %}
-<h2>Home</h2>
+<header>
+    <h2>Home</h2>
+    <div class="header-container">
+        <h1>Products</h1>
+        <div class="filter">
+            <button type="button">Sort by</button>
+            <button type="button">Categories</button>
+            <button type="button">Search</button>
+        </div>
+    </div>
+</header>
+  <div class="dummy-products">
+    <div class="dummy-products">
+        <div class="products-card">
+          <img src="{% static 'main_app/images/Dummy-Pic1.webp' %}" alt="Product 1">
+          <h2>Blue Sky Candy</h2>
+          <p>Price: $10.00 | Exchange: Red Lava</p>
+        </div>
+        <div class="products-card">
+          <img src="{% static 'main_app/images/Dummy-Pic1.webp' %}" alt="Product 1">
+          <h2>Blue Sky Candy</h2>
+          <p>Price: $10.00 | Exchange: Red Lava</p>
+        </div>
+      </div>
+      
+  </div>
+  
 {% endblock %}
