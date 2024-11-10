@@ -25,7 +25,7 @@ GiveAndGet is a web application for buy, sell or trade anything you wanted.
   
   2.[Link to Github Repo](https://github.com/Miyorina378/GiveAndGet.git)
   
-  3.[Link to Python anywhere]()
+  3.[Link to Pythonanywhere](https://miyorina.pythonanywhere.com/)
   
   4.[Link to Trello](https://trello.com/b/3iOxyUke/giveandget)
   
