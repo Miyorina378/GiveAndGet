@@ -17,7 +17,7 @@ This repository is created for CN331's Project.
 
 GiveAndGet is a web application for buy, sell or trade anything you wanted.
 
-# Iteration0
+# Iteration 0
 ## Task
   1.ส่งRequirement report (ต้นฉบับ และ PDF)
   * [Link to Progress report (ต้นฉบับ)]()
