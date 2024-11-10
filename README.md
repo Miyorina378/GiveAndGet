@@ -1,3 +1,10 @@
+# Home
+* [CN331 Project](https://github.com/Miyorina378/GiveAndGet/edit/main/README.md#cn331-project)
+* [About](https://github.com/Miyorina378/GiveAndGet/edit/main/README.md#about)
+* [Iteration0](https://github.com/Miyorina378/GiveAndGet/edit/main/README.md#iteration0)
+  * [Task](https://github.com/Miyorina378/GiveAndGet/edit/main/README.md#task)
+* [Team member](https://github.com/Miyorina378/GiveAndGet/edit/main/README.md#team-member)
+
 # CN331 Project
 
 ### main_app ไว้ดูแลเรื่องเข้าหน้าเว็บต่างๆ
@@ -17,8 +24,18 @@ GiveAndGet is a web application for buy, sell or trade anything you wanted.
 # Iteration0
 ## Task
   1.ส่งRequirement report (ต้นฉบับ และ PDF)
+  * [Link to Progress report (ต้นฉบับ)]()
+  * [Link to Progress report (PDF)]()
+  
+  2.[Link to Github Repo](https://github.com/Miyorina378/GiveAndGet.git)
+  
+  3.[Link to Python anywhere]()
+  
+  4.[Link to Trello](https://trello.com/b/3iOxyUke/giveandget)
+  
+  5.[Link to Powerpoint iteration0]()
 
-# สมาชิก
+# Team member
 * นาย วงศธร ดีโรจนวงศ์ 6510615278
 * นาย ภูริทัตตุ์ เลิศกิจไพศาล 6610685049
 * นาย ฉัตรชัย สีคราม 6610685064
