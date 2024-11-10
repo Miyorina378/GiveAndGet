@@ -10,8 +10,9 @@
 </head>
 <body>
     <a href="{% url 'home' %}">
-        <button type="button">Back</button>
+        <button type="button" class="back-btn">Back</button>
     </a>
+
     <div class="login-body">
         <div class="login-box">
             <h3>Login</h3>
@@ -20,9 +21,15 @@
                 {{ form.as_p }}
                 <input type="hidden" name="next" value="{{ request.GET.next }}">
                 <button type="submit">Login</button>
+                <h2>OR</h2>
             </form>
+            <a href="{% url 'register' %}">
+                <button type="button" class="signup-btn">Sign Up</button>
+            </a>
         </div>
     </div>
 </body>
 </html>
+
+
 

@@ -1,27 +1,39 @@
-html, body {
-    height: 100%;  /* Make sure the height covers the entire viewport */
+/* Body Settings */
+body {
+    height: 100%;  /* Full viewport height */
     margin: 0;
     padding: 0;
+    font-family: Arial, sans-serif;  /* Adding a default font family */
 }
 
-a button {
+/* Link Styling for Buttons */
+a {
+    text-decoration: none;  /* Remove underline from anchor links */
+}
+
+/* Back Button Styling */
+.back-btn {
     position: absolute;
-    top: 10px;  /* Distance from the top */
-    left: 30px;  /* Distance from the left */
+    top: 20px;  /* Distance from the top */
+    left: 20px;  /* Distance from the left */
     padding: 10px 20px;
-    width: auto;  /* Let the width be determined by the content */
     background-color: #333;  /* Dark background for button */
     color: white;
     border: none;
     cursor: pointer;
     text-align: center;
     display: inline-block;  /* Ensure the button doesn't stretch */
+    width: auto;  /* Let the width be determined by the content */
+    border-radius: 5px;  /* Rounded corners for the button */
+    font-size: 14px;  /* Set a standard font size */
 }
 
-a button:hover {
+.back-btn:hover {
     background-color: #555;  /* Hover effect */
 }
 
+
+/* Main Body Styling */
 .login-body {
     background-color: rgb(24, 23, 23);  /* Dark background */
     display: flex;
@@ -31,31 +43,40 @@ a button:hover {
     margin: 0;
 }
 
+/* Login Box Styling */
 .login-box {
-    background-color: rgb(187, 235, 187);  /* Light green box background */
+    background-color: rgb(187, 235, 187);  /* Light green background */
     padding: 40px;
     border-radius: 20px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);  /* Slight shadow for depth */
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);  /* Soft shadow for depth */
     width: 300px;
     text-align: center;
+    position: relative;  /* Needed for absolute positioning of Back button */
+    border: 6px solid rgb(156, 235, 156);  /* Dark green border */
 }
 
+
+/* Heading Style */
 h3 {
     margin-bottom: 20px;
     font-size: 24px;
     color: #333;  /* Darker color for the title */
 }
 
+/* Form Styling */
 form {
     display: flex;
-    flex-direction: column;  /* Stack the input fields vertically */
+    flex-direction: column;  /* Stack input fields vertically */
+    width: 100%;
 }
 
+/* Form Field Styling */
 form p {
     text-align: left;
     color: #333;  /* Ensure label text is readable */
 }
 
+/* Input Fields Styling */
 input[type="text"], input[type="password"], input[type="email"] {
     width: 100%;
     padding: 10px;
@@ -64,16 +85,42 @@ input[type="text"], input[type="password"], input[type="email"] {
     border-radius: 5px;
 }
 
+/* Submit Button Styling */
 button {
     padding: 10px 20px;
     background-color: #333;
     color: white;
     border: none;
     cursor: pointer;
+    border-radius: 5px;
     margin-top: 20px;
-    width: 100%;  /* Button spans the full width of the form */
+    width: 100%;  /* Button spans full width of the form */
 }
 
+/* Button Hover Effect */
 button:hover {
     background-color: #555;  /* Change background color on hover */
 }
+
+/* Space between the Login button and the "OR" divider */
+h2 {
+    margin: 20px 0;  /* Space around the OR divider */
+    color: #333;  /* Color for the OR heading */
+}
+
+/* Sign Up Button Styling */
+.signup-btn {
+    padding: 10px 20px;
+    background-color: #333;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    width: 100%;  /* Make Sign Up button as wide as the login button */
+    margin-top: 0px;  /* Space between OR and Sign Up button */
+}
+
+.signup-btn:hover {
+    background-color: #555;  /* Hover effect */
+}
+
