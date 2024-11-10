@@ -6,7 +6,7 @@
 
 ![Login](README_images/Login.png)
 
-![SignUp](README_images\SignUp.png)
+![SignUp](README_images/SignUp.png)
 
 # About 
 
