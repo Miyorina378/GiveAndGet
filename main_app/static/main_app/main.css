@@ -1,19 +1,22 @@
-
+/* General Body Styles */
 body {
     background-color: rgb(24, 23, 23); 
-    color: aliceblue; 
+    color: aliceblue;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
 }
 
-/* Navbar*/
+/* Navbar */
 .navbar {
     display: flex;
-    justify-content: space-between; 
-    align-items: center; 
-    padding: 10px 20px; 
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
 }
 
 .navbar_link {
-    margin-right: 20px; 
+    margin-right: 20px;
     text-decoration: none;
     color: #fff; /* White links */
 }
@@ -22,12 +25,11 @@ body {
 .navbar-right {
     display: flex;
     align-items: center;
-    gap: 5px; /* Adds space between the buttons */
+    gap: 5px;
 }
 
-
 .navbar_link:hover {
-    color: #00bfff; /* Change text color to light blue */
+    color: #00bfff;
 }
 
 button {
@@ -46,6 +48,7 @@ button:hover {
 header {
     padding: 5px 20px;
     margin: 20px;
+    text-align: center;
 }
 
 /* Header Container for Products and Filters */
@@ -57,10 +60,7 @@ header {
     align-items: center;
 }
 
-h1 {
-    margin: 0;
-}
-
+/* Dummy Products Layout */
 .dummy-products {
     display: flex;
     justify-content: center;
@@ -92,6 +92,18 @@ h1 {
 .products-card h2, .products-card p {
     margin: 10px 0;
 }
+
+/* About Page Specific Styles */
+.about .header p, .about .text p, .about .team-text p {
+    font-size: 16px;
+    line-height: 1.6;
+    color: #333;
+}
+
+
+
+
+
 
 
 

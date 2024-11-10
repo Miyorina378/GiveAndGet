@@ -22,12 +22,12 @@ body {
 .navbar-right {
     display: flex;
     align-items: center;
-    gap: 5px; /* Adds space between the buttons */
+    gap: 5px;
 }
 
 
 .navbar_link:hover {
-    color: #00bfff; /* Change text color to light blue */
+    color: #00bfff;
 }
 
 button {
@@ -55,10 +55,6 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-}
-
-h1 {
-    margin: 0;
 }
 
 .dummy-products {
@@ -92,6 +88,58 @@ h1 {
 .products-card h2, .products-card p {
     margin: 10px 0;
 }
+
+/* About */
+/* General page styling */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+/* Header section */
+header {
+    text-align: center;
+    margin-top: 50px;
+}
+
+/* General text container */
+.header, .text, .team-text {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    text-align: center;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Styling for each section */
+.header p, .text p, .team-text p {
+    font-size: 16px;
+    line-height: 1.6;
+    color: #333;
+}
+
+/* Styling for the 'Our Team' section */
+.team-text h3 {
+    font-size: 24px;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.team-text p {
+    font-size: 16px;
+    color: #555;
+}
+
+.team-text {
+    margin-top: 30px;
+}
+
+
+
 
 
 
