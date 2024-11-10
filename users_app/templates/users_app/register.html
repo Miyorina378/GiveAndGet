@@ -1,0 +1,46 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="{% static 'users_app/login.css' %}">
+</head>
+<body>
+    <a href="{% url 'login' %}">
+        <button type="button">Back</button>
+    </a>
+    <div class="login-body">
+        <div class="login-box">
+            <h3>Register</h3>
+            <form method="post">
+                {% csrf_token %}
+                <div class="form-field">
+                    {{ form.email.label_tag }}
+                    {{ form.email }}
+                    {{ form.email.errors }}
+                </div>
+                <div class="form-field">
+                    {{ form.username.label_tag }}
+                    {{ form.username }}
+                    {{ form.username.errors }}
+                </div>
+                <div class="form-field">
+                    {{ form.password1.label_tag }}
+                    {{ form.password1 }}
+                    {{ form.pasword1.errors }}
+                </div>
+                <div class="form-field">
+                    {{ form.password2.label_tag }}
+                    {{ form.password2 }}
+                    {{ form.pasword2.errors }}
+                </div>
+                <input type="hidden" name="next" value="{{ request.GET.next }}">
+                <button type="submit">Register</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
