@@ -1,0 +1,13 @@
+{% block content %}
+<div ok>
+    <button type = 'submit'>back</button>
+    <h3>Login</h3>
+    <form action="{% url 'login'%}" method ='post'>
+        {% csrf_token %}
+        {{ form.as_p }}
+        <p>
+            <button type='submit'>Login</button>
+        </p>
+    </form>
+</div>
+{% endblock %}
