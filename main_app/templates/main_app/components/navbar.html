@@ -4,7 +4,20 @@
         <a class="navbar_link" href="{% url 'home' %}">Home</a>
         <a class="navbar_link" href="{% url 'about' %}">About</a>
     </div>
+    {% if user.is_authenticated %}
     <div class="navbar-right">
-        <button type="button">Login</button>
+        <button type="submit">Chat</button>
+        <button type="submit">My Account</button>
+        <form action="{% url 'logout' %}" method="post">
+            {% csrf_token %}
+            <button type="submit">Logout</button>
+        </form>
     </div>
+    {% else %}
+    <div class="navbar-right">
+        <a href="{% url 'login' %}">
+            <button type="submit">Login</button>
+        </a>
+    </div>
+    {% endif %}
 </nav>

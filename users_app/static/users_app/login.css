@@ -1,42 +1,41 @@
 html, body {
-    height: 100%;
+    height: 100%;  /* Make sure the height covers the entire viewport */
     margin: 0;
     padding: 0;
 }
 
 a button {
     position: absolute;
-    top: 10px; /* Distance from the top */
-    left: 30px; /* Distance from the left */
+    top: 10px;  /* Distance from the top */
+    left: 30px;  /* Distance from the left */
     padding: 10px 20px;
-    width: auto; /* Let the width be determined by the content */
-    background-color: #333; /* Dark background for button */
+    width: auto;  /* Let the width be determined by the content */
+    background-color: #333;  /* Dark background for button */
     color: white;
     border: none;
     cursor: pointer;
     text-align: center;
-    display: inline-block; /* Make it inline so it doesn't stretch */
+    display: inline-block;  /* Ensure the button doesn't stretch */
 }
 
 a button:hover {
-    background-color: #555; /* Hover effect */
+    background-color: #555;  /* Hover effect */
 }
 
-
 .login-body {
-    background-color: rgb(24, 23, 23);
+    background-color: rgb(24, 23, 23);  /* Dark background */
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100vh;
+    min-height: 100vh;  /* Full viewport height */
     margin: 0;
 }
 
 .login-box {
-    background-color: rgb(187, 235, 187);
+    background-color: rgb(187, 235, 187);  /* Light green box background */
     padding: 40px;
     border-radius: 20px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);  /* Slight shadow for depth */
     width: 300px;
     text-align: center;
 }
@@ -44,22 +43,23 @@ a button:hover {
 h3 {
     margin-bottom: 20px;
     font-size: 24px;
-    color: #333;
+    color: #333;  /* Darker color for the title */
 }
 
 form {
     display: flex;
-    flex-direction: column;
+    flex-direction: column;  /* Stack the input fields vertically */
 }
 
 form p {
     text-align: left;
+    color: #333;  /* Ensure label text is readable */
 }
 
-input[type="text"], input[type="password"] {
+input[type="text"], input[type="password"], input[type="email"] {
     width: 100%;
     padding: 10px;
-    margin: 10px 0;
+    margin: 10px 0;  /* Vertical space between input fields */
     border: 1px solid #ccc;
     border-radius: 5px;
 }
@@ -71,9 +71,9 @@ button {
     border: none;
     cursor: pointer;
     margin-top: 20px;
-    width: 100%;
+    width: 100%;  /* Button spans the full width of the form */
 }
 
 button:hover {
-    background-color: #555; 
+    background-color: #555;  /* Change background color on hover */
 }

@@ -22,7 +22,9 @@ body {
 .navbar-right {
     display: flex;
     align-items: center;
+    gap: 5px; /* Adds space between the buttons */
 }
+
 
 .navbar_link:hover {
     color: #00bfff; /* Change text color to light blue */
