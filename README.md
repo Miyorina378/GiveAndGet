@@ -7,8 +7,10 @@
 ![G&G](https://github.com/user-attachments/assets/ba42d690-8d31-4abd-a4dc-69ed5e6d7c41)
 
 # About 
-### This repository is created for CN331's Project.
-### GiveAndGet is a web application for buy,sell or trade anything you wanted.
+
+This repository is created for CN331's Project.
+
+GiveAndGet is a web application for buy,sell or trade anything you wanted.
 
 # Iteration0
 ## Task
