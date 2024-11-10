@@ -28,7 +28,7 @@ GiveAndGet is a web application for buy, sell or trade anything you wanted.
   
   4.[Link to Trello](https://trello.com/b/3iOxyUke/giveandget)
   
-  5.[Link to Powerpoint iteration 0](https://drive.google.com/file/d/1sLqOpI3fmwP1zSH_jK4vOgspVcf6TdpJ/view?usp=sharing)
+  5.[Link to Presentation iteration 0](https://drive.google.com/file/d/1sLqOpI3fmwP1zSH_jK4vOgspVcf6TdpJ/view?usp=sharing)
 
 # Team member
 * นาย วงศธร ดีโรจนวงศ์ 6510615278
