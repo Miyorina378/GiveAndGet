@@ -12,7 +12,7 @@
 
 This repository is created for CN331's Project.
 
-GiveAndGet is a web application for buy,sell or trade anything you wanted.
+GiveAndGet is a web application for buy, sell or trade anything you wanted.
 
 # Iteration0
 ## Task
