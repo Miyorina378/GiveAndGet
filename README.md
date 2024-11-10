@@ -1,9 +1,9 @@
 # Home
-* [CN331 Project](https://github.com/Miyorina378/GiveAndGet/edit/main/README.md#cn331-project)
-* [About](https://github.com/Miyorina378/GiveAndGet/edit/main/README.md#about)
-* [Iteration0](https://github.com/Miyorina378/GiveAndGet/edit/main/README.md#iteration0)
-  * [Task](https://github.com/Miyorina378/GiveAndGet/edit/main/README.md#task)
-* [Team member](https://github.com/Miyorina378/GiveAndGet/edit/main/README.md#team-member)
+ * [CN331 Project](#CN331-Project)
+ * [About](#About)
+ * [Iteration0](#Iteration0)
+   * [Task](#Task)
+ * [Team member](#Team-member) 
 
 # CN331 Project
 
