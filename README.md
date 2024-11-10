@@ -4,7 +4,7 @@
 
 ### users_app ไว้ดูแลเรื่อง users
 
-![My Image](![G&G](https://github.com/user-attachments/assets/ba42d690-8d31-4abd-a4dc-69ed5e6d7c41))
+![G&G](https://github.com/user-attachments/assets/ba42d690-8d31-4abd-a4dc-69ed5e6d7c41)
 
 # About 
 ### This repository is created for CN331's Project.
