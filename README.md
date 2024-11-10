@@ -1,7 +1,7 @@
 # Home
  * [CN331 Project](#CN331-Project)
  * [About](#About)
- * [Iteration 0](#Iteration0)
+ * [Iteration 0](#Iteration-0)
    * [Task](#Task)
  * [Team member](#Team-member) 
 
