@@ -1,4 +1,5 @@
 from django.contrib.auth import login
+from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest, HttpResponseRedirect
 from django.urls import reverse
 from django.shortcuts import render
@@ -16,3 +17,8 @@ def register(request: HttpRequest):
     form = RegisterForm()
     context = {'form': form}
     return render(request, 'users_app/register.html', context)
+
+@login_required
+def dashboard(request):
+    username = request.user.username
+    return render(request, "users_app/dashboard.html", {'username': username})
