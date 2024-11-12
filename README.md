@@ -1,7 +1,7 @@
 # Home
  * [CN331 Project](#CN331-Project)
  * [About](#About)
- * [Iteration0](#Iteration0)
+ * [Iteration 0](#Iteration-0)
    * [Task](#Task)
  * [Team member](#Team-member) 
 
@@ -17,11 +17,10 @@ This repository is created for CN331's Project.
 
 GiveAndGet is a web application for buy, sell or trade anything you wanted.
 
-# Iteration0
+# Iteration 0
 ## Task
   1.ส่งRequirement report (ต้นฉบับ และ PDF)
-  * [Link to Progress report (ต้นฉบับ)]()
-  * [Link to Progress report (PDF)]()
+  * [Link to Progress report (PDF)](https://drive.google.com/file/d/1LZlmM6vGSMkpzHwmsox6Volm-2wfZ2UV/view?usp=sharing)
   
   2.[Link to Github Repo](https://github.com/Miyorina378/GiveAndGet.git)
   
@@ -29,7 +28,7 @@ GiveAndGet is a web application for buy, sell or trade anything you wanted.
   
   4.[Link to Trello](https://trello.com/b/3iOxyUke/giveandget)
   
-  5.[Link to Powerpoint iteration0]()
+  5.[Link to Presentation iteration 0](https://drive.google.com/file/d/1r_qTqTDfE0K_NLoxcljS4dakK40agHru/view?usp=sharing)
 
 # Team member
 * นาย วงศธร ดีโรจนวงศ์ 6510615278
