@@ -22,3 +22,7 @@ def register(request: HttpRequest):
 def dashboard(request):
     username = request.user.username
     return render(request, "users_app/dashboard.html", {'username': username})
+
+@login_required
+def chat(request):
+    return render(request, 'chat_app/chat.html')

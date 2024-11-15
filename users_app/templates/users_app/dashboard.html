@@ -2,9 +2,60 @@
 {% load static %}
 {% block content %}
 
-    <header style='text-align: center;'>
-        <h1>Username: {{ user.username }}</h1>
-    </header>
+<header style='text-align: center;'>
+    <h1>Username: {{ user.username }}</h1>
+</header>
+
+<div class="info-box">
+    <div class="info-box-header">
+        <h3>User Information</h3>
+    </div>
+    
+    <div class="info-box-container">
+        <!-- Profile Picture Section -->
+        <div class="profile-section">
+            <div class="profile-section">
+                {% if user.profile_picture %}
+                    <img src="{{ user.profile_picture.url }}" alt="User Picture" class="profile-pic">
+                    <p>Profile picture found: {{ user.profile_picture.url }}</p>
+                {% else %}
+                    <img src="{% static 'main_app/images/default.png' %}" alt="Default User Picture" class="profile-pic">
+                    <p>Using default profile picture.</p>
+                {% endif %}
+            </div>
+            
+            
+        </div> 
+
+        <!-- User Details Section -->
+        <div class="details-section">
+            <button class="edit-btn">Edit</button>
+            <div class="detail-item">
+                <span>Username</span>
+                <span>{{ user.username }}</span>
+            </div>
+            <button class="edit-btn">Edit</button>
+            <div class="detail-item">
+                <span>Email</span>
+                <span>{{ user.email }}</span>
+            </div>
+            <button class="edit-btn">Edit</button>
+            <div class="detail-item">
+                <span>Password</span>
+                <span>••••••••••</span>
+            </div>
+            <div class="detail-item">
+                <span>UID</span>
+                <span>{{user.user_id}}</span>
+            </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer style='text-align: center; margin-top: 20px;'>
+    <h3>My Product</h3>
+</footer>
 
 
 {% endblock %}

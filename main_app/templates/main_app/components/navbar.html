@@ -6,8 +6,12 @@
     </div>
     {% if user.is_authenticated %}
     <div class="navbar-right">
-        <button type="submit">Chat</button>
-        <button type="submit">My Account</button>
+        <form action="{% url 'chat' %}" method="get">
+            <button type="submit">Chat</button>
+        </form>        
+        <form action="{% url 'dashboard' %}" method="get">
+            <button type="submit">{{ user.username }}</button>
+        </form>
         <form action="{% url 'logout' %}" method="post">
             {% csrf_token %}
             <button type="submit">Logout</button>
