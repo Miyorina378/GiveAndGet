@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ product.name }} - Details</title>
+    {% load static %}
+    <script>
+        function goBack() {
+            window.history.back(); // กลับไปหน้าก่อนหน้า
+        }
+    </script>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <button onclick="goBack()">Back</button>
+            <h1>{{ product.name }}</h1>
+        </header>
+        <main>
+            <div class="product-details">
+                <img src="{{ product.image.url }}" alt="{{ product.name }}" style="width: 300px; height: auto; margin-bottom: 20px;">
+                <p><strong>Description:</strong> {{ product.description }}</p>
+                <p><strong>Price:</strong> {{ product.price }}</p>
+                <p><strong>Stock:</strong> {{ product.stock }}</p>
+                <p><strong>Created At:</strong> {{ product.created_at }}</p>
+                <p><strong>Last Updated:</strong> {{ product.updated_at }}</p>
+            </div>
+        </main>
+    </div>
+</body>
+</html>
