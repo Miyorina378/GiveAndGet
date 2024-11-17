@@ -45,4 +45,41 @@
         <a href="{% url 'product_list' %}" class="btn btn-success">My Products</a>
     </div>
 </div>
+
+<script>
+    const editProfileBtn = document.getElementById("editProfileBtn");
+    const saveChangesBtn = document.getElementById("saveChangesBtn");
+    const cancelEditBtn = document.getElementById("cancelEditBtn");
+    const usernameInput = document.getElementById("username");
+    const emailInput = document.getElementById("email");
+
+    // Toggle Edit Mode
+    editProfileBtn.addEventListener("click", () => {
+        usernameInput.disabled = false;
+        emailInput.disabled = false;
+
+        // Show Save and Cancel buttons, hide Edit button
+        saveChangesBtn.classList.remove("d-none");
+        cancelEditBtn.classList.remove("d-none");
+        editProfileBtn.classList.add("d-none");
+
+        // Focus on the username input
+        usernameInput.focus();
+    });
+
+    // Cancel Edit
+    cancelEditBtn.addEventListener("click", () => {
+        usernameInput.disabled = true;
+        emailInput.disabled = true;
+
+        // Revert changes to original values
+        usernameInput.value = "{{ user.username }}";
+        emailInput.value = "{{ user.email }}";
+
+        // Hide Save and Cancel buttons, show Edit button
+        saveChangesBtn.classList.add("d-none");
+        cancelEditBtn.classList.add("d-none");
+        editProfileBtn.classList.remove("d-none");
+    });
+</script>
 {% endblock %}
