@@ -31,27 +31,38 @@ def dashboard(request):
 def chat(request):
     return render(request, 'chat_app/chat.html')
 
+from django.contrib.auth.models import User
+from django.http import JsonResponse
+
 @login_required
 def update_username(request):
-    if request.method == "POST":
+    if request.method == 'POST':
         data = json.loads(request.body)
-        new_username = data.get("username")
-        if new_username:
-            request.user.username = new_username
-            request.user.save()
-            return JsonResponse({"status": "success"})
-    return JsonResponse({"status": "failed"}, status=400)
+        new_username = data.get('username')
+        user = request.user
+        user.username = new_username
+        user.save()
+        request.session['username'] = new_username
+
+        return JsonResponse({"message": "Username updated successfully"})
+    return JsonResponse({"error": "Invalid request"}, status=400)
+
 
 @login_required
 def update_email(request):
-    if request.method == "POST":
+    if request.method == 'POST':
         data = json.loads(request.body)
-        new_email = data.get("email")
-        if new_email:
-            request.user.email = new_email
-            request.user.save()
-            return JsonResponse({"status": "success"})
-    return JsonResponse({"status": "failed"}, status=400)
+        new_email = data.get('email')
+        user = request.user
+        user.email = new_email
+        user.save()
+
+        # Update the session with the new username
+        request.session['username'] = new_email
+
+        return JsonResponse({"message": "Email updated successfully"})
+    return JsonResponse({"error": "Invalid request"}, status=400)
+
 
 
 
