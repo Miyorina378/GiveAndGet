@@ -1,0 +1,72 @@
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    /* จัดให้คอนเทนเนอร์อยู่ตรงกลาง */
+    padding: 20px;
+}
+
+.form-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #333;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.back-button {
+    background-color: #6c757d;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.back-button:hover {
+    background-color: #5a6268;
+}
+
+.add-product-form {
+    background-color: #f8f9fa;
+    border-radius: 10px;
+    padding: 30px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.form-control {
+    margin-bottom: 15px;
+    padding: 10px;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+}
+
+.submit-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.submit-button:hover {
+    background-color: #0056b3;
+}
+
+label {
+    color: #333;
+    /* เปลี่ยนเป็นสีเข้มเพื่อให้มองเห็นชัดเจน */
+    font-weight: bold;
+}
+
+input,
+textarea {
+    background-color: #fff;
+    /* เปลี่ยนพื้นหลังเป็นสีขาว */
+    color: #000;
+    /* เปลี่ยนข้อความให้เป็นสีดำ */
+    border: 1px solid #ccc;
+    /* เพิ่มเส้นขอบบาง */
+    padding: 8px;
+    border-radius: 4px;
+}

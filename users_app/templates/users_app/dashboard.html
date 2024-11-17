@@ -1,134 +1,48 @@
 {% extends 'main_app/components/base.html' %}
 {% load static %}
+
 {% block content %}
-
-<header style='text-align: center;'>
-    <h1>Username: {{ user.username }}</h1>
-</header>
-
-<div class="info-box">
-    <div class="info-box-header">
-        <h3>User Information</h3>
+<div class="container py-5">
+    <!-- Header Section -->
+    <div class="text-center mb-4 text-black">
+        <h1 class="lead display-4">Welcome, {{ user.username }}</h1>
     </div>
-    
-    <div class="info-box-container">
-        <!-- Profile Picture Section -->
-        <div class="profile-section">
-            <form method="POST" action="{% url 'update_profile_picture' %}" enctype="multipart/form-data">
-                {% csrf_token %}
-                {% if user.profile_picture %}
-                <label for="profile-pic-upload">
-                    <img src="{{ user.profile_picture.url }}" alt="User Picture" class="profile-pic" style="cursor: pointer;">
-                </label>
-                {% else %}
-                <label for="profile-pic-upload">
-                    <img src="{% static 'media/profile_pics/default.png' %}" alt="Default User Picture" class="profile-pic" style="cursor: pointer;">
-                </label>
-                {% endif %}
-                <input type="file" id="profile-pic-upload" name="profile_picture" style="display: none;" onchange="this.form.submit()">
-            </form>
-        </div> 
 
-        <!-- User Details Section -->
-        <div class="details-section">
-            <!-- Username -->
-            <div class="details-section">
-                <!-- Username Section -->
-                <div class="detail-item">
-                    <span>Username</span>
-                    <input type="text" id="usernameInput" value="{{ user.username }}" disabled>
-                    <button id="usernameEditBtn" onclick="handleEditSave('username')" class="edit-btn">Edit</button>
+    <!-- User Information Section -->
+    <div class="row">
+        <div class="col-md-4 text-center">
+            <!-- Profile Picture -->
+            <div class="dashboard-card">
+                <div class="dashboard-card-body">
+                    {% if user.profile_picture %}
+                    <img src="{{ user.profile_picture.url }}" class="img-fluid rounded-circle mb-3" alt="User Picture">
+                    {% else %}
+                    <img src="{% static 'images/default-profile.png' %}" class="img-fluid rounded-circle mb-3"
+                        alt="Default Picture">
+                    {% endif %}
+                    <h5 class="dashboard-card-title">{{ user.username }}</h5>
+                    <button class="btn btn-primary">Edit Profile</button>
                 </div>
-                
-                <div class="detail-item">
-                    <span>Email</span>
-                    <input type="text" id="emailInput" value="{{ user.email }}" disabled>
-                    <button id="emailEditBtn" onclick="handleEditSave('email')" class="edit-btn">Edit</button>
-                </div>
-                
-
-            <!-- Password -->
-            <div class="detail-item">
-                <span>Password</span>
-                <span>••••••••••</span>
-                <a href="{% url 'password_change' %}">
-                    <button type="button" class="edit-btn">Edit</button>
-                </a>
             </div>
+        </div>
 
-            <!-- UID -->
-            <div class="detail-item">
-                <span>UID</span>
-                <span>{{ user.user_id }}</span>
+        <!-- User Details -->
+        <div class="col-md-8">
+            <div class="card mb-3">
+                <div class="user-info-card-header">User Information</div>
+                <div class="user-info-card-body">
+                    <p><strong>Username:</strong> {{ user.username }}</p>
+                    <p><strong>Email:</strong> {{ user.email }}</p>
+                    <p><strong>UID:</strong> {{ user.user_id }}</p>
+                    <a href="{% url 'password_change' %}" class="btn btn-secondary">Change Password</a>
+                </div>
             </div>
         </div>
     </div>
+
+    <!-- My Products Button -->
+    <div class="text-center mt-4">
+        <a href="{% url 'product_list' %}" class="btn btn-success">My Products</a>
+    </div>
 </div>
-
-<footer style='text-align: center; margin-top: 20px;'>
-    <a href="{% url 'product_list' %}">
-        <button>My Products</button>
-    </a>
-</footer>
-
-<script>
-    // JavaScript function to toggle edit mode
-    function toggleEdit(field) {
-        const display = document.getElementById(`${field}-display`);
-        const form = document.getElementById(`${field}-form`);
-        const section = document.getElementById(`${field}-section`);
-        
-        if (display.style.display === 'none') {
-            display.style.display = 'inline';
-            form.style.display = 'none';
-        } else {
-            display.style.display = 'none';
-            form.style.display = 'inline';
-        }
-    }
-        
-        function handleEditSave(field) {
-        const input = document.getElementById(`${field}Input`);
-        const button = document.getElementById(`${field}EditBtn`);
-
-        if (button.innerText === "Edit") {
-            input.disabled = false;
-            input.focus();
-            button.innerText = "Save";
-        } else {
-            const newValue = input.value;
-
-            fetch(`/users/update-${field}/`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-CSRFToken": getCsrfToken()
-                },
-                body: JSON.stringify({ [field]: newValue })
-            })
-                .then(response => {
-                    if (response.ok) {
-                        window.location.href = "";
-                    } else {
-                        console.error(`Failed to update ${field}`);
-                    }
-                })
-                .catch(error => console.error("Error:", error));
-        }
-    }
-
-    // Helper function to get CSRF token from cookie
-    function getCsrfToken() {
-        const cookies = document.cookie.split("; ");
-        for (let cookie of cookies) {
-            const [name, value] = cookie.split("=");
-            if (name === "csrftoken") return value;
-        }
-        return "";
-    }
-</script>
-
 {% endblock %}
-
-
-
