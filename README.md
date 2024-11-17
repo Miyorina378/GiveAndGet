@@ -19,7 +19,7 @@ GiveAndGet is a web application for buy, sell or trade anything you wanted.
 
 # Iteration 0
 ## Task
-  1.ส่งRequirement report (ต้นฉบับ และ PDF)
+  1.ส่งRequirement report (PDF)
   * [Link to Progress report (PDF)](https://drive.google.com/file/d/1LZlmM6vGSMkpzHwmsox6Volm-2wfZ2UV/view?usp=sharing)
   
   2.[Link to Github Repo](https://github.com/Miyorina378/GiveAndGet.git)
@@ -29,6 +29,14 @@ GiveAndGet is a web application for buy, sell or trade anything you wanted.
   4.[Link to Trello](https://trello.com/b/3iOxyUke/giveandget)
   
   5.[Link to Presentation iteration 0](https://drive.google.com/file/d/1r_qTqTDfE0K_NLoxcljS4dakK40agHru/view?usp=sharing)
+
+# Iteration 1
+## Task
+  1.ส่งRequirement report (PDF)
+  * [Link to Progress report (PDF)]()
+  
+  2.[Link to Presentation iteration 1]()
+
 
 # Team member
 * นาย วงศธร ดีโรจนวงศ์ 6510615278
