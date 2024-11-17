@@ -34,12 +34,13 @@ def chat_room(request, user_id=None):
     if request.method == "POST":
         form = ChatForm(request.POST)
         if form.is_valid():
-            # Create a new message
+        # Create a new message
             new_message = form.save(commit=False)
             new_message.sender = request.user
             new_message.receiver = user_to_chat
             new_message.save()
-            return redirect('chat_room', user_id=user_id)  # Redirect back to the same chat room (changed 'chat' to 'chat_room')
+            return redirect('chat_room', user_id=user_id)  # Redirect back to the same chat room
+
     else:
         form = ChatForm()
 

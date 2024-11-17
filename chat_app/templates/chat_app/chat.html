@@ -1,6 +1,6 @@
 {% extends 'main_app/components/base.html' %}
 {% block content %}
-<h1>Chat Room</h1>
+<h1 style="color:black;">Chat Room</h1>
 
 <!-- Display search form and search results -->
 <form method="get" action="{% url 'chat_room' user_id=user_to_chat.id %}">
@@ -9,10 +9,10 @@
 </form>
 
 {% if search_results %}
-    <h2>Search Results:</h2>
+    <h2 style="color:black;">Search Results:</h2>
     <ul>
         {% for user in search_results %}
-            <li>
+            <li style="color:black;">
                 <a href="{% url 'chat_room' user_id=user.id %}">{{ user.username }}</a>
             </li>
         {% endfor %}
@@ -21,8 +21,8 @@
 
 <!-- Display chat messages -->
 {% if messages %}
-    <h2>Chat with {{ user_to_chat.username }}</h2>
-    <ul>
+    <h2 style="color:black;" >Chat with {{ user_to_chat.username }}</h2>
+    <ul style="color:black;">
         {% for message in messages %}
             <li><strong>{{ message.sender.username }}:</strong> {{ message.message }}</li>
         {% endfor %}
