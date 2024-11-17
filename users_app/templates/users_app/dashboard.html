@@ -1,61 +1,48 @@
 {% extends 'main_app/components/base.html' %}
 {% load static %}
+
 {% block content %}
-
-<header style='text-align: center;'>
-    <h1>Username: {{ user.username }}</h1>
-</header>
-
-<div class="info-box">
-    <div class="info-box-header">
-        <h3>User Information</h3>
+<div class="container py-5">
+    <!-- Header Section -->
+    <div class="text-center mb-4 text-black">
+        <h1 class="lead display-4">Welcome, {{ user.username }}</h1>
     </div>
-    
-    <div class="info-box-container">
-        <!-- Profile Picture Section -->
-        <div class="profile-section">
-            <div class="profile-section">
-                {% if user.profile_picture %}
-                <img src="{{ user.profile_picture.url }}" alt="User Picture" class="profile-pic">
-                 {% endif %}
-            </div>
-        </div> 
 
-        <!-- User Details Section -->
-        <div class="details-section">
-            <button class="edit-btn">Edit</button>
-            <div class="detail-item">
-                <span>Username</span>
-                <span>{{ user.username }}</span>
+    <!-- User Information Section -->
+    <div class="row">
+        <div class="col-md-4 text-center">
+            <!-- Profile Picture -->
+            <div class="dashboard-card">
+                <div class="dashboard-card-body">
+                    {% if user.profile_picture %}
+                    <img src="{{ user.profile_picture.url }}" class="img-fluid rounded-circle mb-3" alt="User Picture">
+                    {% else %}
+                    <img src="{% static 'images/default-profile.png' %}" class="img-fluid rounded-circle mb-3"
+                        alt="Default Picture">
+                    {% endif %}
+                    <h5 class="dashboard-card-title">{{ user.username }}</h5>
+                    <button class="btn btn-primary">Edit Profile</button>
+                </div>
             </div>
-            <button class="edit-btn">Edit</button>
-            <div class="detail-item">
-                <span>Email</span>
-                <span>{{ user.email }}</span>
-            </div>
-            <a href="{% url 'password_change' %}">
-                <button type="button" class="edit-btn">Edit</button>
-            </a>
-            <div class="detail-item">
-                <span>Password</span>
-                <span>••••••••••</span>
-            </div>
-            <div class="detail-item">
-                <span>UID</span>
-                <span>{{user.user_id}}</span>
-            </div>
+        </div>
+
+        <!-- User Details -->
+        <div class="col-md-8">
+            <div class="card mb-3">
+                <div class="user-info-card-header">User Information</div>
+                <div class="user-info-card-body">
+                    <p><strong>Username:</strong> {{ user.username }}</p>
+                    <p><strong>Email:</strong> {{ user.email }}</p>
+                    <p><strong>UID:</strong> {{ user.user_id }}</p>
+                    <a href="{% url 'password_change' %}" class="btn btn-secondary">Change Password</a>
+                </div>
             </div>
         </div>
     </div>
+
+    <!-- My Products Button -->
+    <div class="text-center mt-4">
+        <a href="{% url 'product_list' %}" class="btn btn-success">My Products</a>
+    </div>
 </div>
-
-<footer style='text-align: center; margin-top: 20px;'>
-    <body>
-        <a href="{% url 'product_list' %}">
-            <button>My Products</button>
-        </a>
-    </body>
-</footer>
-
-
 {% endblock %}
