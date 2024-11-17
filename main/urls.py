@@ -25,4 +25,9 @@ urlpatterns = [
     path('chat/', include('chat_app.urls')),
     path('admin/', admin.site.urls),
     path('products/', include('products.urls')),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]
+
+# Serve media files in development mode
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+

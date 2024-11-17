@@ -3,7 +3,7 @@ from django.contrib.auth.models import AbstractUser
 
 class GGUser(AbstractUser):
     # Adding custom fields
-    profile_picture = models.ImageField(default= 'default.png', upload_to='profile_pics/', null=True, blank=True)
+    profile_picture = models.ImageField(default= 'media/profile_pics/default.png', upload_to='media/profile_pics/', null=True, blank=True)
     user_id = models.PositiveIntegerField(unique=True, editable=False)
     status_choices = [
         ('online', 'Online'),
