@@ -2,39 +2,68 @@
 {% load static %}
 {% block content %}
 
-    <header style='text-align: center;'>
+<header class="text-white text-center py-5">
+    <div class="container">
         <h1>About</h1>
-    </header>
-
-    <div class="header" style="text-align: center;">
-        <p>GiveAndGet is a web application for buying, selling, or trading anything you want.</p>
-        <br>
-        <br>
     </div>
+</header>
 
-    <div class="text" style="text-align: center;">
-        <p>Our web application is aimed at users who have items that they are no longer using but don't want to throw them away as trash. They can sell or exchange them for something else they need.</p>
-        <p>This way, a user can buy or trade an item that is no longer available, such as limited items.
-        <br>
-        <br>
-        <br>
+<section class="about-section py-5">
+    <div class="container text-center">
+        <p class="lead">GiveAndGet is a web application for buying, selling, or trading anything you want.</p>
+        <p class="second_text">
+            Our web application is aimed at users who have items that they are no longer using but don't want to throw
+            them away as trash. They can sell or exchange them for something else they need.
         </p>
+        <p class="finally_text">
+            This way, a user can buy or trade an item that is no longer available, such as limited items.
+        </p>
+    </div>
+</section>
 
-    <div class="team-text" style="text-align: center;">
-        <h3>Our Team</h3>
-        <p>Wongsathorn Derochanawong 6510615278</p>
-        <p>Phuritat Lertkitpaisarn 6610685049</p>
-        <p>Chatchai Seekram 6610685064</p>
-        <p>Chitipat Takdumrongkul 6610685130</p>
-        <p>Thanabodee Suddaen 6610685163</p>
-    </div>
-   
-    <div class="about-footer">
-        <div class="about-footerContainer">
-            <div class="socialIcons">
-              <a href="https://trello.com/b/3iOxyUke/giveandget"><i class="fa-brands fa-trello"></i></a>
-              <a href="https://drive.google.com/file/d/1LZlmM6vGSMkpzHwmsox6Volm-2wfZ2UV/view"><i class="fa fa-file-text"></i></a>
-              <a href="https://github.com/Miyorina378/GiveAndGet"><i class="fa-brands fa-github"></i></a>
+<section class="team-section py-5 bg-light">
+    <div class="container">
+        <h3 class="text-center mb-4">Our Team</h3>
+        <div class="row">
+            <div class="col-md-4 mb-3">
+                <p class="text-center">Wongsathorn Derochanawong <br> 6510615278</p>
             </div>
+            <div class="col-md-4 mb-3">
+                <p class="text-center">Phuritat Lertkitpaisarn <br> 6610685049</p>
+            </div>
+            <div class="col-md-4 mb-3">
+                <p class="text-center">Chatchai Seekram <br> 6610685064</p>
+            </div>
+            <div class="col-md-4 mb-3">
+                <p class="text-center">Chitipat Takdumrongkul <br> 6610685130</p>
+            </div>
+            <div class="col-md-4 mb-3">
+                <p class="text-center">Thanabodee Suddaen <br> 6610685163</p>
+            </div>
+        </div>
     </div>
-{% endblock %} 
+</section>
+
+<footer class="py-4 bg-dark text-white text-center">
+    <div class="container">
+        <div class="social-icons d-flex justify-content-center">
+            <a href="https://trello.com/b/3iOxyUke/giveandget" class="btn btn-outline-light btn-sm mx-2">
+                <i class="fa-brands fa-trello"></i>
+            </a>
+            <a href="https://drive.google.com/file/d/1LZlmM6vGSMkpzHwmsox6Volm-2wfZ2UV/view"
+                class="btn btn-outline-light btn-sm mx-2">
+                <i class="fa fa-file-text"></i>
+            </a>
+            <a href="https://github.com/Miyorina378/GiveAndGet" class="btn btn-outline-light btn-sm mx-2">
+                <i class="fa-brands fa-github"></i>
+            </a>
+        </div>
+    </div>
+</footer>
+
+<!-- Bootstrap JS Bundle -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
+{% endblock %}
