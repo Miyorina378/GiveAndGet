@@ -2,48 +2,47 @@
 {% load static %}
 {% block content %}
 
-<header>
-    <div class="header-container">
-        <h1>Products</h1>
-        <div class="filter">
-            <button type="submit">Sort by</button>
-            <button type="submit">Categories</button>
-            <button type="submit">Search</button>
+<header class="text-white text-center py-4">
+    <div class="w-100">
+        <div class="container">
+            <h1>GiveAndGet</h1>
+            <div class="filter d-flex gap-2 pb-3">
+                <input type="text" class="form-control gap-2" placeholder="Search products...">
+                <button type="submit" class="btn btn-light">Search</button>
+                <button type="submit" class="btn btn-light">Sort by</button>
+                <button type="submit" class="btn btn-light">Categories</button>
+            </div>
         </div>
     </div>
 </header>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
-</head>
-<body>
-    <div class="container">
-            <ul class="product-list">
-                {% for product in products %}
-                <li class="product-item">
-                    <a href="{% url 'product_detail' product.id %}">
-                        <div class="product-image">
-                            {% if product.image %}
-                                <img src="{{ product.image.url }}" alt="{{ product.name }}" style="width: 100px; height: auto;">
-                            {% else %}
-                                <img src="{% static 'images/default_image.jpg' %}" alt="Default Image" style="width: 100px; height: auto;">
-                            {% endif %}
-                        </div>
-                        <div class="product-details">
-                            <h3>{{ product.name }}</h3>
-                            <p>Price: {{ product.price }}</p>
-                        </div>
-                    </a>
-                </li>
-                {% endfor %}
-            </ul>
-        </main>
+
+    <div class="container my-5">
+        <div class="row">
+            {% for product in products %}
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <div class="product-image">
+                        {% if product.image %}
+                        <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+                        {% else %}
+                        <img src="{% static 'images/default_image.jpg' %}" class="card-img-top" alt="Default Image">
+                        {% endif %}
+                    </div>
+                    <div class="card-body text-center">
+                        <h5 class="card-title">{{ product.name }}</h5>
+                        <p class="card-text">Price: {{ product.price }}</p>
+                        <a href="{% url 'product_detail' product.id %}" class="btn btn-primary">View Details</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
     </div>
-</body>
+    </body>
+
 </html>
 {% endblock %}
