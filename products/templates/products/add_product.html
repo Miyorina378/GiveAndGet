@@ -1,8 +1,6 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Add Product</title>
-    {% load static %}
+{% extends 'main_app/components/base.html' %}
+{% load static %}
+{% block content %}
     <script>
         function goBack() {
             window.history.back(); // กลับไปหน้าก่อนหน้า
@@ -21,5 +19,4 @@
         <button type="submit">Add Product</button>
     </form>
 
-</body>
-</html>
+{% endblock %}

@@ -14,48 +14,121 @@
     <div class="info-box-container">
         <!-- Profile Picture Section -->
         <div class="profile-section">
-            <div class="profile-section">
+            <form method="POST" action="{% url 'update_profile_picture' %}" enctype="multipart/form-data">
+                {% csrf_token %}
                 {% if user.profile_picture %}
-                <img src="{{ user.profile_picture.url }}" alt="User Picture" class="profile-pic">
-                 {% endif %}
-            </div>
+                <label for="profile-pic-upload">
+                    <img src="{{ user.profile_picture.url }}" alt="User Picture" class="profile-pic" style="cursor: pointer;">
+                </label>
+                {% else %}
+                <label for="profile-pic-upload">
+                    <img src="{% static 'media/profile_pics/default.png' %}" alt="Default User Picture" class="profile-pic" style="cursor: pointer;">
+                </label>
+                {% endif %}
+                <input type="file" id="profile-pic-upload" name="profile_picture" style="display: none;" onchange="this.form.submit()">
+            </form>
         </div> 
 
         <!-- User Details Section -->
         <div class="details-section">
-            <button class="edit-btn">Edit</button>
-            <div class="detail-item">
-                <span>Username</span>
-                <span>{{ user.username }}</span>
-            </div>
-            <button class="edit-btn">Edit</button>
-            <div class="detail-item">
-                <span>Email</span>
-                <span>{{ user.email }}</span>
-            </div>
-            <a href="{% url 'password_change' %}">
-                <button type="button" class="edit-btn">Edit</button>
-            </a>
+            <!-- Username -->
+            <div class="details-section">
+                <!-- Username Section -->
+                <div class="detail-item">
+                    <span>Username</span>
+                    <input type="text" id="usernameInput" value="{{ user.username }}" disabled>
+                    <button id="usernameEditBtn" onclick="handleEditSave('username')" class="edit-btn">Edit</button>
+                </div>
+                
+                <div class="detail-item">
+                    <span>Email</span>
+                    <input type="text" id="emailInput" value="{{ user.email }}" disabled>
+                    <button id="emailEditBtn" onclick="handleEditSave('email')" class="edit-btn">Edit</button>
+                </div>
+                
+
+            <!-- Password -->
             <div class="detail-item">
                 <span>Password</span>
                 <span>••••••••••</span>
+                <a href="{% url 'password_change' %}">
+                    <button type="button" class="edit-btn">Edit</button>
+                </a>
             </div>
+
+            <!-- UID -->
             <div class="detail-item">
                 <span>UID</span>
-                <span>{{user.user_id}}</span>
-            </div>
+                <span>{{ user.user_id }}</span>
             </div>
         </div>
     </div>
 </div>
 
 <footer style='text-align: center; margin-top: 20px;'>
-    <body>
-        <a href="{% url 'product_list' %}">
-            <button>My Products</button>
-        </a>
-    </body>
+    <a href="{% url 'product_list' %}">
+        <button>My Products</button>
+    </a>
 </footer>
 
+<script>
+    // JavaScript function to toggle edit mode
+    function toggleEdit(field) {
+        const display = document.getElementById(`${field}-display`);
+        const form = document.getElementById(`${field}-form`);
+        const section = document.getElementById(`${field}-section`);
+        
+        if (display.style.display === 'none') {
+            display.style.display = 'inline';
+            form.style.display = 'none';
+        } else {
+            display.style.display = 'none';
+            form.style.display = 'inline';
+        }
+    }
+        
+        function handleEditSave(field) {
+        const input = document.getElementById(`${field}Input`);
+        const button = document.getElementById(`${field}EditBtn`);
+
+        if (button.innerText === "Edit") {
+            input.disabled = false;
+            input.focus();
+            button.innerText = "Save";
+        } else {
+            const newValue = input.value;
+
+            fetch(`/users/update-${field}/`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": getCsrfToken()
+                },
+                body: JSON.stringify({ [field]: newValue })
+            })
+                .then(response => {
+                    if (response.ok) {
+                        window.location.href = "";
+                    } else {
+                        console.error(`Failed to update ${field}`);
+                    }
+                })
+                .catch(error => console.error("Error:", error));
+        }
+    }
+
+    // Helper function to get CSRF token from cookie
+    function getCsrfToken() {
+        const cookies = document.cookie.split("; ");
+        for (let cookie of cookies) {
+            const [name, value] = cookie.split("=");
+            if (name === "csrftoken") return value;
+        }
+        return "";
+    }
+</script>
 
 {% endblock %}
+
+
+

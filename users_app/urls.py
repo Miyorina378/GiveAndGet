@@ -8,5 +8,8 @@ urlpatterns = [
     path('register/', view=views.register, name='register'),
     path('dashboard/', view=views.dashboard, name='dashboard'),
     path('', include("django.contrib.auth.urls")),
-     path('chat/', include('chat_app.urls')),
+    path('chat/', include('chat_app.urls')),
+    path('update-username/', views.update_username, name='update_username'),
+    path('update-email/', views.update_email, name='update_email'),
+    path('update-profile-picture/', views.update_profile_picture, name='update_profile_picture'),
 ]
