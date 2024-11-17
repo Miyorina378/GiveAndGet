@@ -68,11 +68,12 @@ def update_email(request):
 
 @login_required
 def update_profile_picture(request):
-    if request.method == 'POST' and request.FILES.get('profile_picture'):
-        new_profile_picture = request.FILES['profile_picture']
+    if request.method == "POST" and request.FILES.get("profile_picture"):
+        new_profile_picture = request.FILES["profile_picture"]
         request.user.profile_picture = new_profile_picture
-        request.user.save()
-        messages.success(request, 'Profile picture updated successfully!')
-        return redirect('profile')  
-    messages.error(request, 'Please provide a valid profile picture.')
-    return redirect('profile') 
+        request.user.save() 
+        messages.success(request, "Profile picture updated successfully!")
+        return redirect("dashboard")
+    messages.error(request, "Please provide a valid profile picture.")
+    return redirect("dashboard")
+
