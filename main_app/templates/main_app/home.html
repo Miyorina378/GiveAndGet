@@ -12,20 +12,38 @@
         </div>
     </div>
 </header>
-  <div class="dummy-products">
-    <div class="dummy-products">
-        <div class="products-card">
-          <img src="{% static 'main_app/images/HarryPotter.webp' %}" alt="Product 1">
-          <h2>แฮร์รี่ พอตเตอร์กับศิลาอาถรรพ์</h2>
-          <p>Price: $20.00 | Exchange: Red Lava</p>
-        </div>
-        <div class="products-card">
-          <img src="{% static 'main_app/images/The Monsters Exciting Macarons.webp' %}" alt="Product 2">
-          <h2>ลาบูบู้</h2>
-          <p>Price: $40.00 | Exchange: Red Lava</p>
-        </div>
-      </div>
-      
-  </div>
-  
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <div class="container">
+            <ul class="product-list">
+                {% for product in products %}
+                <li class="product-item">
+                    <a href="{% url 'product_detail' product.id %}">
+                        <div class="product-image">
+                            {% if product.image %}
+                                <img src="{{ product.image.url }}" alt="{{ product.name }}" style="width: 100px; height: auto;">
+                            {% else %}
+                                <img src="{% static 'images/default_image.jpg' %}" alt="Default Image" style="width: 100px; height: auto;">
+                            {% endif %}
+                        </div>
+                        <div class="product-details">
+                            <h3>{{ product.name }}</h3>
+                            <p>Price: {{ product.price }}</p>
+                        </div>
+                    </a>
+                </li>
+                {% endfor %}
+            </ul>
+        </main>
+    </div>
+</body>
+</html>
 {% endblock %}
