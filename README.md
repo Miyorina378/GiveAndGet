@@ -3,6 +3,8 @@
  * [About](#About)
  * [Iteration 0](#Iteration-0)
    * [Task](#Task)
+ * [Iteration 1](#Iteration-1)
+   * [Task](#Task)
  * [Team member](#Team-member) 
 
 # CN331 Project
