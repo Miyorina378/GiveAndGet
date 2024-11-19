@@ -2,7 +2,7 @@
  * [CN331 Project](#CN331-Project)
  * [About](#About)
  * [Iteration 0](#Iteration-0)
-   * [Task](#Task)
+ * [Iteration 1](#Iteration-1)
  * [Team member](#Team-member) 
 
 # CN331 Project
@@ -33,9 +33,9 @@ GiveAndGet is a web application for buy, sell or trade anything you wanted.
 # Iteration 1
 ## Task
   1.ส่งRequirement report (PDF)
-  * [Link to Progress report (PDF)]()
+  * [Link to Progress report (PDF)](https://drive.google.com/file/d/1Ng_PLy_6prS_GugbLl2huLKPvN8x4mRW/view?usp=sharing)
   
-  2.[Link to Presentation iteration 1]()
+  2.[Link to Presentation iteration 1](https://drive.google.com/file/d/17gI6M_pE7-0l1G0sXMjc66BTagqU1UCt/view?usp=sharing)
 
 
 # Team member
