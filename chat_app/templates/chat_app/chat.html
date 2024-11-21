@@ -193,7 +193,7 @@
           <div
             class="chat-message {% if message.sender == request.user %} sender {% else %} receiver {% endif %}"
           >
-            <span>{{ message.content }}</span>
+            <span>{{ message.message }}</span>
           </div>
           {% endfor %} {% else %}
           <p class="no-messages">No Messages.</p>
