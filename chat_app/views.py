@@ -1,57 +1,55 @@
-from django.shortcuts import render, get_object_or_404, redirect
-from .forms import ChatForm, UserSearchForm
-from .models import Chat
-from django.contrib.auth import get_user_model
-from django.db.models import Q
+from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import get_user_model
+from .models import Chat
+from django.db.models import Q
 
 User = get_user_model()
 
 @login_required
-def chat_room(request, user_id=None):
-    # Get the user to chat with
-    user_to_chat = None
-    if user_id:
-        user_to_chat = get_object_or_404(User, pk=user_id)
+def chat_room(request, room_name):
+    search_query = request.GET.get('search', '')
 
-    # Fetch messages between the current user and the target user (if any)
-    messages = Chat.objects.filter(
-        (Q(sender=request.user) & Q(receiver=user_to_chat)) |
-        (Q(sender=user_to_chat) & Q(receiver=request.user))
-    ).order_by('timestamp') if user_to_chat else []
+    # Get all users except the logged-in user
+    users = User.objects.exclude(id=request.user.id)
 
-    # Handle the search functionality
-    search_form = UserSearchForm(request.GET)
-    search_results = []
+    # Get chat history for the specific room
+    chats = Chat.objects.filter(
+        (Q(sender=request.user) & Q(receiver__username=room_name)) |
+        (Q(receiver=request.user) & Q(sender__username=room_name))
+    )
 
-    if search_form.is_valid():
-        search_query = search_form.cleaned_data.get('username')
-        if search_query:
-            # Search for users whose usernames match the search query (case-insensitive)
-            search_results = User.objects.filter(username__icontains=search_query).exclude(username=request.user.username)
+    # Apply search query filter, if provided
+    if search_query:
+        chats = chats.filter(message__icontains=search_query)
 
-    # Handle the POST request to send a message
-    if request.method == "POST":
-        form = ChatForm(request.POST)
-        if form.is_valid():
-        # Create a new message
-            new_message = form.save(commit=False)
-            new_message.sender = request.user
-            new_message.receiver = user_to_chat
-            new_message.save()
-            return redirect('chat_room', user_id=user_id)  # Redirect back to the same chat room
+    chats = chats.order_by('timestamp')
 
-    else:
-        form = ChatForm()
+    user_last_messages = []
+    for user in users:
+        last_message = Chat.objects.filter(
+            (Q(sender=request.user) & Q(receiver=user)) |
+            (Q(receiver=request.user) & Q(sender=user))
+        ).order_by('-timestamp').first()
+        user_last_messages.append({
+            'user': user,
+            'last_message': last_message
+        })
 
-    # Render the chat template with search results, messages, and the search form
     return render(request, 'chat_app/chat.html', {
-        'messages': messages,
-        'user_to_chat': user_to_chat,
-        'form': form,
-        'search_form': search_form,
-        'search_results': search_results,
+        'room_name': room_name,
+        'chats': chats,
+        'users': users,
+        'user_last_messages': user_last_messages,
+        'search_query': search_query
     })
+
+
+
+
+
+
+
 
 
 
