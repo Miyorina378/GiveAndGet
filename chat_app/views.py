@@ -43,14 +43,3 @@ def chat_room(request, room_name):
         'user_last_messages': user_last_messages,
         'search_query': search_query
     })
-
-
-
-
-
-
-
-
-
-
-
