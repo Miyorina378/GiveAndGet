@@ -7,10 +7,25 @@
         <div class="container">
             <h1>GiveAndGet</h1>
             <div class="filter d-flex gap-2 pb-3">
-                <input type="text" class="form-control gap-2" placeholder="Search products...">
-                <button type="submit" class="btn btn-light">Search</button>
-                <button type="submit" class="btn btn-light">Sort by</button>
-                <button type="submit" class="btn btn-light">Categories</button>
+                <form method="get" action="{% url 'home' %}" class="d-flex gap-2">
+                    <input type="text" name="search" value="{{ request.GET.search }}" class="form-control" placeholder="Search products...">
+                    
+                    <select name="sort" class="form-select">
+                        <option value="" {% if not request.GET.sort %}selected{% endif %}>None</option>
+                        <option value="name" {% if request.GET.sort == "name" %}selected{% endif %}>Name (A-Z)</option>
+                        <option value="price" {% if request.GET.sort == "price" %}selected{% endif %}>Price (Low to High)</option>
+                        <option value="-price" {% if request.GET.sort == "-price" %}selected{% endif %}>Price (High to Low)</option>
+                    </select>
+
+                    <select name="category" class="form-select">
+                        <option value="">All Categories</option>
+                        <option value="electronics" {% if request.GET.category == "electronics" %}selected{% endif %}>Electronics</option>
+                        <option value="fashion" {% if request.GET.category == "fashion" %}selected{% endif %}>Fashion</option>
+                        <option value="home" {% if request.GET.category == "home" %}selected{% endif %}>Home</option>
+                    </select>
+                    
+                    <button type="submit" class="btn btn-light">Search</button>
+                </form>
             </div>
         </div>
     </div>
