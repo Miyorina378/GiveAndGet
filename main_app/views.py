@@ -11,3 +11,20 @@ def home(request):
 def about(request):
     return render(request, 'main_app/about.html')
 
+def home(request):
+    query = request.GET.get('search', '')
+    sort = request.GET.get('sort', '')
+    category = request.GET.get('category', '')
+
+    products = Product.objects.all()
+
+    if query:
+        products = products.filter(name__icontains=query)
+
+    if category:
+        products = products.filter(category__iexact=category)
+
+    if sort:
+        products = products.order_by(sort)
+
+    return render(request, 'main_app/home.html', {'products': products})
