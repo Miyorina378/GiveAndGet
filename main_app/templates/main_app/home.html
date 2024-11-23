@@ -12,7 +12,7 @@
                     
                     <select name="sort" class="form-select">
                         <option value="" {% if not request.GET.sort %}selected{% endif %}>None</option>
-                        <option value="name" {% if request.GET.sort == "name" %}selected{% endif %}>Name</option>
+                        <option value="name" {% if request.GET.sort == "name" %}selected{% endif %}>Name (A-Z)</option>
                         <option value="price" {% if request.GET.sort == "price" %}selected{% endif %}>Price (Low to High)</option>
                         <option value="-price" {% if request.GET.sort == "-price" %}selected{% endif %}>Price (High to Low)</option>
                     </select>
