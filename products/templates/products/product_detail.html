@@ -1,15 +1,19 @@
 {% extends 'main_app/components/base.html' %}
 {% load static %}
-{% block content %}
 
+{% block content %}
 <link rel="stylesheet" href="{% static 'products/product_detail.css' %}">
 
 <script>
     function goBack() {
         window.history.back(); // กลับไปหน้าก่อนหน้า
     }
-</script>
 
+    // Function to open the modal
+    function openReportModal() {
+        $('#reportModal').modal('show');
+    }
+</script>
 
 <div class="product-detail-container container">
     <button class="back-button btn btn-secondary mb-4" onclick="goBack()">Back</button>
@@ -24,6 +28,8 @@
             <!-- Product Details Section -->
             <div class="product-details-section col-md-6">
                 <div class="product-card card p-3">
+                    <!-- Updated Report Button to trigger Modal -->
+                    <button class="btn btn-primary" onclick="openReportModal()">Report user</button>
                     <h3 class="product-card-title">Product Details</h3>
                     <p class="product-info"><strong>Post by:</strong> {{ product.user.username }}</p>
                     <p class="product-info"><strong>Description:</strong> {{ product.description }}</p>
@@ -38,5 +44,82 @@
         </div>
     </div>
 
+    <!-- Report User Modal -->
+    <div class="modal" tabindex="-1" role="dialog" id="reportModal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Report User</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="report-form">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="reason">Reason for reporting:</label>
+                            <select class="form-control" id="reason" name="reason" required>
+                                <option value="Spamming or harassment">Spamming or harassment</option>
+                                <option value="This user is a bot">This user is a bot</option>
+                                <option value="This Product is not delivered on time">This Product is not delivered on time</option>
+                                <option value="Posting copyrighted product">Posting copyrighted product</option>
+                                <option value="Posting illegal product">Posting illegal product</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="description">Description:</label>
+                            <textarea class="form-control" id="description" name="report_description" rows="4" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit Report</button>
+                    </form>
+                    <div id="response-message" style="display:none;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    {% endblock %}
+{% endblock %}
+
+<!-- Include Bootstrap JS and jQuery -->
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+
+<!-- JS for handling the form submission -->
+<script>
+$(document).ready(function(){
+    // Handle form submission
+    $('#report-form').submit(function(event){
+        event.preventDefault(); // Prevent default form submission
+
+        // Get form data
+        var formData = {
+            reason: $('#reason').val(),
+            report_description: $('#description').val(),
+            csrfmiddlewaretoken: $('input[name="csrfmiddlewaretoken"]').val(),
+        };
+
+        // AJAX request to submit the report
+        $.ajax({
+            url: "{% url 'report_user' product.user.username %}",  // Update with your actual URL for report handling
+            type: "POST",
+            data: formData,
+            success: function(response) {
+                if (response.success) {
+                    $('#response-message').text(response.message).addClass('alert alert-success').show();
+                    setTimeout(function() {
+                        $('#reportModal').modal('hide');
+                        $('#response-message').hide();
+                    }, 2000); // Hide modal after 2 seconds
+                } else {
+                    $('#response-message').text(response.message).addClass('alert alert-danger').show();
+                }
+            },
+            error: function() {
+                $('#response-message').text('An error occurred. Please try again.').addClass('alert alert-danger').show();
+            }
+        });
+    });
+});
+</script>
+

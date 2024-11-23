@@ -8,8 +8,6 @@ def product_list(request):
     products = Product.objects.filter(user=request.user)  # แสดงสินค้าของผู้ใช้ที่ล็อกอินอยู่
     return render(request, 'products/product_list.html', {'products': products})
 
-
-
 @login_required
 def add_product(request):
     if request.method == 'POST':
