@@ -105,6 +105,13 @@ class UserViewsTest(TestCase):
         self.user.refresh_from_db()
         self.assertTrue(self.user.profile_picture.name.startswith("media/profile_pics/"))
 
+    ### yes
+    def test_update_profile_picture_no_file(self):
+        response = self.client.post(reverse("update_profile_picture"), {})
+        self.assertRedirects(response, reverse("dashboard"))
+        messages = list(response.wsgi_request._messages)
+        self.assertEqual(len(messages), 1)
+        self.assertEqual(str(messages[0]), "Please provide a valid profile picture.")
 
 # Test admin
 class AdminSiteTest(TestCase):
