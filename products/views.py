@@ -27,5 +27,21 @@ def delete_product(request, product_id):
     return redirect('product_list')  # กลับไปที่หน้ารายการสินค้า
 
 def product_detail(request, product_id):
-    product = get_object_or_404(Product, id=product_id)  # ค้นหาสินค้าตาม ID
-    return render(request, 'products/product_detail.html', {'product': product})
+    product = get_object_or_404(Product, id=product_id)
+    return render(request, 'products/product_detail.html', {
+        'product': product,
+        'added_by': product.user.username,  # ส่งชื่อผู้เพิ่มสินค้าไปยังเทมเพลต
+    })
+
+
+@login_required
+def edit_product(request, product_id):
+    product = get_object_or_404(Product, id=product_id, user=request.user)  # ตรวจสอบว่าเป็นสินค้าของผู้ใช้
+    if request.method == 'POST':
+        form = ProductForm(request.POST, request.FILES, instance=product)
+        if form.is_valid():
+            form.save()
+            return redirect('product_list')
+    else:
+        form = ProductForm(instance=product)
+    return render(request, 'products/add_product.html', {'form': form, 'is_edit': True})
