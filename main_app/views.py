@@ -3,10 +3,6 @@ from django.http import HttpResponse
 from products.models import Product
 
 # Create your views here.
-def home(request):
-    products = Product.objects.all()  # ดึงสินค้าทั้งหมดจากฐานข้อมูล
-    return render(request, 'main_app/home.html', {'products': products})
-
 
 def about(request):
     return render(request, 'main_app/about.html')
@@ -24,7 +20,8 @@ def home(request):
     if category:
         products = products.filter(category__iexact=category)
 
-    if sort:
+    valid_sort_fields = ['name', 'price', '-price', 'stock', '-stock']
+    if sort in valid_sort_fields:
         products = products.order_by(sort)
 
     return render(request, 'main_app/home.html', {'products': products})
