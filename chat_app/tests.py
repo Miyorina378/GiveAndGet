@@ -7,6 +7,10 @@ from .models import Chat
 from .consumers import ChatConsumer
 from datetime import datetime
 from channels.auth import AuthMiddlewareStack
+from django.test import SimpleTestCase
+from django.urls import resolve
+from channels.routing import URLRouter
+from chat_app.routing import websocket_urlpatterns
 
 User = get_user_model()
 
@@ -179,13 +183,6 @@ class ChatRoomViewTest(TestCase):
         # Ensure non-logged in user is redirected
         response = self.client.get(reverse('chat_room', kwargs={'room_name': self.receiver.username}))
         self.assertEqual(response.status_code, 302)  # Should redirect to login
-
-from django.test import SimpleTestCase
-from django.urls import resolve
-from channels.routing import URLRouter
-from chat_app.routing import websocket_urlpatterns
-from chat_app.consumers import ChatConsumer
-
 
 class RoutingTestCase(SimpleTestCase):
     def test_routing_resolves_to_consumer(self):
