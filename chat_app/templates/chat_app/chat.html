@@ -120,56 +120,53 @@
   <div class="row h-100">
       <!-- User List Sidebar -->
       <div class="col-3 sidebar p-3 chats">
-          <h5 class="mb-3 text-white">Chats</h5>
-          <div class="contacts">
-              {% for item in user_last_messages %}
-              <a
-                  href="{% url 'chat_room' item.user.username %}"
-                  class="list-group-item list-group-item-action {% if item.user.username == room_name %} active {% endif %}"
-                  data-username="{{ item.user.username }}"
-              >
-                  <div class="d-flex align-items-center">
-                      <!-- Profile Icon -->
-                      <img
-                          src="https://ui-avatars.com/api/?name={{ item.user.username|urlencode }}&size=64&background=random"
-                          alt="{{ item.user.username }}'s Profile Image"
-                          class="profile-icon rounded-circle mr-3"
-                          style="width: 1.8rem; height: 1.8rem; object-fit: cover"
-                      />
-                      <!-- Message Content -->
-                      <div class="w-100">
-                          <div class="d-flex justify-content-between">
-                              <strong class="text-truncate">{{ item.user.username }}</strong>
-                              {% if item.last_message %}
-                              <small class="text-nowrap timestamp">{{ item.last_message.timestamp|date:"H:i" }}</small>
-                              {% endif %}
-                          </div>
-                          <div>
-                              {% if item.last_message %}
-                              <small
-                                  class="d-block text-truncate last-msg"
-                                  style="max-width: 90%"
-                                  id="last-message"
-                              >
-                                  {% if item.last_message.sender == request.user %} 
-                                  You: 
-                                  {% endif %} 
-                                  {{ item.last_message.content|truncatewords:5 }}
-                              </small>
-                              {% else %}
-                              <small>No messages yet</small>
-                              {% endif %}
-                          </div>
-                      </div>
-                      <!-- Unread Badge -->
-                      {% if item.unread_count > 0 %}
-                      <span class="badge badge-danger unread-badge" data-username="{{ item.user.username }}">{{ item.unread_count }}</span>
-                      {% endif %}
-                  </div>
-              </a>
-              {% endfor %}
-          </div>
-      </div>
+        <h5 class="mb-3 text-white">Chats</h5>
+        <div class="contacts">
+            {% for item in user_last_messages %}
+                <a
+                    href="{% url 'chat_room' item.user.username %}"
+                    class="list-group-item list-group-item-action {% if item.user.username == room_name %} active {% endif %}"
+                    data-username="{{ item.user.username }}"
+                >
+                    <div class="d-flex align-items-center">
+                        <!-- Profile Icon -->
+                        <img
+                            src="https://ui-avatars.com/api/?name={{ item.user.username|urlencode }}&size=64&background=random"
+                            alt="{{ item.user.username }}'s Profile Image"
+                            class="profile-icon rounded-circle mr-3"
+                            style="width: 1.8rem; height: 1.8rem; object-fit: cover"
+                        />
+                        <!-- Message Content -->
+                        <div class="w-100">
+                            <div class="d-flex justify-content-between">
+                                <strong class="text-truncate">{{ item.user.username }}</strong>
+                                {% if item.last_message %}
+                                    <small class="text-nowrap timestamp">{{ item.last_message.timestamp|date:"H:i" }}</small>
+                                {% endif %}
+                            </div>
+                            <div>
+                                {% if item.last_message %}
+                                    <small class="d-block text-truncate last-msg" style="max-width: 90%" id="last-message">
+                                        {% if item.last_message.sender == request.user %}
+                                            You: 
+                                        {% endif %} 
+                                        {{ item.last_message.content|truncatewords:5 }}
+                                    </small>
+                                {% else %}
+                                    <small>No messages yet</small>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <!-- Unread Badge -->
+                        {% if item.unread_count > 0 %}
+                            <span class="badge badge-danger unread-badge" data-username="{{ item.user.username }}">{{ item.unread_count }}</span>
+                        {% endif %}
+                    </div>
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+    
 
       <!-- Chat Area -->
       <div class="col-9 d-flex flex-column chat" data-id="{{ room_name }}">

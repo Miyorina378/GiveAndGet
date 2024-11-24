@@ -1,6 +1,5 @@
 from django.db import models
 from django.conf import settings
-from django.db.models import Count, Q
 
 class Chat(models.Model):
     sender = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='sent_chats')
