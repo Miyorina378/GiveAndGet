@@ -8,6 +8,7 @@ from users_app.forms import RegisterForm
 from django.contrib import messages
 from django.contrib.auth.models import User
 from .models import Report
+from django.views.decorators.csrf import csrf_protect
 import json
 from django.shortcuts import get_object_or_404
 
@@ -77,37 +78,31 @@ def update_profile_picture(request):
     return redirect("dashboard")
 
 @login_required
-def report_user(request, username):
-    # Ensure the user is authenticated
-    if not request.user.is_authenticated:
-        return JsonResponse({'success': False, 'message': 'You must be logged in to submit a report.'})
-
-    # Retrieve the reported user from the database
-    reported_user = get_object_or_404(User, username=username)
-
+@csrf_protect
+def submit_report(request):
     if request.method == 'POST':
-        # Extract the form data
+        reporter = request.user
+        reported_user_id = request.POST.get('reported_user_id')
         reason = request.POST.get('reason')
-        report_description = request.POST.get('report_description')
+        report_description = request.POST.get('report_description', '')
 
-        # Log the received data for debugging
-        print(f"Received POST request: Reason - {reason}, Description - {report_description}")
+        try:
+            reported_user = User.objects.get(id=reported_user_id)
+        except User.DoesNotExist:
+            return JsonResponse({'error': 'Reported user does not exist.'}, status=404)
 
-        # Ensure reason and description are provided
-        if reason and report_description:
-            # Create the report
-            report = Report.objects.create(
-                reporter=request.user,
-                reported_user=reported_user,
-                reason=reason,
-                report_description=report_description
-            )
-            print(f"Created report: {report}")
-            return JsonResponse({'success': True, 'message': 'Report submitted successfully!'})
-        else:
-            return JsonResponse({'success': False, 'message': 'Missing required fields.'})
+        # Save the report
+        report = Report.objects.create(
+            reporter=reporter,
+            reported_user=reported_user,
+            reason=reason,
+            report_description=report_description
+        )
+        report.save()
 
-    return JsonResponse({'success': False, 'message': 'Invalid request method. Only POST is allowed.'})
+        return JsonResponse({'message': 'Report submitted successfully.'}, status=200)
+
+    return JsonResponse({'error': 'Invalid request method.'}, status=405)
 
 
 

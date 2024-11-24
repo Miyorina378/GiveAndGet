@@ -16,6 +16,7 @@ class GGUserAdmin(admin.ModelAdmin):
 @admin.register(Report)
 class ReportAdmin(admin.ModelAdmin):
     list_display = ('reporter', 'reported_user', 'reason', 'status', 'date_filed')
-    list_filter = ('status', 'reason')
-    search_fields = ('reporter__username', 'reported_user__username', 'reason', 'report_description')
+    list_filter = ('status', 'reason', 'date_filed')
+    search_fields = ('reporter__username', 'reported_user__username')
+
 
