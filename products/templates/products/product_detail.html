@@ -25,13 +25,14 @@
             <div class="product-details-section col-md-6">
                 <div class="product-card card p-3">
                     <h3 class="product-card-title">Product Details</h3>
+                    <p class="product-info"><strong>Post by:</strong> {{ product.user.username }}</p>
                     <p class="product-info"><strong>Description:</strong> {{ product.description }}</p>
                     <p class="product-info"><strong>Price:</strong> {{ product.price }}</p>
                     <p class="product-info"><strong>Stock:</strong> {{ product.stock }}</p>
                     <p class="product-info"><strong>Created At:</strong> {{ product.created_at }}</p>
                     <p class="product-info"><strong>Last Updated:</strong> {{ product.updated_at }}</p>
                     <!-- เปลี่ยน add to cart -> add to chat link -->
-                    <a href="{% url 'chat_room' product.user.username %}" class="btn btn-primary">Add to chat</a> 
+                    <a href="{% url 'chat_room' product.user.username %}" class="btn btn-primary">Add {{ product.user.username }} to chat</a> 
                 </div>
             </div>
         </div>
