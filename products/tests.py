@@ -1,4 +1,4 @@
-from django.test import TestCase
+from django.test import TestCase, Client
 from django.contrib.auth import get_user_model
 from products.models import Product
 from django.core.exceptions import ValidationError
@@ -6,7 +6,8 @@ import tempfile
 from django.core.files.uploadedfile import SimpleUploadedFile
 import os
 from django.urls import reverse
-from products.forms import ProductForm
+from .models import Product
+from PIL import Image
 
 User = get_user_model()
 
@@ -80,17 +81,6 @@ class ProductSignalTest(TestCase):
 
         # ตรวจสอบว่าไฟล์ภาพถูกลบแล้ว
         self.assertFalse(os.path.exists(image_path))
-
-from django.contrib.auth import get_user_model
-from django.test import TestCase, Client
-from django.urls import reverse
-from .models import Product
-from django.core.files.uploadedfile import SimpleUploadedFile
-from PIL import Image
-import tempfile
-
-User = get_user_model()
-
 
 def get_valid_image_file():
     """สร้างไฟล์ภาพตัวอย่างสำหรับการทดสอบ"""
@@ -203,3 +193,68 @@ class ProductViewsTest(TestCase):
         url = reverse('product_list')
         response = self.client.get(url)
         self.assertEqual(response.status_code, 302)  # Redirect ไปที่หน้า login
+
+class ProductEditViewTest(TestCase):
+    def setUp(self):
+        # สร้างผู้ใช้และเข้าสู่ระบบ
+        self.user = User.objects.create_user(username='testuser', password='password')
+        self.client = Client()
+        self.client.login(username='testuser', password='password')
+
+        # สร้างสินค้าตัวอย่าง
+        valid_image = get_valid_image_file()
+        self.product = Product.objects.create(
+            name="Original Product",
+            price=100.0,
+            stock=10,
+            user=self.user,
+            image=SimpleUploadedFile(
+                name=valid_image.name,
+                content=valid_image.read(),
+                content_type='image/jpeg'
+            ),
+        )
+
+    def test_edit_product_view_get(self):
+        """ทดสอบการแสดงฟอร์มแก้ไขสินค้า"""
+        url = reverse('edit_product', args=[self.product.id])
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'products/add_product.html')
+        self.assertIn('form', response.context)
+        self.assertEqual(response.context['form'].instance, self.product)
+
+    def test_edit_product_view_post_valid(self):
+        """ทดสอบการแก้ไขสินค้าเมื่อข้อมูลถูกต้อง"""
+        url = reverse('edit_product', args=[self.product.id])
+        valid_image = get_valid_image_file()
+        data = {
+            'name': 'Updated Product',
+            'price': 150.0,
+            'stock': 20,
+            'image': SimpleUploadedFile(
+                name=valid_image.name,
+                content=valid_image.read(),
+                content_type='image/jpeg'
+            ),
+        }
+        response = self.client.post(url, data)
+        self.assertEqual(response.status_code, 302)  # Redirect หลังจากบันทึกสำเร็จ
+        self.product.refresh_from_db()
+        self.assertEqual(self.product.name, 'Updated Product')
+        self.assertEqual(self.product.price, 150.0)
+        self.assertEqual(self.product.stock, 20)
+
+    def test_edit_product_view_post_invalid(self):
+        """ทดสอบการแก้ไขสินค้าเมื่อข้อมูลไม่สมบูรณ์"""
+        url = reverse('edit_product', args=[self.product.id])
+        data = {
+            'name': '',  # ชื่อสินค้าเป็นค่าว่าง
+            'price': '',  # ราคาเป็นค่าว่าง
+            'stock': '',  # Stock เป็นค่าว่าง
+        }
+        response = self.client.post(url, data)
+        self.assertEqual(response.status_code, 200)  # แสดงฟอร์มเดิมอีกครั้ง
+        self.assertTemplateUsed(response, 'products/add_product.html')
+        self.assertIn('form', response.context)
+        self.assertTrue(response.context['form'].errors)
