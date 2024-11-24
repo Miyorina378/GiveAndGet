@@ -1,5 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import User
+from django.conf import settings
+from products.models import Product
 
 class GGUser(AbstractUser):
     # Adding custom fields
@@ -23,3 +26,27 @@ class GGUser(AbstractUser):
 
     def __str__(self):
         return f'{self.username} - {self.status}'
+    
+class Report(models.Model):
+    REASON_CHOICES = [
+        ('Spamming or harassment', 'Spamming or harassment'),
+        ('This user is a bot', 'This user is a bot'),
+        ('This Product is not delivered on time', 'This Product is not delivered on time'),
+        ('Posting copyrighted product', 'Posting copyrighted product'),
+        ('Posting illegal product', 'Posting illegal product'),
+    ]
+    
+    reporter = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='user_report_sender')
+    reported_user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='user_reported_user')
+    reported_product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="reported_product", default=1)
+    reason = models.CharField(max_length=60, choices=REASON_CHOICES)
+    report_description = models.TextField(blank=True, null=True)
+    status = models.CharField(max_length=20, choices=[('Pending', 'Pending'), ('Reviewed', 'Reviewed'), ('Resolved', 'Resolved'), ('Dismissed', 'Dismissed')], default='Pending')
+    date_filed = models.DateTimeField(auto_now_add=True)
+    action_taken = models.TextField(blank=True, null=True)
+
+    def __str__(self):
+        return f'Report by {self.reporter} on {self.reported_user} for {self.reason}'
+
+    
+    

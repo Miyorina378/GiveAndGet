@@ -30,6 +30,16 @@
     background-color: #0056b3;
 }
 
+.btn-report {
+    background-color: rgb(245, 15, 15);
+    border: none;
+    transition: background-color 0.3s;
+}
+
+.btn-report:hover {
+    background-color: rgb(136, 22, 22);
+}
+
 .product-detail-container {
     max-width: 1000px;
     margin: auto;

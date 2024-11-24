@@ -4,15 +4,48 @@
 {% block content %}
 <link rel="stylesheet" href="{% static 'products/product_detail.css' %}">
 
+<!-- Load jQuery first -->
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
 <script>
     function goBack() {
-        window.history.back(); // กลับไปหน้าก่อนหน้า
+        window.history.back();
     }
 
-    // Function to open the modal
     function openReportModal() {
-        $('#reportModal').modal('show');
+        $('#reportModal').modal('show'); // Open the modal using Bootstrap's modal method
     }
+    
+    function sendPurchaseRequestAndRedirect(username, productName, button) {
+        const chatSocket = new WebSocket(
+            "ws://" + window.location.host + "/ws/chat/" + username + "/"
+        );
+
+        // Send the message and then redirect
+        chatSocket.onopen = function () {
+            const message = `Hi, I want to buy the product: ${productName} from you.`;
+            chatSocket.send(
+                JSON.stringify({
+                    message: message
+                })
+            );
+
+            // Close the WebSocket connection after sending the message
+            chatSocket.close();
+
+            // Redirect to the chat room
+            window.location.href = button.href;
+        };
+
+        chatSocket.onerror = function () {
+            alert("Failed to send the message. Redirecting to the chat anyway.");
+            window.location.href = button.href; // Redirect even if the WebSocket fails
+        };
+
+        // Prevent the default link action until WebSocket handling completes
+        return false;
+}
+
 </script>
 
 <div class="product-detail-container container">
@@ -28,8 +61,8 @@
             <!-- Product Details Section -->
             <div class="product-details-section col-md-6">
                 <div class="product-card card p-3">
-                    <!-- Updated Report Button to trigger Modal -->
-                    <button class="btn btn-primary" onclick="openReportModal()">Report user</button>
+                    <!-- Report Button to trigger Modal -->
+                    <button class="btn btn-report" onclick="openReportModal()">Report</button>
                     <h3 class="product-card-title">Product Details</h3>
                     <p class="product-info"><strong>Post by:</strong> {{ product.user.username }}</p>
                     <p class="product-info"><strong>Description:</strong> {{ product.description }}</p>
@@ -37,28 +70,32 @@
                     <p class="product-info"><strong>Stock:</strong> {{ product.stock }}</p>
                     <p class="product-info"><strong>Created At:</strong> {{ product.created_at }}</p>
                     <p class="product-info"><strong>Last Updated:</strong> {{ product.updated_at }}</p>
-                    <!-- เปลี่ยน add to cart -> add to chat link -->
-                    <a href="{% url 'chat_room' product.user.username %}" class="btn btn-primary">Add {{ product.user.username }} to chat</a> 
+                    <a 
+                    href="{% url 'chat_room' product.user.username %}" 
+                    class="btn btn-primary" 
+                    onclick="return sendPurchaseRequestAndRedirect('{{ product.user.username }}', '{{ product.name }}', this);">
+                    Add {{ product.user.username }} to chat
+                </a>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Report User Modal -->
-    <div class="modal" tabindex="-1" role="dialog" id="reportModal">
+    <div class="modal fade" tabindex="-1" role="dialog" id="reportModal">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Report User</h5>
+                    <h5 class="modal-title" style="color: black;">Report User</h5> 
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form id="report-form">
+                    <form id="report-form" method="post">
                         {% csrf_token %}
                         <div class="form-group">
-                            <label for="reason">Reason for reporting:</label>
+                            <label for="reason" style="color: black;">Reason for reporting:</label>
                             <select class="form-control" id="reason" name="reason" required>
                                 <option value="Spamming or harassment">Spamming or harassment</option>
                                 <option value="This user is a bot">This user is a bot</option>
@@ -68,7 +105,7 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="description">Description:</label>
+                            <label for="description" style="color: black;">Description:</label>
                             <textarea class="form-control" id="description" name="report_description" rows="4" required></textarea>
                         </div>
                         <button type="submit" class="btn btn-primary">Submit Report</button>
@@ -78,48 +115,55 @@
             </div>
         </div>
     </div>
-
+</div>
 {% endblock %}
 
 <!-- Include Bootstrap JS and jQuery -->
-<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
 
-<!-- JS for handling the form submission -->
 <script>
-$(document).ready(function(){
-    // Handle form submission
-    $('#report-form').submit(function(event){
+$(document).ready(function () {
+    console.log('jQuery version: ', $.fn.jquery);
+    console.log('Document is ready');
+    $('#report-form').submit(function (event) {
+        console.log('Form submission triggered');
         event.preventDefault(); // Prevent default form submission
 
-        // Get form data
         var formData = {
             reason: $('#reason').val(),
             report_description: $('#description').val(),
             csrfmiddlewaretoken: $('input[name="csrfmiddlewaretoken"]').val(),
         };
 
-        // AJAX request to submit the report
+        console.log('Submitting form:', formData); // Debugging
+
         $.ajax({
-            url: "{% url 'report_user' product.user.username %}",  // Update with your actual URL for report handling
+            url: "{% url 'report_user' product.user.username %}",
             type: "POST",
             data: formData,
-            success: function(response) {
+            success: function (response) {
+                console.log('Response:', response);
                 if (response.success) {
-                    $('#response-message').text(response.message).addClass('alert alert-success').show();
-                    setTimeout(function() {
-                        $('#reportModal').modal('hide');
-                        $('#response-message').hide();
-                    }, 2000); // Hide modal after 2 seconds
+                    alert('Report submitted successfully!');
+                    $('#report-form')[0].reset();
+                    $('#reportModal').modal('hide');
                 } else {
-                    $('#response-message').text(response.message).addClass('alert alert-danger').show();
+                    alert(response.message || 'Failed to submit the report.');
                 }
             },
-            error: function() {
-                $('#response-message').text('An error occurred. Please try again.').addClass('alert alert-danger').show();
-            }
+            error: function (xhr, status, error) {
+                console.log('Error:', error);
+                alert('An error occurred. Please try again.');
+            },
         });
     });
 });
+
 </script>
+
+
+
+
+
+
 
