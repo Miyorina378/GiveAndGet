@@ -18,6 +18,8 @@ sqlparse = "==0.5.1"
 tzdata = "==2024.1"
 virtualenv = "==20.26.5"
 pytest = "*"
+channels = "*"
+daphne = "*"
 
 [dev-packages]
 
