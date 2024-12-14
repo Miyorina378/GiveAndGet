@@ -19,9 +19,13 @@
 
                     <select name="category" class="form-select">
                         <option value="">All Categories</option>
-                        <option value="electronics" {% if request.GET.category == "electronics" %}selected{% endif %}>Electronics</option>
-                        <option value="fashion" {% if request.GET.category == "fashion" %}selected{% endif %}>Fashion</option>
-                        <option value="home" {% if request.GET.category == "home" %}selected{% endif %}>Home</option>
+                        <option value="books" {% if request.GET.category == "books" %}selected{% endif %}>Books</option>
+                        <option value="clothing&fashion" {% if request.GET.category == "clothing&fashion" %}selected{% endif %}>Clothing&Fashion</option>
+                        <option value="home&living" {% if request.GET.category == "home&living" %}selected{% endif %}>Home&Living</option>
+                        <option value="tools&equipment" {% if request.GET.category == "tools&equipment" %}selected{% endif %}>Tools&Equipment</option>
+                        <option value="collectibles" {% if request.GET.category == "collectibles" %}selected{% endif %}>Collectibles</option>
+                        <option value="health&beauty" {% if request.GET.category == "health&beauty" %}selected{% endif %}>Health&Beauty</option>
+                        <option value="other" {% if request.GET.category == "other" %}selected{% endif %}>Other</option>
                     </select>
                     
                     <button type="submit" class="btn btn-light">Search</button>
