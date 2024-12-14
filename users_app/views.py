@@ -78,31 +78,26 @@ def update_profile_picture(request):
     return redirect("dashboard")
 
 @login_required
-@csrf_protect
 def submit_report(request):
     if request.method == 'POST':
-        reporter = request.user
-        reported_user_id = request.POST.get('reported_user_id')
         reason = request.POST.get('reason')
         report_description = request.POST.get('report_description', '')
+        reported_user_id = request.POST.get('reported_user_id')
 
-        try:
-            reported_user = User.objects.get(id=reported_user_id)
-        except User.DoesNotExist:
-            return JsonResponse({'error': 'Reported user does not exist.'}, status=404)
+        # Validate the data
+        if not reason or not reported_user_id:
+            return JsonResponse({'success': False, 'error': 'Invalid data'}, status=400)
 
-        # Save the report
-        report = Report.objects.create(
-            reporter=reporter,
-            reported_user=reported_user,
+        # Save the report to the database
+        Report.objects.create(
             reason=reason,
-            report_description=report_description
+            description=report_description,
+            reported_user_id=reported_user_id
         )
-        report.save()
 
-        return JsonResponse({'message': 'Report submitted successfully.'}, status=200)
+        return JsonResponse({'success': True})
 
-    return JsonResponse({'error': 'Invalid request method.'}, status=405)
+    return JsonResponse({'error': 'Invalid request method'}, status=405)
 
 
 

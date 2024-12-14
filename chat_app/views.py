@@ -1,8 +1,11 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
-from .models import Chat
+from .models import Chat, TradeRequest
+from products.models import Product
 from django.db.models import Q, Count
+from django.http import JsonResponse
+import json
 
 User = get_user_model()
 
@@ -15,6 +18,10 @@ def get_unread_message_counts(user):
 
 @login_required
 def chat_room(request, room_name):
+    
+    seller = get_object_or_404(User, username=room_name)
+    products = Product.objects.filter(user=seller)
+    
     search_query = request.GET.get('search', '')
 
     # Fetch all users who have interacted with the current user in the chat
@@ -65,7 +72,59 @@ def chat_room(request, room_name):
         'user_last_messages': user_last_messages,
         'search_query': search_query,
         'unread_message_counts': unread_message_counts_dict,
+        'products': products,
+        'seller': seller,
+        'room_name': room_name,
     })
+
+@login_required
+def get_user_products(request, room_name):
+    # Fetch the user based on the room_name (which is the seller's username)
+    seller = get_object_or_404(User, username=room_name)
+    
+    # Fetch the products posted by this seller
+    products = Product.objects.filter(user=seller)
+
+    # Check if products are found
+    if products.exists():
+        # Prepare the product data to send back as a JSON response
+        product_data = [{"id": product.id, "name": product.name, "price": str(product.price)} for product in products]
+        return JsonResponse({"success": True, "products": product_data})
+    else:
+        return JsonResponse({"success": False, "message": "No products available for this user."})
+
+
+# Handle trade request submission
+@login_required
+def send_trade_request(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        product_id = data.get("product_id")
+        payment_method = data.get("payment_method")
+        location = data.get("location", None)  # Location can be optional
+
+        # Fetch the product and seller
+        product = get_object_or_404(Product, id=product_id)
+        seller = product.user  # Assuming the product's user is the seller
+
+        # Create a new trade request (assuming TradeRequest model exists)
+        trade_request = TradeRequest.objects.create(
+            buyer=request.user,
+            seller=seller,
+            product=product,
+            payment_method=payment_method,
+            location=location,
+        )
+
+        # Notify the seller (you need to implement this function)
+        notify_seller(seller, f"คุณมีคำขอแลกเปลี่ยนใหม่สำหรับ {product.name}!")
+
+        return JsonResponse({"success": True, "message": "Trade request sent successfully."})
+
+    return JsonResponse({"success": False, "message": "Invalid request."})
+
+
+
 
 
 

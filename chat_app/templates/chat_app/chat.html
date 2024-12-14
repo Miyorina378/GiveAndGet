@@ -3,6 +3,9 @@
 {% block content %}
 
 <style>
+      body {
+      color: black; /* Default text color */
+  }
     /* Chatbox styling */
     .profile-icon {
       color: #12151a;
@@ -114,7 +117,54 @@
     border-radius: 50%;
     text-align: center;
   }
+  /* Modal Style*/
+  .modal {
+      display: none;
+      position: fixed;
+      z-index: 1050;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 50%;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+      overflow: hidden;
+  }
+  .modal-header, .modal-footer {
+      padding: 1rem;
+      border-bottom: 1px solid #ddd;
+      color: black; /* Modal header/footer text color */
+  }
+  .modal-footer {
+      border-top: 1px solid #ddd;
+      display: flex;
+      justify-content: flex-end;
+  }
+  .modal-body {
+      padding: 1rem;
+      color: black; /* Modal body text color */
+  }
+  .modal-header {
+      font-size: 1.5rem;
+      font-weight: bold;
+  }
+  .backdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 1049;
+      display: none;
+  }
+  .chat-message span {
+      color: black; /* Ensure chat messages are black */
+  }
 </style>
+
+
 
 <div class="container-fluid h-100">
   <div class="row h-100">
@@ -122,6 +172,16 @@
       <div class="col-3 sidebar p-3 chats">
         <h5 class="mb-3 text-white">Chats</h5>
         <div class="contacts">
+        <div class="mb-3 text-white">
+            <h5>{{ room_name }} sells</h5>
+            {% if products %}
+                {% for product in products %}
+                <li>{{ product.name }} - ฿{{ product.price }}</li>
+              {% endfor %}
+            {% else %}
+              <p>No products available for this user.</p>
+            {% endif %}
+        </div> 
             {% for item in user_last_messages %}
                 <a
                     href="{% url 'chat_room' item.user.username %}"
@@ -190,6 +250,7 @@
                           value="{{ search_query }}"
                       />
                   </div>
+                  <button type="button" id="tradeButton" class="btn btn-success ml-2">Send Trade Accepting Request</button>
               </form>
           </div>
 
@@ -232,6 +293,49 @@
       </div>
   </div>
 </div>
+
+<!-- Backdrop -->
+<div class="backdrop" id="backdrop"></div>
+
+<!-- Trade Modal -->
+<div class="modal" id="tradeModal">
+    <div class="modal-header">ตกลงซื้อขาย</div>
+    <div class="modal-body">
+      <form id="tradeForm">
+        <!-- Product Selection -->
+        <div class="form-group">
+          <label for="productSelect">เลือกสินค้าที่ต้องการ:</label>
+          <select id="productSelect" class="form-control">
+            <option value="">-- กรุณาเลือกสินค้า --</option>
+          </select>
+        </div>
+  
+        <!-- Payment Method Selection -->
+        <div class="form-group">
+          <label>เลือกวิธีชำระเงิน:</label>
+          <select id="paymentMethod" class="form-control">
+            <option value="money">จ่ายด้วยเงิน</option>
+            <option value="items">แลกเปลี่ยนด้วยของ</option>
+          </select>
+        </div>
+  
+        <!-- Location Input -->
+        <div class="form-group" id="locationInput" style="display: none;">
+          <label>พิกัดสถานที่:</label>
+          <input type="text" id="location" class="form-control" placeholder="ใส่พิกัดที่อยู่สำหรับการแลกเปลี่ยน" />
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button type="button" id="cancelTrade" class="btn btn-secondary">ยกเลิก</button>
+      <button type="button" id="confirmTrade" class="btn btn-primary">ยืนยัน</button>
+    </div>
+  </div>
+  
+  
+  
+  
+  
 
 {{ slug|json_script:"room_slug" }}
 
@@ -336,6 +440,114 @@
           badge.parentElement.removeChild(badge);  // Remove badge when user enters the chat
       });
   }
+
+// Show modal
+tradeButton.addEventListener("click", () => {
+  backdrop.style.display = "block";
+  tradeModal.style.display = "block";
+});
+
+// Hide modal
+const closeModal = () => {
+  backdrop.style.display = "none";
+  tradeModal.style.display = "none";
+};
+
+backdrop.addEventListener("click", closeModal);
+cancelTrade.addEventListener("click", closeModal);
+
+// Show/Hide location input based on payment method
+document.getElementById("paymentMethod").addEventListener("change", function () {
+  const locationInput = document.getElementById("locationInput");
+  if (this.value === "items") {
+    locationInput.style.display = "block";  // Show location input for items payment
+  } else {
+    locationInput.style.display = "none";  // Hide location input for money payment
+  }
+});
+
+// Fetch the user's products when the modal opens
+document.addEventListener("DOMContentLoaded", function () {
+  // Function to fetch and populate the product select dropdown
+  fetch("/get-user-products/", {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      const productSelect = document.getElementById("productSelect");
+      productSelect.innerHTML = ""; // Clear existing options
+
+      // If products are found, create options for the select dropdown
+      if (data.success && data.products.length > 0) {
+        data.products.forEach((product) => {
+          const option = document.createElement("option");
+          option.value = product.id;
+          option.textContent = `${product.name} - ฿${product.price}`;
+          productSelect.appendChild(option);
+        });
+      } else {
+        // If no products, show a message
+        const option = document.createElement("option");
+        option.value = "";
+        option.textContent = "ไม่มีสินค้าสำหรับผู้ใช้นี้";
+        productSelect.appendChild(option);
+      }
+    })
+    .catch((error) => console.error("Error fetching products:", error));
+});
+
+// Confirm trade and submit the trade request
+document.getElementById("confirmTrade").addEventListener("click", function () {
+  const productId = document.getElementById("productSelect").value; // Get selected product ID
+  const paymentMethod = document.getElementById("paymentMethod").value;
+  const location = document.getElementById("location").value;
+
+  // Make sure all fields are filled
+  if (!productId || !paymentMethod) {
+    alert("กรุณากรอกข้อมูลให้ครบถ้วน");
+    return;
+  }
+
+  // Send the trade request via AJAX
+  fetch("/submit-trade-request/", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "X-CSRFToken": getCookie("csrftoken"), // Ensure CSRF token is included
+    },
+    body: JSON.stringify({
+      product_id: productId,
+      payment_method: paymentMethod,
+      location: location,
+    }),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.success) {
+        alert("คำขอแลกเปลี่ยนถูกส่งแล้ว!");
+        location.reload(); // Reload the page if necessary
+      } else {
+        alert("เกิดข้อผิดพลาด: " + data.message);
+      }
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+      alert("เกิดข้อผิดพลาดในการส่งคำขอ");
+    });
+});
+
+// CSRF Token Helper (to get the CSRF token from cookies)
+function getCookie(name) {
+  const cookieValue = document.cookie
+    .split("; ")
+    .find((row) => row.startsWith(name + "="))
+    ?.split("=")[1];
+  return cookieValue || "";
+}
+
 
 </script>
 

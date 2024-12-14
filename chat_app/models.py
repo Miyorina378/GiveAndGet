@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from products.models import Product
 
 class Chat(models.Model):
     sender = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='sent_chats')
@@ -27,6 +28,20 @@ class Chat(models.Model):
         self.is_read = True
         self.last_read = self.timestamp
         self.save()
+
+
+class TradeRequest(models.Model):
+    buyer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="trade_requests_sent")
+    seller = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="trade_requests_received")
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    payment_method = models.CharField(max_length=50)  # Example: "money" or "items"
+    location = models.CharField(max_length=255, blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    status = models.CharField(max_length=50, default="pending")  # Example: "pending", "accepted", "declined"
+
+    def __str__(self):
+        return f"TradeRequest: {self.buyer} -> {self.seller} ({self.product})"
+
 
 
 
