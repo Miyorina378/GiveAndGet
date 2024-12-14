@@ -19,6 +19,7 @@
 
                     <select name="category" class="form-select">
                         <option value="">All Categories</option>
+                        <option value="electronics" {% if request.GET.category == "electronics" %}selected{% endif %}>Electronics</option>
                         <option value="books" {% if request.GET.category == "books" %}selected{% endif %}>Books</option>
                         <option value="clothing&fashion" {% if request.GET.category == "clothing&fashion" %}selected{% endif %}>Clothing&Fashion</option>
                         <option value="home&living" {% if request.GET.category == "home&living" %}selected{% endif %}>Home&Living</option>
