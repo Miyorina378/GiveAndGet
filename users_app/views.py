@@ -10,6 +10,7 @@ from .models import Report
 from django.utils.timezone import now
 import json
 from django.shortcuts import get_object_or_404
+from .forms import ProfilePictureForm
 
 User = get_user_model()
 
@@ -69,31 +70,9 @@ def update_email(request):
 @login_required
 def update_profile_picture(request):
     if request.method == "POST" and request.FILES.get("profile_picture"):
-        new_profile_picture = request.FILES["profile_picture"]
-        request.user.profile_picture = new_profile_picture
-        request.user.save() 
+        # Update profile picture with the new file
+        request.user.profile_picture = request.FILES["profile_picture"]
+        request.user.save()
         messages.success(request, "Profile picture updated successfully!")
-        return redirect("dashboard")
-    messages.error(request, "Please provide a valid profile picture.")
+        return redirect("dashboard")  # หรือหน้าอื่นๆ ตามที่คุณต้องการ
     return redirect("dashboard")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

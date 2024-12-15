@@ -5,8 +5,12 @@ from django.conf import settings
 from products.models import Product
 
 class GGUser(AbstractUser):
-    # Adding custom fields
-    profile_picture = models.ImageField(default= 'media/profile_pics/default.png', upload_to='media/profile_pics/', null=True, blank=True)
+    profile_picture = models.ImageField(
+        default='profile_pics/default.png', 
+        upload_to='profile_pics/', 
+        null=True, 
+        blank=True
+    )
     user_id = models.PositiveIntegerField(unique=True, editable=False)
     status_choices = [
         ('online', 'Online'),
@@ -19,8 +23,7 @@ class GGUser(AbstractUser):
     is_ban = models.BooleanField(default=False)
     ban_reason = models.TextField(null=True, blank=True)
     ban_end_date = models.DateTimeField(null=True, blank=True)
-    
-    # Automatically set the user_id
+
     def save(self, *args, **kwargs):
         if not self.user_id:
             last_user = GGUser.objects.last()
@@ -58,7 +61,3 @@ class Report(models.Model):
     def __str__(self):
         # Ensure the reported_product exists before trying to access its name
         return f'Report by {self.reporter} on {self.reported_user} for {self.reason}'
-
-
-    
-    
