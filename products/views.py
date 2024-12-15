@@ -2,11 +2,12 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import Product
 from .forms import ProductForm
 from users_app.models import Report
-from users_app.forms import ReportForm
+from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
-from django.conf import settings
-from django.apps import apps
+from django.http import HttpResponse
 
+
+User = get_user_model()
 
 @login_required
 def product_list(request):
@@ -38,7 +39,6 @@ def product_detail(request, product_id):
         'added_by': product.user.username,  # ส่งชื่อผู้เพิ่มสินค้าไปยังเทมเพลต
     })
 
-
 @login_required
 def edit_product(request, product_id):
     product = get_object_or_404(Product, id=product_id, user=request.user)  # ตรวจสอบว่าเป็นสินค้าของผู้ใช้
@@ -52,22 +52,54 @@ def edit_product(request, product_id):
     return render(request, 'products/add_product.html', {'form': form, 'is_edit': True})
 
 @login_required
-def add_report(request, reported_user_id):
-    print("Reported User ID:", reported_user_id)
+def add_report(request):
+    if request.method == 'POST':
+        reported_user = User.objects.get(id=reported_user_id)
+        reason = request.POST.get('reason')
+        description = request.POST.get('description')
 
-    reported_user = get_object_or_404(Product, id=reported_user_id)
+        # Create a new report
+        report = Report(
+            reporter=request.user,
+            reported_user=reported_user_username,
+            reason=reason,
+            report_description=description
+        )
+        report.save()
+
+        # Redirect back to the referring page or a default page
+        return redirect(request.META.get('HTTP_REFERER', 'products:product_list'))
+
+    # If not a POST request, return an error response
+    return HttpResponse("ERROR: Reports can only be submitted via POST.")
+
+def create_scope(request):
 
     if request.method == 'POST':
-        form = ReportForm(request.POST)
-        if form.is_valid():
-            report = form.save(commit=False)
-            report.reporter = request.user  # Set the reporter to the current user
-            report.reported_user = reported_user  # Assign the reported user
-            report.save()
+        wallet = User.objects.get(id=request.POST.get('wallet')) 
+        month = int(request.POST.get('month'))
+        year = int(request.POST.get('year'))
+        income_goal = float(request.POST.get('income_goal'))
+        expense_goal = float(request.POST.get('expense_goal'))
 
-            # Redirect to the product detail page (replace 'product_detail' with your view name)
-        return redirect('products/product_detail.html', pk=request.POST.get('product_id'))
+        # ตรวจสอบว่าเป้าหมายเดือน/ปีนี้มีอยู่แล้วหรือไม่
+        if User.objects.filter(wallet=wallet, month=month, year=year).exists():
+            # เพิ่มข้อความแจ้งเตือน (หากมีอยู่แล้ว)
+            return HttpResponse("ERROR, Can't create 2 scope with same month")
+
+        # สร้างเป้าหมายใหม่
+        scope = User(
+            wallet=wallet,
+            month=month,
+            year=year,
+            income_goal=income_goal,
+            expense_goal=expense_goal
+        )
+        
+        scope.save()
+
+        return redirect(request.META.get('HTTP_REFERER', 'main'))
     else:
-        form = ReportForm()
+        # ถ้าเป็น GET ก็แสดงแบบฟอร์ม
+        return HttpResponse("ERROR, Can't create_scope")
 
-    return render(request, 'products/product_detail.html', {'form': form})
