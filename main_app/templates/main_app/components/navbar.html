@@ -7,20 +7,20 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav me-auto">
+            <ul class="navbar-nav ms-auto">
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'home' %}">Home</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'about' %}">About</a>
                 </li>
-            </ul>
-            {% if user.is_authenticated %}
-            <ul class="navbar-nav">
+
+                {% if user.is_authenticated %}
+
                 <li class="nav-item">
                     <form action="{% url 'chat_room' room_name=user.username %}" method="get">
                         <button class="btn btn-outline-light" type="submit">Chat</button>
-                    </form>                                       
+                    </form>
                 </li>
                 <li class="nav-item">
                     <form action="{% url 'dashboard' %}" method="get">
@@ -33,10 +33,11 @@
                         <button class="btn btn-outline-danger" type="submit">Logout</button>
                     </form>
                 </li>
+
+                {% else %}
+                <a href="{% url 'login' %}" class="btn btn-outline-light">Login</a>
+                {% endif %}
             </ul>
-            {% else %}
-            <a href="{% url 'login' %}" class="btn btn-outline-light">Login</a>
-            {% endif %}
         </div>
     </div>
 </nav>

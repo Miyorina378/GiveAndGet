@@ -1,0 +1,47 @@
+.container {
+    max-width: 800px;
+}
+ิ
+.body {
+    color: #000;
+}
+
+.text-black {
+    color: #000;
+    /* เปลี่ยนสีข้อความให้เป็นสีดำ */
+}
+
+
+.search-section form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.chat-messages {
+    max-height: 400px;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+.list-group-item {
+    background-color: #f8f9fa;
+    /* Light background for messages */
+    border: none;
+    margin-bottom: 5px;
+}
+
+.message-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+}
+
+button.btn {
+    margin-top: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+}
