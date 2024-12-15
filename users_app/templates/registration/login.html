@@ -12,6 +12,8 @@
 </head>
 <body>
     <div class="container">
+        <!-- ปุ่ม Back -->
+        <a href="{% url 'home' %}" class="back-btn">Back</a>
         <!-- โลโก้และข้อความด้านซ้าย -->
         <div class="logo">
             <img src="{% static 'users_app/images/logo.png' %}" alt="Logo">
@@ -35,7 +37,7 @@
                 <input type="text" name="username" id="username" placeholder="Enter your username">
                 <label for="password">PASSWORD</label>
                 <input type="password" name="password" id="password" placeholder="Enter your password">
-                <button type="submit" class="signup-btn">LOG IN</button>
+                <button type="submit" class="signup-btn">LOGIN</button>
             </form>
             <div class="or-text">or</div>
             <a href="{% url 'register' %}">
