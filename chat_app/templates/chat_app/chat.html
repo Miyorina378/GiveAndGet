@@ -1,11 +1,14 @@
 {% extends 'main_app/components/base.html' %}
-
 {% block content %}
 
 <style>
-      body {
-      color: black; /* Default text color */
-  }
+    /* กำหนด body และ html ให้เต็มพื้นที่จอ */
+    html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden; /* ตัดเฉพาะ Scroll แนวนอน ไม่ตัดแนวตั้ง */
+    }
     /* Chatbox styling */
     .profile-icon {
       color: #12151a;
@@ -15,11 +18,42 @@
       flex: 1;
     }
 
+    /* พื้นหลังพื้นที่แชทด้านขวา */
+
     #chatbox {
+      background-color: #e6e6e67a; /* สีเทากลางสำหรับกล่องข้อความ */
+      border: 1px solid #ccc; /* เส้นขอบสีเทา */
+      border-radius: 8px; /* ขอบโค้งเล็กน้อย */
+      height: 400px; /* ความสูงคงที่ของกล่องแชท */
+      overflow-y: auto; /* เพิ่มการเลื่อนเมื่อข้อความเกินพื้นที่ */
+      background-color: #f8f9fa; /* สีพื้นหลัง */
+      padding: 10px; /* ระยะห่างภายใน */
+      margin-bottom: 0; /* ลบ margin ล่าง */
+    }
+
+    .chat {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Chat Header ให้ความสูงพอดี */
+    .chat-header {
       background-color: #f8f9fa;
-      overflow-y: auto;
-      height: calc(100vh - 180px);
+      color: white;
       padding: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    } 
+
+    .chatbox {
+      flex-grow: 1; /* ขยายเต็มพื้นที่ที่เหลือ */
+      overflow-y: auto;
+      padding: 10px;
+      background-color: #f8f9fa;
+      border-top: 1px solid #ddd;
+      border-bottom: 1px solid #ddd;
     }
 
     .chat-message {
@@ -32,27 +66,29 @@
     }
 
     .chat-message.sender {
-      background-color: #63eead;
-      color: #435f7a;
+      background-color: #b3e5fc; /* สีฟ้าอ่อน */
+      color: #000000;
       margin-left: auto;
       text-align: right;
     }
 
     .chat-message.receiver {
-      background-color: #435f7a;
-      color: white;
+      background-color: #cfd8dc; /* สีเทาอ่อน */
+      color: #000000; /* สีข้อความดำ */
       margin-right: auto;
       text-align: left;
     }
 
     .chat-input {
       background-color: white;
+      border-top: 1px solid #ddd; /* เส้นแบ่งด้านบน */
+      padding: 10px;
     }
 
     .chat-input button {
       border-top-left-radius: 0;
       border-bottom-left-radius: 0;
-      background: #435f7a;
+      background: #1d72b8;
       color: white;
       border: none;
     }
@@ -62,12 +98,13 @@
     }
 
     .sidebar {
-      background-color: #2c3e50;
+      height: 100%;
+      background: radial-gradient(circle, #6fb0e7 10%, #0052cc 100%);
       overflow-y: auto;
     }
 
     .sidebar a {
-      background: #2c3e50;
+      background: 1d72b8;
       color: white;
     }
 
@@ -83,14 +120,14 @@
     }
 
     .chats .list-group-item:hover {
-      background-color: #435f7a;
+      background-color: #00000062;
       color: white;
     }
 
     /* Change border bottom color of the item in the list */
     .chats .list-group-item {
-      border-bottom: 1px solid #435f7a;
-      width: 105%;
+      border-bottom: 1px solid #5a58587e;
+      width: 100%;
     }
 
     .active {
@@ -107,16 +144,17 @@
     }
 
     .badge {
-    display: inline-block;
-    min-width: 20px;
-    padding: 3px 7px;
-    font-size: 12px;
-    font-weight: bold;
-    color: white;
-    background-color: red;
-    border-radius: 50%;
-    text-align: center;
-  }
+      display: inline-block !important; /* แสดง Badge เสมอ */
+      visibility: visible !important; /* มองเห็นได้เสมอ */
+      background-color: #dc3545; /* สีแดง */
+      color: #fff; /* สีข้อความ */
+      border-radius: 50%;
+      padding: 5px 8px;
+      font-size: 12px;
+      text-align: center;
+      font-weight: bold;
+    }
+
   /* Modal Style*/
   .modal {
       display: none;
@@ -162,9 +200,151 @@
   .chat-message span {
       color: black; /* Ensure chat messages are black */
   }
+
+  /* จัดตำแหน่งและขนาดคำว่า Chats */
+  .sidebar h5 {
+      text-align: center;  /* จัดให้อยู่ตรงกลาง */
+      font-size: 1.8rem;   /* ขยายขนาดตัวอักษร */
+      font-weight: bold;   /* ทำให้หนาขึ้น */
+      margin-bottom: 20px; /* เพิ่มช่องว่างด้านล่าง */
+      color: white;        /* กำหนดสีข้อความเป็นสีขาว */
+      border-bottom: 2px solid #ffffff8a; /* เส้นสีขาว */
+      padding-bottom: 10px; /* เพิ่มช่องว่างด้านล่าง */
+  }
+    /* เส้นแบ่งใต้ Product List */
+  .sidebar .contacts > div {
+      border-bottom: 2px solid #ffffff8a; /* เส้นสีขาว */
+      margin-bottom: 15px;
+      padding-bottom: 10px; /* เพิ่มช่องว่างด้านล่าง */
+  }
+
+
+
+  .sidebar .profile-icon {
+    margin-right: 10px; /* ระยะห่างด้านขวาของรูป */
+    flex-shrink: 0; /* ป้องกันรูปย่อขนาด */
+  }
+
+  .sidebar .w-100 {
+    margin-left: 5px; /* ขยับเนื้อหาด้านใน */
+  }
+
+  /* จัดตำแหน่งช่องค้นหาและปุ่มให้อยู่ด้านขวา */
+  .ml-auto {
+    margin-left: auto;
+  }
+
+  /* ขอบมนสำหรับช่องค้นหา */
+  #searchInput {
+    border-radius: 20px; /* ขอบมน */
+    padding: 5px 15px; /* ขยายพื้นที่ภายใน */
+    border: 1px solid #ccc; /* เพิ่มเส้นขอบสีเทา */
+  }
+
+  /* ปุ่มคำขอแลกเปลี่ยน */
+  #tradeButton {
+    margin-right: 15px; /* เพิ่มระยะห่างด้านขวาของปุ่ม */
+    border: 2px solid #1d72b8; /* ขอบสีฟ้าเข้ม */
+    background-color: white; /* พื้นหลังสีขาว */
+    color: #1d72b8; /* ข้อความสีฟ้าเข้ม */
+    border-radius: 20px; /* ทำขอบมน */
+    padding: 5px 15px; /* เพิ่มพื้นที่ภายในปุ่ม */
+    font-size: 14px; /* ขนาดตัวอักษร */
+    font-weight: bold; /* ทำให้ข้อความหนา */
+    transition: all 0.3s ease; /* เพิ่มเอฟเฟกต์ตอน hover */
+  }
+
+  /* เพิ่มเอฟเฟกต์เมื่อ hover */
+  #tradeButton:hover {
+    background-color: #1d72b8; /* พื้นหลังสีฟ้าเข้ม */
+    color: white; /* ข้อความสีขาว */
+    border: 2px solid #1d72b8; /* ขอบยังคงเดิม */
+}
+
+  /* เพิ่มระยะห่างระหว่างรูปโปรไฟล์และชื่อห้องแชท */
+  .chat-header img {
+    margin-right: 10px; /* ระยะห่างด้านขวาของรูปโปรไฟล์ */
+  }
+
+  /* ปรับขนาดตัวอักษรของชื่อห้องแชท */
+  .chat-header h3 {
+    font-size: 1.8rem; /* ขนาดตัวอักษรเล็กลง */
+    margin: 0; /* ลบระยะห่างด้านบนและด้านล่างของ h3 */
+    font-weight: bold; /* น้ำหนักตัวอักษรปานกลาง */
+    color: #333; /* ปรับสีข้อความเป็นสีเทาเข้ม */
+  }
+
+  /* ตกแต่ง Trade Modal */
+/* ปรับ Modal ให้ขนาดพอดีกับเนื้อหา */
+.modal {
+    position: fixed;
+    top: 50%; /* จัดให้อยู่กึ่งกลางตามแนวตั้ง */
+    left: 50%; /* จัดให้อยู่กึ่งกลางตามแนวนอน */
+    transform: translate(-50%, -50%); /* จัดกึ่งกลางอย่างสมบูรณ์ */
+    width: auto; /* กำหนดความกว้างตามเนื้อหา */
+    max-width: 600px; /* ความกว้างสูงสุด */
+    height: auto; /* ความสูงตามเนื้อหา */
+    border-radius: 8px; /* ขอบโค้งมน */
+    box-shadow: 0px 3px 7px rgba(0, 0, 0, 0.3); /* เพิ่มเงาเบา ๆ */
+    background-color: #fff; /* สีพื้นหลัง */
+    padding: 0; /* เอา Padding ของ Modal หลักออก */
+    overflow: hidden; /* ไม่ให้มี Scroll ที่ไม่จำเป็น */
+}
+
+/* Header จัดให้อยู่กระชับ */
+.modal-header {
+    background: linear-gradient(to right, #003366, #1d72b8); /* ไล่จากน้ำเงินเข้มไปน้ำเงินอ่อน */
+    color: white; /* ข้อความสีขาว */
+    padding: 10px 15px; /* ปรับ Padding ให้กระชับขึ้น */
+    font-size: 1.3rem;
+    font-weight: bold;
+}
+
+/* Body กระชับและพอดีกับเนื้อหา */
+.modal-body {
+    padding: 15px 20px; /* ระยะห่างภายใน */
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+/* Footer กระชับ และปุ่มอยู่ขวา */
+.modal-footer {
+    display: flex;
+    justify-content: flex-end; /* ปุ่มชิดขวา */
+    padding: 10px 15px; /* ปรับ Padding */
+    background-color: #f9f9f9; /* สีเทาอ่อน */
+    gap: 10px;
+}
+
+/* ปุ่มสไตล์เดียวกับปุ่มคำขอแลกเปลี่ยน */
+.modal-footer .btn {
+    border: 2px solid #1d72b8;
+    background-color: white;
+    color: #1d72b8;
+    border-radius: 20px;
+    padding: 5px 15px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.modal-footer .btn:hover {
+    background-color: #1d72b8;
+    color: white;
+}
+
+/* จัดให้ Sidebar และ Chat Area เต็มความสูง */
+.container-fluid {
+    height: 100vh; /* เต็มความสูงของ viewport */
+    margin: 0;
+    padding: 0;
+}
+
+.row {
+    height: 100%; /* ให้ row ขยายเต็มความสูง */
+    margin: 0;
+}
+
 </style>
-
-
 
 <div class="container-fluid h-100">
   <div class="row h-100">
@@ -173,7 +353,7 @@
         <h5 class="mb-3 text-white">Chats</h5>
         <div class="contacts">
         <div class="mb-3 text-white">
-            <h5>{{ room_name }} sells</h5>
+            <h6 style="font-weight: bold;"></h6style>{{ room_name }}'s Product List : </h6>
             {% if products %}
                 {% for product in products %}
                 <li>{{ product.name }} - ฿{{ product.price }}</li>
@@ -208,7 +388,7 @@
                                 {% if item.last_message %}
                                     <small class="d-block text-truncate last-msg" style="max-width: 90%" id="last-message">
                                         {% if item.last_message.sender == request.user %}
-                                            You: 
+                                            
                                         {% endif %} 
                                         {{ item.last_message.content|truncatewords:5 }}
                                     </small>
@@ -219,7 +399,7 @@
                         </div>
                         <!-- Unread Badge -->
                         {% if item.unread_count > 0 %}
-                            <span class="badge badge-danger unread-badge" data-username="{{ item.user.username }}">{{ item.unread_count }}</span>
+                            <span class="badge badge-danger unread-badge">{{ item.unread_count }}</span>
                         {% endif %}
                     </div>
                 </a>
@@ -231,28 +411,35 @@
       <!-- Chat Area -->
       <div class="col-9 d-flex flex-column chat" data-id="{{ room_name }}">
           <!-- Chat Header -->
-          <div class="d-flex align-items-center p-1">
-              <img
-                  src="https://ui-avatars.com/api/?name={{ room_name|urlencode }}&size=64&background=random"
-                  style="border-radius: 50%; height: 45px; width: auto"
-              />
-              <h3 class="display-5 mb-0" style="padding-left: 10px">
-                  {{ room_name }}
-              </h3>
-              <form method="GET" action="" class="p-3 ml-auto">
-                  <div class="form-group mb-0">
-                      <input
-                          type="text"
-                          name="search"
-                          id="searchInput"
-                          class="form-control"
-                          placeholder="Search messages..."
-                          value="{{ search_query }}"
-                      />
-                  </div>
-                  <button type="button" id="tradeButton" class="btn btn-success ml-2">Send Trade Accepting Request</button>
-              </form>
+          <div class="d-flex align-items-center p-1 chat-header">
+          <!-- รูปโปรไฟล์ -->
+          <img
+              src="https://ui-avatars.com/api/?name={{ room_name|urlencode }}&size=64&background=random"
+              style="border-radius: 30%; height: 50px; width: auto;"
+          />
+          <!-- ชื่อห้องแชท -->
+          <h3 class="display-5 mb-0 pl-2">{{ room_name }}</h3>
+
+          <!-- ปุ่มและช่องค้นหา -->
+          <div class="ml-auto d-flex align-items-center">
+              <!-- ปุ่มคำขอแลกเปลี่ยน -->
+              <button type="button" id="tradeButton" class="btn btn-success mr-2">
+                  Send Trade Request
+              </button>
+              <!-- ช่องค้นหา -->
+              <div class="form-group mb-0">
+                <input
+                    type="text"
+                    name="search"
+                    id="searchInput"
+                    class="form-control rounded"
+                    placeholder="Search messages..."
+                    value="{{ search_query }}"
+                    style="border-radius: 20px; width: 250px;"
+                />
+              </div>
           </div>
+        </div>
 
           <!-- Chatbox -->
           <div id="chatbox" class="chatbox flex-fill p-3">
@@ -559,27 +746,4 @@ function getCookie(name) {
 
 
 {% endblock %}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
