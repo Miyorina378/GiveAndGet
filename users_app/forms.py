@@ -13,6 +13,16 @@ class ProfilePictureForm(forms.ModelForm):
         model = GGUser
         fields = ['profile_picture']
 
+class UserProfileForm(forms.ModelForm):
+    class Meta:
+        model = GGUser
+        fields = ['first_name', 'last_name', 'birth_date', 'phone_number', 'occupation', 'profile_picture', 'email']
+        widgets = {
+            'birth_date': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
+            'phone_number': forms.TextInput(attrs={'class': 'form-control'}),
+            'occupation': forms.TextInput(attrs={'class': 'form-control'}),
+        }
+
 class ReportForm(forms.ModelForm):
     class Meta:
         model = Report
