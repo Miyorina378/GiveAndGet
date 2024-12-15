@@ -5,41 +5,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Register</title>
+    <!-- ลิงก์ไปยัง Google Fonts: Open Sans -->
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'users_app/login.css' %}">
 </head>
 <body>
-    <a href="{% url 'login' %}">
-        <button type="button" class="back-btn">Back</button>
-    </a>
-    <div class="login-body">
+    <div class="container">
+        <!-- โลโก้ด้านซ้าย -->
+        <div class="logo">
+            <img src="{% static 'users_app/images/logo.png' %}" alt="Logo">
+            <h1>GiveAndGet</h1>
+            <p>buy - sell - trade</p>
+        </div>
+
+        <!-- กล่อง Register ด้านขวา -->
         <div class="login-box">
-            <h3>Register</h3>
+            <h3>SIGN UP</h3>
             <form method="post">
                 {% csrf_token %}
+                <!-- Email Field -->
                 <div class="form-field">
-                    {{ form.email.label_tag }}
+                    <label for="email">EMAIL</label>
                     {{ form.email }}
                     {{ form.email.errors }}
                 </div>
+                <!-- Username Field -->
                 <div class="form-field">
-                    {{ form.username.label_tag }}
+                    <label for="username">USERNAME</label>
                     {{ form.username }}
                     {{ form.username.errors }}
                 </div>
+                <!-- Password1 Field -->
                 <div class="form-field">
-                    {{ form.password1.label_tag }}
+                    <label for="password1">PASSWORD</label>
                     {{ form.password1 }}
-                    {{ form.pasword1.errors }}
+                    {{ form.password1.errors }}
                 </div>
+                <!-- Password2 Field -->
                 <div class="form-field">
-                    {{ form.password2.label_tag }}
+                    <label for="password2">CONFIRM YOUR PASSWORD</label>
                     {{ form.password2 }}
-                    {{ form.pasword2.errors }}
+                    {{ form.password2.errors }}
                 </div>
                 <input type="hidden" name="next" value="{{ request.GET.next }}">
-                <button type="submit">Register</button>
+                <button type="submit">SIGN UP</button>
             </form>
+            <div class="or-text">or</div>
+            <a href="{% url 'login' %}">
+                <button type="button" class="signup-btn">BACK TO LOGIN</button>
+            </a>
         </div>
     </div>
 </body>

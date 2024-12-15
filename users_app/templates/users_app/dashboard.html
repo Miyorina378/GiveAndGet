@@ -9,10 +9,10 @@
     </div>
 
     <!-- User Information Section -->
-    <div class="row">
+    <div class="row align-items-stretch">
         <div class="col-md-4 text-center">
             <!-- Profile Picture -->
-            <div class="dashboard-card">
+            <div class="dashboard-card h-100">
                 <div class="dashboard-card-body">
                     {% if user.profile_picture %}
                     <img src="{{ user.profile_picture.url }}" class="img-fluid rounded-circle mb-3" alt="User Picture">
@@ -22,19 +22,19 @@
                     {% endif %}
                     <h5 class="dashboard-card-title">{{ user.username }}</h5>
                     <button class="btn btn-primary">Edit Profile</button>
+                    <a href="{% url 'password_change' %}" class="btn btn-secondary">Change Password</a>
                 </div>
             </div>
         </div>
 
         <!-- User Details -->
         <div class="col-md-8">
-            <div class="card mb-3">
+            <div class="card mb-3 h-100">
                 <div class="user-info-card-header">User Information</div>
                 <div class="user-info-card-body">
                     <p><strong>Username:</strong> {{ user.username }}</p>
                     <p><strong>Email:</strong> {{ user.email }}</p>
                     <p><strong>UID:</strong> {{ user.user_id }}</p>
-                    <a href="{% url 'password_change' %}" class="btn btn-secondary">Change Password</a>
                 </div>
             </div>
         </div>
