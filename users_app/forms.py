@@ -8,8 +8,10 @@ class RegisterForm(UserCreationForm):
         model = GGUser
         fields = UserCreationForm.Meta.fields + ("email", )
 
-from django import forms
-from .models import Report
+class ProfilePictureForm(forms.ModelForm):
+    class Meta:
+        model = GGUser
+        fields = ['profile_picture']
 
 class ReportForm(forms.ModelForm):
     class Meta:
@@ -19,16 +21,14 @@ class ReportForm(forms.ModelForm):
             'reason': forms.Select(
                 attrs={
                     'class': 'form-select',  # Bootstrap's dropdown styling
-                    'id': 'reportReason',  # Matches the label's `for` attribute
+                    'id': 'reportReason',  # Matches the label's for attribute
                 }
             ),
             'report_description': forms.Textarea(
                 attrs={
                     'class': 'form-control',  # Bootstrap's textarea styling
-                    'id': 'reportDescription',  # Matches the label's `for` attribute
+                    'id': 'reportDescription',  # Matches the label's for attribute
                     'rows': 4,
                 }
             ),
         }
-
-

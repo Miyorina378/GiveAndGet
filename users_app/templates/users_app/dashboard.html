@@ -17,11 +17,11 @@
                     {% if user.profile_picture %}
                     <img src="{{ user.profile_picture.url }}" class="img-fluid rounded-circle mb-3" alt="User Picture">
                     {% else %}
-                    <img src="{% static 'images/default-profile.png' %}" class="img-fluid rounded-circle mb-3"
-                        alt="Default Picture">
+                    <img src="{% static 'images/default-profile.png' %}" class="img-fluid rounded-circle mb-3" alt="Default Picture">
                     {% endif %}
                     <h5 class="dashboard-card-title">{{ user.username }}</h5>
-                    <button class="btn btn-primary">Edit Profile</button>
+                    <!-- Edit Profile Button -->
+                    <button class="btn btn-primary" id="editProfileBtn">Edit Profile</button>
                     <a href="{% url 'password_change' %}" class="btn btn-secondary">Change Password</a>
                 </div>
             </div>
@@ -44,42 +44,37 @@
     <div class="text-center mt-4">
         <a href="{% url 'product_list' %}" class="btn btn-success">My Products</a>
     </div>
+
+    <!-- Profile Picture Update Form (Initially Hidden) -->
+    <div id="profilePictureForm" class="mt-4" style="display: none;">
+        <form action="{% url 'update_profile_picture' %}" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="profile_picture" class="form-label">Update Profile Picture</label>
+                <input type="file" class="form-control" id="profile_picture" name="profile_picture" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Upload</button>
+            <button type="button" id="cancelEditBtn" class="btn btn-secondary">Cancel</button>
+        </form>
+    </div>
 </div>
 
 <script>
     const editProfileBtn = document.getElementById("editProfileBtn");
-    const saveChangesBtn = document.getElementById("saveChangesBtn");
+    const profilePictureForm = document.getElementById("profilePictureForm");
     const cancelEditBtn = document.getElementById("cancelEditBtn");
-    const usernameInput = document.getElementById("username");
-    const emailInput = document.getElementById("email");
 
-    // Toggle Edit Mode
+    // Show the profile picture upload form when "Edit Profile" is clicked
     editProfileBtn.addEventListener("click", () => {
-        usernameInput.disabled = false;
-        emailInput.disabled = false;
-
-        // Show Save and Cancel buttons, hide Edit button
-        saveChangesBtn.classList.remove("d-none");
-        cancelEditBtn.classList.remove("d-none");
-        editProfileBtn.classList.add("d-none");
-
-        // Focus on the username input
-        usernameInput.focus();
+        profilePictureForm.style.display = 'block';  // Show form
+        editProfileBtn.style.display = 'none';      // Hide Edit Profile button
     });
 
-    // Cancel Edit
+    // Cancel the edit and hide the upload form
     cancelEditBtn.addEventListener("click", () => {
-        usernameInput.disabled = true;
-        emailInput.disabled = true;
-
-        // Revert changes to original values
-        usernameInput.value = "{{ user.username }}";
-        emailInput.value = "{{ user.email }}";
-
-        // Hide Save and Cancel buttons, show Edit button
-        saveChangesBtn.classList.add("d-none");
-        cancelEditBtn.classList.add("d-none");
-        editProfileBtn.classList.remove("d-none");
+        profilePictureForm.style.display = 'none';  // Hide form
+        editProfileBtn.style.display = 'block';     // Show Edit Profile button
     });
 </script>
+
 {% endblock %}
