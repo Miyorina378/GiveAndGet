@@ -1,7 +1,12 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Product
 from .forms import ProductForm
+from users_app.models import Report
+from users_app.forms import ReportForm
 from django.contrib.auth.decorators import login_required
+from django.conf import settings
+from django.apps import apps
+
 
 @login_required
 def product_list(request):
@@ -45,3 +50,24 @@ def edit_product(request, product_id):
     else:
         form = ProductForm(instance=product)
     return render(request, 'products/add_product.html', {'form': form, 'is_edit': True})
+
+@login_required
+def add_report(request, reported_user_id):
+    print("Reported User ID:", reported_user_id)
+
+    reported_user = get_object_or_404(Product, id=reported_user_id)
+
+    if request.method == 'POST':
+        form = ReportForm(request.POST)
+        if form.is_valid():
+            report = form.save(commit=False)
+            report.reporter = request.user  # Set the reporter to the current user
+            report.reported_user = reported_user  # Assign the reported user
+            report.save()
+
+            # Redirect to the product detail page (replace 'product_detail' with your view name)
+        return redirect('products/product_detail.html', pk=request.POST.get('product_id'))
+    else:
+        form = ReportForm()
+
+    return render(request, 'products/product_detail.html', {'form': form})

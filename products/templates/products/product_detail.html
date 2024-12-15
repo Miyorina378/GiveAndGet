@@ -67,7 +67,7 @@
             <div class="product-details-section col-md-6">
                 <div class="product-card card p-3">
                     <!-- Report Button to trigger Modal -->
-                    <button class="btn btn-report" onclick="openReportModal('{{ user.id }}')">Report</button>
+                    <button class="btn btn-danger" onclick="openReportModal('{{ user.id }}')">Report</button>
                     <h3 class="product-card-title">Product Details</h3>
                     <p class="product-info"><strong>Post by:</strong> {{ product.user.username }}</p>
                     <p class="product-info"><strong>Description:</strong> {{ product.description }}</p>
@@ -86,157 +86,84 @@
         </div>
     </div>
 
+
 <!-- Report Modal -->
 <div class="modal fade" id="reportModal" tabindex="-1" aria-labelledby="reportModalLabel" aria-hidden="true">
     <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="reportModalLabel">Report User</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <form id="reportForm">
-            {% csrf_token %}
-            <div class="mb-3">
-              <label for="reportReason" class="form-label">Reason</label>
-              <select class="form-select" id="reportReason" name="reason" required>
-                <option value="">Select a reason</option>
-                <option value="User is spamming or harassment">User is spamming or harassment</option>
-                <option value="This user is a bot">This user is a bot</option>
-                <option value="This Product is not delivered on time">This Product is not delivered on time</option>
-                <option value="Posting copyrighted product">Posting copyrighted product</option>
-                <option value="Posting illegal product">Posting illegal product</option>
-              </select>
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h5 class="modal-title" id="reportModalLabel">Report User</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="mb-3">
-              <label for="reportDescription" class="form-label">Description</label>
-              <textarea class="form-control" id="reportDescription" name="report_description" rows="3"></textarea>
+            
+            <!-- Modal Body -->
+            <div class="modal-body">
+                <form id="reportForm" method="post" action="{% url 'add_report' reported_user_id=4 %}">
+                    {% csrf_token %}
+                    
+                    <!-- Hidden Field to Pass Reported User ID -->
+                    <input type="hidden" id="reportedUserId" name="reported_user_id">
+
+                    <!-- Hidden Field to Pass Product ID -->
+                    <input type="hidden" id="productId" name="product_id" value="{{ product.id }}">
+
+                    <!-- Dropdown for Reason -->
+                    <div class="mb-3">
+                        <label for="reportReason" class="form-label">Reason for Reporting</label>
+                        <select class="form-select" id="reportReason" name="reason" required>
+                            <option value="" disabled selected>Select a reason</option>
+                            <option value="User is spamming or harassment">User is spamming or harassment</option>
+                            <option value="This user is a bot">This user is a bot</option>
+                            <option value="This Product is not delivered on time">This Product is not delivered on time</option>
+                            <option value="Posting copyrighted product">Posting copyrighted product</option>
+                            <option value="Posting illegal product">Posting illegal product</option>
+                        </select>
+                    </div>
+
+                    <!-- Textarea for Description -->
+                    <div class="mb-3">
+                        <label for="reportDescription" class="form-label">Additional Details</label>
+                        <textarea
+                            class="form-control"
+                            id="reportDescription"
+                            name="report_description"
+                            rows="4"
+                            placeholder="Add more details (optional)"
+                        ></textarea>
+                    </div>
+                </form>
             </div>
-            <input type="hidden" id="reportedUserId" name="reported_user_id" value="">
-          </form>
+            
+            <!-- Modal Footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="submit" class="btn btn-danger" form="reportForm">Submit Report</button>
+            </div>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" id="submitReportBtn">Submit Report</button>
-        </div>
-      </div>
     </div>
-  </div>
+</div>
+
+
+
 
 {% endblock %}
 
-<!-- Report Modal -->
-<div class="modal fade" id="reportModal" tabindex="-1" aria-labelledby="reportModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="reportModalLabel">Report User</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form id="reportForm">
-                    {% csrf_token %}
-                    <div class="mb-3">
-                        <label for="reportReason" class="form-label">Reason</label>
-                        <select class="form-select" id="reportReason" name="reason" required>
-                            <option value="">Select a reason</option>
-                            <option value="User is spamming or harassment">User is spamming or harassment</option>
-                            <option value="This user is a bot">This user is a bot</option>
-                            <option value="This Product is not delivered on time">This Product is not delivered on time</option>
-                            <option value="Posting copyrighted product">Posting copyrighted product</option>
-                            <option value="Posting illegal product">Posting illegal product</option>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="reportDescription" class="form-label">Description</label>
-                        <textarea class="form-control" id="reportDescription" name="report_description" rows="3"></textarea>
-                    </div>
-                    <input type="hidden" id="reportedUserId" name="reported_user_id" value="123"> <!-- Set dynamically -->
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" id="submitReportBtn">Submit Report</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-<!-- Report Modal -->
-<div class="modal fade" id="reportModal" tabindex="-1" aria-labelledby="reportModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="reportModalLabel">Report User</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form id="reportForm">
-                    {% csrf_token %}
-                    <div class="mb-3">
-                        <label for="reportReason" class="form-label">Reason</label>
-                        <select class="form-select" id="reportReason" name="reason" required>
-                            <option value="">Select a reason</option>
-                            <option value="User is spamming or harassment">User is spamming or harassment</option>
-                            <option value="This user is a bot">This user is a bot</option>
-                            <option value="This Product is not delivered on time">This Product is not delivered on time</option>
-                            <option value="Posting copyrighted product">Posting copyrighted product</option>
-                            <option value="Posting illegal product">Posting illegal product</option>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="reportDescription" class="form-label">Description</label>
-                        <textarea class="form-control" id="reportDescription" name="report_description" rows="3"></textarea>
-                    </div>
-                    <input type="hidden" id="reportedUserId" name="reported_user_id" value="123"> <!-- Set dynamically -->
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" id="submitReportBtn">Submit Report</button>
-            </div>
-        </div>
-    </div>
-</div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-    $(document).ready(function() {
-        $('#submitReportBtn').click(function() {
-            submitReport();
-        });
-    });
+function openReportModal(userId, productId) {
+    // Set the reported user ID and product ID in the hidden fields
+    document.getElementById('reportedUserId').value = userId;
+    document.getElementById('productId').value = productId;
 
-    function submitReport() {
-        $('#submitReportBtn').prop('disabled', true).text('Submitting...');
+    // Update the form's action URL dynamically
+    const form = document.getElementById('reportForm');
+    form.action = `/products/reports/${userId}/`;
 
-        const formData = new FormData(document.getElementById('reportForm'));
-
-        fetch('/submit-report/', {
-            method: 'POST',
-            headers: {
-                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
-            },
-            body: formData,
-        })
-        .then(response => {
-            $('#submitReportBtn').prop('disabled', false).text('Submit Report');
-            if (response.ok) {
-                alert('Report submitted successfully!');
-                $('#reportModal').modal('hide');
-                document.getElementById('reportForm').reset();
-            } else {
-                alert('Failed to submit the report. Please try again.');
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            $('#submitReportBtn').prop('disabled', false).text('Submit Report');
-            alert('An error occurred while submitting the report.');
-        });
-    }
+    // Show the modal
+    $('#reportModal').modal('show');
+}
 </script>
 
 

@@ -7,8 +7,8 @@ from users_app.models import GGUser, Report
 @admin.register(GGUser)
 class GGUserAdmin(admin.ModelAdmin):
     list_display = [
-        'username', 'email', 'is_staff', 'is_active', 
-        'date_joined', 'profile_picture', 'user_id', 'status', 'last_login', ]
+        'username', 'email', 'is_staff', 'is_active', 'is_ban', 
+        'date_joined', 'profile_picture', 'user_id', 'status', 'last_login', 'ban_reason', 'ban_end_date']
     search_fields = ['username', 'email']
     list_filter = ['status']
     exclude = [ 'groups', 'user_permissions']

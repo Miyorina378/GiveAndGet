@@ -8,11 +8,27 @@ class RegisterForm(UserCreationForm):
         model = GGUser
         fields = UserCreationForm.Meta.fields + ("email", )
 
+from django import forms
+from .models import Report
 
 class ReportForm(forms.ModelForm):
     class Meta:
         model = Report
-        fields = ['reason', 'report_description']
+        fields = ['reason', 'report_description']  # Fields to be filled by the reporter
         widgets = {
-            'report_description': forms.Textarea(attrs={'placeholder': 'Describe the issue...'}),
+            'reason': forms.Select(
+                attrs={
+                    'class': 'form-select',  # Bootstrap's dropdown styling
+                    'id': 'reportReason',  # Matches the label's `for` attribute
+                }
+            ),
+            'report_description': forms.Textarea(
+                attrs={
+                    'class': 'form-control',  # Bootstrap's textarea styling
+                    'id': 'reportDescription',  # Matches the label's `for` attribute
+                    'rows': 4,
+                }
+            ),
         }
+
+

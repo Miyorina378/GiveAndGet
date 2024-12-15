@@ -16,6 +16,9 @@ class GGUser(AbstractUser):
     ]
     status = models.CharField(max_length=10, choices=status_choices, default='offline')
     last_login = models.DateTimeField(auto_now=True)
+    is_ban = models.BooleanField(default=False)
+    ban_reason = models.TextField(null=True, blank=True)
+    ban_end_date = models.DateTimeField(null=True, blank=True)
     
     # Automatically set the user_id
     def save(self, *args, **kwargs):
