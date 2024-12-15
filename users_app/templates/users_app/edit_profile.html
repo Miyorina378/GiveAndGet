@@ -1,8 +1,9 @@
 {% extends 'main_app/components/base.html' %}
 {% load static %}
-<link rel="stylesheet" href="{% static 'users_app/edit_profile.css' %}">
 
 {% block content %}
+<link rel="stylesheet" href="{% static 'users_app/edit_profile.css' %}">
+
 <div class="container py-5">
     <h1 class="mb-4 text-center">Edit Profile</h1>
 
@@ -11,9 +12,9 @@
     <div class="alert alert-danger">
         <ul>
             {% for field, errors in form.errors.items %}
-                {% for error in errors %}
-                    <li>{{ error }}</li>
-                {% endfor %}
+            {% for error in errors %}
+            <li>{{ error }}</li>
+            {% endfor %}
             {% endfor %}
         </ul>
     </div>
