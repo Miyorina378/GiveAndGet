@@ -6,6 +6,20 @@
 <div class="container py-5">
     <h1 class="mb-4 text-center">Edit Profile</h1>
 
+    <!-- Display any form errors -->
+    {% if form.errors %}
+    <div class="alert alert-danger">
+        <ul>
+            {% for field, errors in form.errors.items %}
+                {% for error in errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+
+    <!-- Profile Edit Form -->
     <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
 
