@@ -4,13 +4,8 @@ from .forms import ProductForm
 from users_app.models import Report
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
-<<<<<<< HEAD
 from django.http import HttpResponse
-=======
-from django.conf import settings
-from django.apps import apps
-from django.contrib import messages
->>>>>>> b547999f31aaf01640d5506c075f1614bdd47b16
+
 
 
 User = get_user_model()
@@ -21,28 +16,17 @@ def product_list(request):
     return render(request, 'products/product_list.html', {'products': products})
 
 @login_required
-def add_product(request, product_id=None):
-    if product_id:
-        is_edit = True
-        product = Product.objects.get(id=product_id)
-        form = ProductForm(request.POST or None, request.FILES or None, instance=product)
-    else:
-        is_edit = False
-        form = ProductForm(request.POST or None, request.FILES or None)
-
+def add_product(request):
     if request.method == 'POST':
-        # ตรวจสอบว่ามีการอัปโหลดไฟล์รูปภาพหรือไม่
-        if not request.FILES.get('image'):
-            messages.error(request, 'กรุณาอัปโหลดรูปภาพสินค้าก่อนที่จะเพิ่มสินค้า.')
-            return render(request, 'products/add_product.html', {'form': form, 'is_edit': is_edit})
-
+        form = ProductForm(request.POST, request.FILES)
         if form.is_valid():
             product = form.save(commit=False)
             product.user = request.user  # กำหนด user ที่เพิ่มสินค้า
             product.save()
             return redirect('product_list')
-
-    return render(request, 'products/add_product.html', {'form': form, 'is_edit': is_edit})
+    else:
+        form = ProductForm()
+    return render(request, 'products/add_product.html', {'form': form})
 
 def delete_product(request, product_id):
     product = get_object_or_404(Product, id=product_id)
@@ -71,14 +55,20 @@ def edit_product(request, product_id):
 @login_required
 def add_report(request):
     if request.method == 'POST':
-        reported_user = User.objects.get(id=reported_user_id)
+        reported_user_username = request.POST.get('reported_user_username')  # Fetch the reported user by username
         reason = request.POST.get('reason')
         description = request.POST.get('description')
+
+        # Fetch the reported user based on the username
+    try:
+        reported_user = User.objects.get(username=reported_user_username)
+    except User.DoesNotExist:
+        return HttpResponse(f"ERROR: Reported user with username '{reported_user_username}' does not exist.")
 
         # Create a new report
         report = Report(
             reporter=request.user,
-            reported_user=reported_user_username,
+            reported_user=reported_user,
             reason=reason,
             report_description=description
         )
@@ -90,33 +80,5 @@ def add_report(request):
     # If not a POST request, return an error response
     return HttpResponse("ERROR: Reports can only be submitted via POST.")
 
-def create_scope(request):
 
-    if request.method == 'POST':
-        wallet = User.objects.get(id=request.POST.get('wallet')) 
-        month = int(request.POST.get('month'))
-        year = int(request.POST.get('year'))
-        income_goal = float(request.POST.get('income_goal'))
-        expense_goal = float(request.POST.get('expense_goal'))
-
-        # ตรวจสอบว่าเป้าหมายเดือน/ปีนี้มีอยู่แล้วหรือไม่
-        if User.objects.filter(wallet=wallet, month=month, year=year).exists():
-            # เพิ่มข้อความแจ้งเตือน (หากมีอยู่แล้ว)
-            return HttpResponse("ERROR, Can't create 2 scope with same month")
-
-        # สร้างเป้าหมายใหม่
-        scope = User(
-            wallet=wallet,
-            month=month,
-            year=year,
-            income_goal=income_goal,
-            expense_goal=expense_goal
-        )
-        
-        scope.save()
-
-        return redirect(request.META.get('HTTP_REFERER', 'main'))
-    else:
-        # ถ้าเป็น GET ก็แสดงแบบฟอร์ม
-        return HttpResponse("ERROR, Can't create_scope")
 
