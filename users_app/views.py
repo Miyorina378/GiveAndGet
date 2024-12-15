@@ -6,7 +6,7 @@ from django.shortcuts import render, redirect
 from users_app.forms import RegisterForm
 from django.contrib import messages
 from django.contrib.auth.models import User
-from .models import Report
+from .models import Report, GGUser
 from django.utils.timezone import now
 import json
 from django.shortcuts import get_object_or_404
@@ -78,17 +78,30 @@ def update_profile_picture(request):
         return redirect("dashboard")  # หรือหน้าอื่นๆ ตามที่คุณต้องการ
     return redirect("dashboard")
 
+import os
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from .forms import UserProfileForm
+from django.core.files.storage import default_storage
+
 @login_required
 def edit_profile(request):
     user = request.user
+    old_image = user.profile_picture  # เก็บไฟล์รูปภาพเดิมไว้
+
     if request.method == 'POST':
         form = UserProfileForm(request.POST, request.FILES, instance=user)
         if form.is_valid():
-            form.save()
-            messages.success(request, "Profile updated successfully!")
+            # ตรวจสอบและลบรูปภาพเดิมหากมีการอัพโหลดรูปภาพใหม่
+            if 'profile_picture' in request.FILES:
+                new_image = request.FILES['profile_picture']
+                if old_image and old_image != new_image and os.path.isfile(old_image.path):  # ถ้ามีไฟล์เก่าและไฟล์นั้นมีอยู่จริง
+                    os.remove(old_image.path)  # ลบไฟล์เก่า
+
+            form.save()  # บันทึกข้อมูลใหม่
             return redirect('dashboard')
     else:
         form = UserProfileForm(instance=user)
     
     return render(request, 'users_app/edit_profile.html', {'form': form})
-    
