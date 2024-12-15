@@ -220,9 +220,13 @@ header h1 {
     /* กำหนดความกว้างของ Search Bar */
     padding: 5px;
     border: 1px solid #ccc;
-    border-radius: 5px;
+    border-radius: 20px;
     margin: 0;
     /* ลบระยะห่างภายนอก */
+    background-color: #ffffff;
+    /* สีพื้นหลังช่อง Search */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    /* เพิ่มเงา */
 }
 
 .filter button {
@@ -230,12 +234,75 @@ header h1 {
     /* กำหนดความกว้างของปุ่มให้เท่ากัน */
     padding: 5px;
     /* ระยะห่างภายในปุ่ม */
-    border-radius: 5px;
+    border-radius: 20px;
     /* มุมโค้งของปุ่ม */
     margin: 0;
     /* ลบระยะห่างภายนอก */
+    background-color: #ffffff;
+    /* สีพื้นหลังของปุ่ม */
+    color: #000000;
+    /* สีข้อความในปุ่ม */
+    border: none;
+    /* ลบขอบ */
+    transition: background-color 0.3s ease;
+    /* เอฟเฟกต์เวลา Hover */
 }
 
+.filter select {
+    width: 140px;
+    /* กำหนดความกว้างของปุ่มให้เท่ากัน */
+    padding: 5px;
+    /* ระยะห่างภายในปุ่ม */
+    border-radius: 20px;
+    /* มุมโค้งของปุ่ม */
+    margin: 0;
+    /* ลบระยะห่างภายนอก */
+    background-color: #ffffff;
+    /* สีพื้นหลังเมื่อ Hover */
+    text-align: left;
+    padding-left: 10px;
+    font-size: 1rem;
+}
+
+@media (max-width: 768px) {
+    .filter {
+        flex-direction: column;
+        /* เรียงช่องและปุ่มเป็นแนวตั้ง */
+        align-items: stretch;
+        /* ยืดความกว้างเต็ม container */
+        justify-content: center;
+        /* จัดกึ่งกลางแนวตั้ง */
+        gap: 10px;
+        /* ระยะห่างระหว่างองค์ประกอบ */
+        margin-top: 20px;
+        /* ปรับระยะห่างด้านบน */
+        padding: 10px;
+        /* เพิ่ม padding ให้พอดี */
+    }
+
+    .filter input,
+    .filter select,
+    .filter button {
+        width: 100%;
+        /* ความกว้างเต็มพื้นที่ */
+        max-width: none;
+        /* ลบการจำกัดความกว้างเดิม */
+        padding: 5px;
+        /* เพิ่มระยะห่างภายใน */
+        font-size: 1rem;
+        /* ขนาดฟอนต์ให้เท่ากัน */
+        border-radius: 20px;
+        /* ขอบมนเล็กน้อย */
+    }
+
+    .filter select {
+        width: 132px;
+    }
+
+    .filter button {
+        width: 75%;
+    }
+}
 
 /* Dummy Products Layout */
 .dummy-products {
@@ -496,6 +563,8 @@ footer {
     display: flex;
     flex-direction: column;
     /* จัดเรียงเนื้อหาในแนวตั้ง */
+    align-items: center;
+    justify-content: center;
     text-align: center;
     color: #000000;
     width: 100%;
@@ -517,8 +586,17 @@ footer {
 .dashboard-card-body .btn {
     display: inline-block;
     /* จัดการปุ่มให้แสดงเหมือน block */
-    margin: 10px 0;
-    /* เพิ่ม margin บน-ล่าง 10px */
+    width: 200px;
+    /* ความกว้างตามเนื้อหาภายในปุ่ม */
+    max-width: 200px;
+    /* กำหนดขนาดสูงสุด */
+    padding: 5px 10px;
+    /* ปรับ padding ให้เหมาะสม */
+    margin: 5px 0;
+    /* ระยะห่างระหว่างปุ่ม */
+    margin-bottom: 2px;
+    text-align: center;
+    /* จัดข้อความให้อยู่ตรงกลาง */
 }
 
 
