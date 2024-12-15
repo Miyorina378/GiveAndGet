@@ -11,7 +11,6 @@
     <!-- User Information Section -->
     <div class="row align-items-stretch">
         <div class="col-md-4 text-center">
-            <!-- Profile Picture -->
             <div class="dashboard-card h-100">
                 <div class="dashboard-card-body">
                     {% if user.profile_picture %}
@@ -19,10 +18,8 @@
                     {% else %}
                     <img src="{% static 'images/default-profile.png' %}" class="img-fluid rounded-circle mb-3" alt="Default Picture">
                     {% endif %}
-                    <h5 class="dashboard-card-title">{{ user.username }}</h5>
-                    <!-- Edit Profile Button -->
-                    <button class="btn btn-primary" id="editProfileBtn">Edit Profile</button>
-                    <a href="{% url 'password_change' %}" class="btn btn-secondary">Change Password</a>
+                    <h5 class="dashboard-card-title">{{ user.first_name }} {{ user.last_name }}</h5>
+                    <a href="{% url 'edit_profile' %}" class="btn btn-primary">Edit Profile</a>
                 </div>
             </div>
         </div>
@@ -32,13 +29,17 @@
             <div class="card mb-3 h-100">
                 <div class="user-info-card-header">User Information</div>
                 <div class="user-info-card-body">
-                    <p><strong>Username:</strong> {{ user.username }}</p>
+                    <p><strong>Full Name:</strong> {{ user.first_name }} {{ user.last_name }}</p>
+                    <p><strong>Birth Date:</strong> {{ user.birth_date|date:"F d, Y" }}</p>
+                    <p><strong>Phone Number:</strong> {{ user.phone_number }}</p>
+                    <p><strong>Occupation:</strong> {{ user.occupation }}</p>
                     <p><strong>Email:</strong> {{ user.email }}</p>
                     <p><strong>UID:</strong> {{ user.user_id }}</p>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
     <!-- My Products Button -->
     <div class="text-center mt-4">

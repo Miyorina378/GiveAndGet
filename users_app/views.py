@@ -11,6 +11,7 @@ from django.utils.timezone import now
 import json
 from django.shortcuts import get_object_or_404
 from .forms import ProfilePictureForm
+from .forms import UserProfileForm
 
 User = get_user_model()
 
@@ -76,3 +77,18 @@ def update_profile_picture(request):
         messages.success(request, "Profile picture updated successfully!")
         return redirect("dashboard")  # หรือหน้าอื่นๆ ตามที่คุณต้องการ
     return redirect("dashboard")
+
+@login_required
+def edit_profile(request):
+    user = request.user
+    if request.method == 'POST':
+        form = UserProfileForm(request.POST, request.FILES, instance=user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Profile updated successfully!")
+            return redirect('dashboard')
+    else:
+        form = UserProfileForm(instance=user)
+    
+    return render(request, 'users_app/edit_profile.html', {'form': form})
+    

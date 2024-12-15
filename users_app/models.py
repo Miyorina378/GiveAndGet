@@ -12,6 +12,11 @@ class GGUser(AbstractUser):
         blank=True
     )
     user_id = models.PositiveIntegerField(unique=True, editable=False)
+    first_name = models.CharField(max_length=50, blank=True)  # ชื่อ
+    last_name = models.CharField(max_length=50, blank=True)   # นามสกุล
+    birth_date = models.DateField(null=True, blank=True)      # วันเกิด
+    phone_number = models.CharField(max_length=15, blank=True)  # เบอร์โทร
+    occupation = models.CharField(max_length=100, blank=True)  # อาชีพ
     status_choices = [
         ('online', 'Online'),
         ('busy', 'Busy'),
