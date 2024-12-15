@@ -122,12 +122,3 @@ def send_trade_request(request):
         return JsonResponse({"success": True, "message": "Trade request sent successfully."})
 
     return JsonResponse({"success": False, "message": "Invalid request."})
-
-
-
-
-
-
-
-
-
