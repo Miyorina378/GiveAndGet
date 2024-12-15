@@ -21,7 +21,7 @@
                     {% endif %}
                     <div class="flex-grow-1">
                         <h5 class="mb-1">{{ product.name }}</h5>
-                        <p class="mb-2">{{ product.price }}</p>
+                        <p class="mb-2">฿{{ product.price }}</p>
                         <a href="{% url 'edit_product' product.id %}" class="btn btn-warning btn-sm">Edit</a>
                         <form action="{% url 'delete_product' product.id %}" method="post" class="d-inline">
                             {% csrf_token %}
