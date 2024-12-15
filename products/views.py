@@ -2,12 +2,13 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import Product
 from .forms import ProductForm
 from users_app.models import Report
-from users_app.forms import ReportForm
+from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
-from django.conf import settings
-from django.apps import apps
-from django.contrib import messages
+from django.http import HttpResponse
 
+
+
+User = get_user_model()
 
 @login_required
 def product_list(request):
@@ -15,28 +16,17 @@ def product_list(request):
     return render(request, 'products/product_list.html', {'products': products})
 
 @login_required
-def add_product(request, product_id=None):
-    if product_id:
-        is_edit = True
-        product = Product.objects.get(id=product_id)
-        form = ProductForm(request.POST or None, request.FILES or None, instance=product)
-    else:
-        is_edit = False
-        form = ProductForm(request.POST or None, request.FILES or None)
-
+def add_product(request):
     if request.method == 'POST':
-        # ตรวจสอบว่ามีการอัปโหลดไฟล์รูปภาพหรือไม่
-        if not request.FILES.get('image'):
-            messages.error(request, 'กรุณาอัปโหลดรูปภาพสินค้าก่อนที่จะเพิ่มสินค้า.')
-            return render(request, 'products/add_product.html', {'form': form, 'is_edit': is_edit})
-
+        form = ProductForm(request.POST, request.FILES)
         if form.is_valid():
             product = form.save(commit=False)
             product.user = request.user  # กำหนด user ที่เพิ่มสินค้า
             product.save()
             return redirect('product_list')
-
-    return render(request, 'products/add_product.html', {'form': form, 'is_edit': is_edit})
+    else:
+        form = ProductForm()
+    return render(request, 'products/add_product.html', {'form': form})
 
 def delete_product(request, product_id):
     product = get_object_or_404(Product, id=product_id)
@@ -50,7 +40,6 @@ def product_detail(request, product_id):
         'added_by': product.user.username,  # ส่งชื่อผู้เพิ่มสินค้าไปยังเทมเพลต
     })
 
-
 @login_required
 def edit_product(request, product_id):
     product = get_object_or_404(Product, id=product_id, user=request.user)  # ตรวจสอบว่าเป็นสินค้าของผู้ใช้
@@ -63,23 +52,42 @@ def edit_product(request, product_id):
         form = ProductForm(instance=product)
     return render(request, 'products/add_product.html', {'form': form, 'is_edit': True})
 
+from django.shortcuts import render, redirect, get_object_or_404
+from django.http import HttpResponse
+from users_app.models import Report
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
+
 @login_required
-def add_report(request, reported_user_id):
-    print("Reported User ID:", reported_user_id)
-
-    reported_user = get_object_or_404(Product, id=reported_user_id)
-
+def add_report(request):
     if request.method == 'POST':
-        form = ReportForm(request.POST)
-        if form.is_valid():
-            report = form.save(commit=False)
-            report.reporter = request.user  # Set the reporter to the current user
-            report.reported_user = reported_user  # Assign the reported user
-            report.save()
+        reported_user_username = request.POST.get('reported_user_username')  # Get username from hidden input
+        reason = request.POST.get('reason')
+        description = request.POST.get('description')
 
-            # Redirect to the product detail page (replace 'product_detail' with your view name)
-        return redirect('products/product_detail.html', pk=request.POST.get('product_id'))
-    else:
-        form = ReportForm()
+        # Check if the reported user exists
+        try:
+            reported_user = User.objects.get(username=reported_user_username)
+        except User.DoesNotExist:
+            return HttpResponse(f"ERROR: Reported user with username '{reported_user_username}' does not exist.")
 
-    return render(request, 'products/product_detail.html', {'form': form})
+        # Create and save the report
+        report = Report(
+            reporter=request.user,
+            reported_user=reported_user,
+            reason=reason,
+            report_description=description,
+        )
+        report.save()
+
+        # Redirect back to the referring page or a default page
+        return redirect(request.META.get('HTTP_REFERER', 'products:product_list'))
+
+    # If the request method is not POST, return an error
+    return HttpResponse("ERROR: Reports can only be submitted via POST.")
+
+
+
+

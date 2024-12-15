@@ -1,129 +1,148 @@
 /* Body Settings */
 body {
-    background-color: rgb(255, 255, 255);
-    height: 100%;  /* Full viewport height */
+    background: radial-gradient(circle, #6fb0e7 10%, #0052cc 100%);
+    height: 100vh;
     margin: 0;
-    padding: 0;
-    font-family: Arial, sans-serif;  /* Adding a default font family */
-}
-
-/* Link Styling for Buttons */
-a {
-    text-decoration: none;  /* Remove underline from anchor links */
-}
-
-/* Back Button Styling */
-.back-btn {
-    position: absolute;
-    top: 20px;  /* Distance from the top */
-    left: 20px;  /* Distance from the left */
-    padding: 10px 20px;
-    background-color: #333;  /* Dark background for button */
-    color: white;
-    border: none;
-    cursor: pointer;
-    text-align: center;
-    display: inline-block;  /* Ensure the button doesn't stretch */
-    width: auto;  /* Let the width be determined by the content */
-    border-radius: 5px;  /* Rounded corners for the button */
-    font-size: 14px;  /* Set a standard font size */
-}
-
-.back-btn:hover {
-    background-color: #555;  /* Hover effect */
-}
-
-
-/* Main Body Styling */
-.login-body {
-    background-color: rgb(255, 255, 255); /* Dark background */
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100vh;  /* Full viewport height */
-    margin: 0;
+    font-family: 'Open Sans', sans-serif;
 }
 
-/* Login Box Styling */
-.login-box {
-    background-color: rgb(187, 235, 187);  /* Light green background */
-    padding: 40px;
-    border-radius: 20px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);  /* Soft shadow for depth */
-    width: 300px;
-    text-align: center;
-    position: relative;  /* Needed for absolute positioning of Back button */
-    border: 6px solid rgb(156, 235, 156);  /* Dark green border */
-}
-
-
-/* Heading Style */
-h3 {
-    margin-bottom: 20px;
-    font-size: 24px;
-    color: #333;  /* Darker color for the title */
-}
-
-/* Form Styling */
-form {
+/* Container Layout */
+.container {
     display: flex;
-    flex-direction: column;  /* Stack input fields vertically */
-    width: 100%;
+    justify-content: center;
+    align-items: center;
+    gap: 60px;
 }
 
-/* Form Field Styling */
-form p {
+/* Logo Section */
+.logo {
+    text-align: center;
+    color: white;
+    font-family: 'Open Sans', sans-serif;
+    
+}
+
+.logo img {
+    width: 150px; /* Logo size */
+    margin-bottom: 20px;
+}
+
+.logo h1 {
+    font-size: 36px;
+    margin: 0;
+    font-weight: bold;
+    font-family: 'Open Sans', sans-serif;
+    
+}
+
+.logo p {
+    font-size: 18px;
+    margin: 5px 0 0;
+    font-family: 'Open Sans', sans-serif;
+}
+
+/* Login Box */
+.login-box {
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    width: 350px;
+    text-align: center;
+}
+
+.login-box h3 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #333;
+    font-weight: bold;
+    font-family: 'Open Sans', sans-serif;
+}
+
+label {
+    display: block;
     text-align: left;
-    color: #333;  /* Ensure label text is readable */
+    margin-top: 5px;
+    padding-left: 10px; /* เลื่อนไปทางขวา 20px */
+    font-size: 12px;
+    color: #555;
 }
 
-/* Input Fields Styling */
-input[type="text"], input[type="password"], input[type="email"] {
-    width: 100%;
+input[type="text"], input[type="password"],input[type="email"] {
+    width:  90%;
     padding: 10px;
-    margin: 10px 0;  /* Vertical space between input fields */
+    margin: 10px 0;
     border: 1px solid #ccc;
     border-radius: 5px;
+    font-size: 14px;
 }
 
-/* Submit Button Styling */
-button {
-    padding: 10px 20px;
-    background-color: #333;
+/* Buttons */
+button, .signup-btn {
+    width: 100%;
+    padding: 10px;
+    background-color: #1d72b8;
     color: white;
     border: none;
+    border-radius: 20px;
+    font-size: 16px;
     cursor: pointer;
-    border-radius: 5px;
-    margin-top: 20px;
-    width: 100%;  /* Button spans full width of the form */
+    margin-top: 4px;
+    font-weight: bold;
+    font-family: 'Open Sans', sans-serif;
 }
 
-/* Button Hover Effect */
-button:hover {
-    background-color: #555;  /* Change background color on hover */
+button:hover, .signup-btn:hover {
+    background-color: #155a8a;
 }
 
-/* Space between the Login button and the "OR" divider */
-h2 {
-    margin: 20px 0;  /* Space around the OR divider */
-    color: #333;  /* Color for the OR heading */
+/* OR Divider */
+.or-text {
+    margin: 15px 0;
+    font-size: 12px;
+    color: #777;
+    text-transform: uppercase;
 }
 
-/* Sign Up Button Styling */
-.signup-btn {
-    padding: 10px 20px;
-    background-color: #333;
-    color: white;
-    border: none;
-    cursor: pointer;
-    border-radius: 5px;
-    width: 100%;  /* Make Sign Up button as wide as the login button */
-    margin-top: 0px;  /* Space between OR and Sign Up button */
+/* ปุ่ม Back */
+.back-btn {
+    position: absolute; /* จัดตำแหน่งแบบ absolute */
+    top: 20px; /* ระยะห่างจากด้านบน */
+    left: 20px; /* ระยะห่างจากด้านซ้าย */
+    padding: 10px 20px; /* ขนาดของปุ่ม */
+    color: white; /* สีตัวอักษร */
+    text-decoration: none; /* ลบขีดเส้นใต้ */
+    border-radius: 20px; /* มุมโค้งมนเหมือนปุ่ม Login */
+    font-size: 16px; /* ขนาดตัวอักษร */
+    font-weight: bold; /* ตัวอักษรหนา */
+    border: none; /* ลบเส้นขอบ */
+    cursor: pointer; /* เปลี่ยน cursor เป็น pointer */
+    transition: background-color 0.3s ease; /* เพิ่มเอฟเฟกต์การ hover */
 }
 
-.signup-btn:hover {
-    background-color: #555;  /* Hover effect */
+.back-btn:hover {
+    background-color: #1d72b8; /* สีเมื่อชี้เมาส์ */
 }
 
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+        gap: 30px;
+    }
 
+    .logo img {
+        width: 120px;
+    }
 
+    .logo h1 {
+        font-size: 28px;
+    }
+
+    .logo p {
+        font-size: 14px;
+    }
+}

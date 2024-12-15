@@ -31,13 +31,17 @@
 }
 
 .btn-report {
-    background-color: rgb(245, 15, 15);
+    background-color: rgb(245, 22, 22);
     border: none;
     transition: background-color 0.3s;
+    color:white;
+    margin-left: 75%;
+    border-radius: 5px;
 }
 
 .btn-report:hover {
-    background-color: rgb(136, 22, 22);
+    background-color: rgb(160, 30, 30);
+    color:white
 }
 
 .product-detail-container {

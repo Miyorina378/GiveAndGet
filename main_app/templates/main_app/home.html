@@ -52,8 +52,13 @@
                         </div>
                         <div class="card-body">
                             <h5 class="card-title">{{ product.name }}</h5>
+<<<<<<< HEAD
+                            <p class="card-text">Post by: {{ product.price }}</p>
+                            <p class="card-text">Price: ฿{{ product.price }}</p>
+=======
                             <p class="card-text">Post by: {{ product.user.username }}</p>
                             <p class="card-text">Price: {{ product.price }}</p>
+>>>>>>> 97e34748870d55b696057025c5da64a0bb52c6ed
                             <a href="{% url 'product_detail' product.id %}" class="btn btn-primary">View Details</a>
                         </div>
                     </div>
