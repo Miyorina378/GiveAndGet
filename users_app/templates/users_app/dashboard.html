@@ -16,10 +16,12 @@
                     {% if user.profile_picture %}
                     <img src="{{ user.profile_picture.url }}" class="img-fluid rounded-circle mb-3" alt="User Picture">
                     {% else %}
-                    <img src="{% static 'images/default-profile.png' %}" class="img-fluid rounded-circle mb-3" alt="Default Picture">
+                    <img src="{% static 'images/default-profile.png' %}" class="img-fluid rounded-circle mb-3"
+                        alt="Default Picture">
                     {% endif %}
                     <h5 class="dashboard-card-title">{{ user.first_name }} {{ user.last_name }}</h5>
                     <a href="{% url 'edit_profile' %}" class="btn btn-primary">Edit Profile</a>
+                    <a href="{% url 'password_change' %}" class="btn btn-secondary">Change Password</a>
                 </div>
             </div>
         </div>
@@ -41,23 +43,23 @@
     </div>
 </div>
 
-    <!-- My Products Button -->
-    <div class="text-center mt-4">
-        <a href="{% url 'product_list' %}" class="btn btn-success">My Products</a>
-    </div>
+<!-- My Products Button -->
+<div class="text-center mt-4">
+    <a href="{% url 'product_list' %}" class="btn btn-success">My Products</a>
+</div>
 
-    <!-- Profile Picture Update Form (Initially Hidden) -->
-    <div id="profilePictureForm" class="mt-4" style="display: none;">
-        <form action="{% url 'update_profile_picture' %}" method="POST" enctype="multipart/form-data">
-            {% csrf_token %}
-            <div class="mb-3">
-                <label for="profile_picture" class="form-label">Update Profile Picture</label>
-                <input type="file" class="form-control" id="profile_picture" name="profile_picture" required>
-            </div>
-            <button type="submit" class="btn btn-primary">Upload</button>
-            <button type="button" id="cancelEditBtn" class="btn btn-secondary">Cancel</button>
-        </form>
-    </div>
+<!-- Profile Picture Update Form (Initially Hidden) -->
+<div id="profilePictureForm" class="mt-4" style="display: none;">
+    <form action="{% url 'update_profile_picture' %}" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="profile_picture" class="form-label">Update Profile Picture</label>
+            <input type="file" class="form-control" id="profile_picture" name="profile_picture" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Upload</button>
+        <button type="button" id="cancelEditBtn" class="btn btn-secondary">Cancel</button>
+    </form>
+</div>
 </div>
 
 <script>
