@@ -8,8 +8,7 @@
             <h1>GiveAndGet</h1>
             <div class="filter d-flex gap-2 pb-3">
                 <form method="get" action="{% url 'home' %}" class="d-flex gap-2">
-                    <input type="text" name="search" value="{{ request.GET.search }}" class="form-control"
-                        placeholder="Search products...">
+                    <input type="text" name="search" value="{{ request.GET.search }}" class="form-control" placeholder="Search products...">
 
                     <select name="sort" class="form-select">
                         <option value="" {% if not request.GET.sort %}selected{% endif %}>None</option>
@@ -19,15 +18,15 @@
                     </select>
 
                     <select name="category" class="form-select">
-                        <option value="">All Categories</option>
-                        <option value="electronics" {% if request.GET.category == "electronics" %}selected{% endif %}>Electronics</option>
-                        <option value="books" {% if request.GET.category == "books" %}selected{% endif %}>Books</option>
-                        <option value="clothing&fashion" {% if request.GET.category == "clothing&fashion" %}selected{% endif %}>Clothing&Fashion</option>
-                        <option value="home&living" {% if request.GET.category == "home&living" %}selected{% endif %}>Home&Living</option>
-                        <option value="tools&equipment" {% if request.GET.category == "tools&equipment" %}selected{% endif %}>Tools&Equipment</option>
-                        <option value="collectibles" {% if request.GET.category == "collectibles" %}selected{% endif %}>Collectibles</option>
-                        <option value="health&beauty" {% if request.GET.category == "health&beauty" %}selected{% endif %}>Health&Beauty</option>
-                        <option value="other" {% if request.GET.category == "other" %}selected{% endif %}>Other</option>
+                        <option value="" {% if not category_filter %}selected{% endif %}>all category</option>
+                        <option value="electronics" {% if category_filter == "electronics" %}selected{% endif %}>Electronics</option>
+                        <option value="books" {% if category_filter == "books" %}selected{% endif %}>Books</option>
+                        <option value="clothing&fashion" {% if category_filter == "clothing&fashion" %}selected{% endif %}>Clothing & Fashion</option>
+                        <option value="home&living" {% if category_filter == "home&living" %}selected{% endif %}>Home & Living</option>
+                        <option value="tools&equipment" {% if category_filter == "tools&equipment" %}selected{% endif %}>Tools & Equipment</option>
+                        <option value="collectibles" {% if category_filter == "collectibles" %}selected{% endif %}>Collectibles</option>
+                        <option value="health&beauty" {% if category_filter == "health&beauty" %}selected{% endif %}>Health & Beauty</option>
+                        <option value="other" {% if category_filter == "other" %}selected{% endif %}>Other</option>
                     </select>
 
                     <button type="submit" class="btn btn-light">Search</button>
