@@ -487,18 +487,23 @@ footer {
     text-align: center;
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
     align-items: center;
     gap: 10px;
 }
 
 .dashboard-card-body {
+    display: flex;
+    flex-direction: column;
+    /* จัดเรียงเนื้อหาในแนวตั้ง */
     text-align: center;
     color: #000000;
     width: 100%;
-    height: 200px;
+    height: 100%;
     object-fit: cover;
     border-radius: 50%;
     margin-bottom: 15px;
+    gap: 10px;
 }
 
 .dashboard .dashboard-card img {
@@ -507,6 +512,13 @@ footer {
     object-fit: cover;
     border-radius: 50%;
     margin-bottom: 15px;
+}
+
+.dashboard-card-body .btn {
+    display: inline-block;
+    /* จัดการปุ่มให้แสดงเหมือน block */
+    margin: 10px 0;
+    /* เพิ่ม margin บน-ล่าง 10px */
 }
 
 
