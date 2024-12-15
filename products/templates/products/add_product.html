@@ -14,7 +14,14 @@
     <div class="mb-3">
         <button class="back-button" onclick="goBack()">Back</button>
     </div>
-
+        <!-- Display messages if any -->
+    {% if messages %}
+        <div class="alert alert-danger">
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
     <form method="post" enctype="multipart/form-data" class="add-product-form">
         {% csrf_token %}
         {{ form.as_p }}

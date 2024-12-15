@@ -1,6 +1,5 @@
-from django.contrib.auth import login, get_user_model
+from django.contrib.auth import login, get_user_model, authenticate
 from django.contrib.auth.decorators import login_required
-from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpRequest, HttpResponseRedirect, JsonResponse
 from django.urls import reverse
 from django.shortcuts import render, redirect
@@ -8,9 +7,11 @@ from users_app.forms import RegisterForm
 from django.contrib import messages
 from django.contrib.auth.models import User
 from .models import Report
-from django.views.decorators.csrf import csrf_protect
+from django.utils.timezone import now
 import json
 from django.shortcuts import get_object_or_404
+from .forms import ProfilePictureForm
+from .forms import UserProfileForm
 
 User = get_user_model()
 
@@ -70,53 +71,24 @@ def update_email(request):
 @login_required
 def update_profile_picture(request):
     if request.method == "POST" and request.FILES.get("profile_picture"):
-        new_profile_picture = request.FILES["profile_picture"]
-        request.user.profile_picture = new_profile_picture
-        request.user.save() 
+        # Update profile picture with the new file
+        request.user.profile_picture = request.FILES["profile_picture"]
+        request.user.save()
         messages.success(request, "Profile picture updated successfully!")
-        return redirect("dashboard")
-    messages.error(request, "Please provide a valid profile picture.")
+        return redirect("dashboard")  # หรือหน้าอื่นๆ ตามที่คุณต้องการ
     return redirect("dashboard")
 
 @login_required
-def submit_report(request):
+def edit_profile(request):
+    user = request.user
     if request.method == 'POST':
-        reason = request.POST.get('reason')
-        report_description = request.POST.get('report_description', '')
-        reported_user_id = request.POST.get('reported_user_id')
-
-        # Validate the data
-        if not reason or not reported_user_id:
-            return JsonResponse({'success': False, 'error': 'Invalid data'}, status=400)
-
-        # Save the report to the database
-        Report.objects.create(
-            reason=reason,
-            description=report_description,
-            reported_user_id=reported_user_id
-        )
-
-        return JsonResponse({'success': True})
-
-    return JsonResponse({'error': 'Invalid request method'}, status=405)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        form = UserProfileForm(request.POST, request.FILES, instance=user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Profile updated successfully!")
+            return redirect('dashboard')
+    else:
+        form = UserProfileForm(instance=user)
+    
+    return render(request, 'users_app/edit_profile.html', {'form': form})
+    

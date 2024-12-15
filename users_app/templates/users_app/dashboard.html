@@ -11,7 +11,6 @@
     <!-- User Information Section -->
     <div class="row align-items-stretch">
         <div class="col-md-4 text-center">
-            <!-- Profile Picture -->
             <div class="dashboard-card h-100">
                 <div class="dashboard-card-body">
                     {% if user.profile_picture %}
@@ -20,8 +19,8 @@
                     <img src="{% static 'images/default-profile.png' %}" class="img-fluid rounded-circle mb-3"
                         alt="Default Picture">
                     {% endif %}
-                    <h5 class="dashboard-card-title">{{ user.username }}</h5>
-                    <button class="btn btn-primary">Edit Profile</button>
+                    <h5 class="dashboard-card-title">{{ user.first_name }} {{ user.last_name }}</h5>
+                    <a href="{% url 'edit_profile' %}" class="btn btn-primary">Edit Profile</a>
                     <a href="{% url 'password_change' %}" class="btn btn-secondary">Change Password</a>
                 </div>
             </div>
@@ -32,54 +31,53 @@
             <div class="card mb-3 h-100">
                 <div class="user-info-card-header">User Information</div>
                 <div class="user-info-card-body">
-                    <p><strong>Username:</strong> {{ user.username }}</p>
+                    <p><strong>Full Name:</strong> {{ user.first_name }} {{ user.last_name }}</p>
+                    <p><strong>Birth Date:</strong> {{ user.birth_date|date:"F d, Y" }}</p>
+                    <p><strong>Phone Number:</strong> {{ user.phone_number }}</p>
+                    <p><strong>Occupation:</strong> {{ user.occupation }}</p>
                     <p><strong>Email:</strong> {{ user.email }}</p>
                     <p><strong>UID:</strong> {{ user.user_id }}</p>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-    <!-- My Products Button -->
-    <div class="text-center mt-4">
-        <a href="{% url 'product_list' %}" class="btn btn-success">My Products</a>
-    </div>
+<!-- My Products Button -->
+<div class="text-center mt-4">
+    <a href="{% url 'product_list' %}" class="btn btn-success">My Products</a>
+</div>
+
+<!-- Profile Picture Update Form (Initially Hidden) -->
+<div id="profilePictureForm" class="mt-4" style="display: none;">
+    <form action="{% url 'update_profile_picture' %}" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="profile_picture" class="form-label">Update Profile Picture</label>
+            <input type="file" class="form-control" id="profile_picture" name="profile_picture" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Upload</button>
+        <button type="button" id="cancelEditBtn" class="btn btn-secondary">Cancel</button>
+    </form>
+</div>
 </div>
 
 <script>
     const editProfileBtn = document.getElementById("editProfileBtn");
-    const saveChangesBtn = document.getElementById("saveChangesBtn");
+    const profilePictureForm = document.getElementById("profilePictureForm");
     const cancelEditBtn = document.getElementById("cancelEditBtn");
-    const usernameInput = document.getElementById("username");
-    const emailInput = document.getElementById("email");
 
-    // Toggle Edit Mode
+    // Show the profile picture upload form when "Edit Profile" is clicked
     editProfileBtn.addEventListener("click", () => {
-        usernameInput.disabled = false;
-        emailInput.disabled = false;
-
-        // Show Save and Cancel buttons, hide Edit button
-        saveChangesBtn.classList.remove("d-none");
-        cancelEditBtn.classList.remove("d-none");
-        editProfileBtn.classList.add("d-none");
-
-        // Focus on the username input
-        usernameInput.focus();
+        profilePictureForm.style.display = 'block';  // Show form
+        editProfileBtn.style.display = 'none';      // Hide Edit Profile button
     });
 
-    // Cancel Edit
+    // Cancel the edit and hide the upload form
     cancelEditBtn.addEventListener("click", () => {
-        usernameInput.disabled = true;
-        emailInput.disabled = true;
-
-        // Revert changes to original values
-        usernameInput.value = "{{ user.username }}";
-        emailInput.value = "{{ user.email }}";
-
-        // Hide Save and Cancel buttons, show Edit button
-        saveChangesBtn.classList.add("d-none");
-        cancelEditBtn.classList.add("d-none");
-        editProfileBtn.classList.remove("d-none");
+        profilePictureForm.style.display = 'none';  // Hide form
+        editProfileBtn.style.display = 'block';     // Show Edit Profile button
     });
 </script>
+
 {% endblock %}

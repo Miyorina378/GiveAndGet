@@ -6,12 +6,8 @@ class ProductForm(forms.ModelForm):
     class Meta:
         model = Product
         fields = ['name', 'description', 'price', 'stock', 'image']  # เพิ่ม image
-
-
-class ReportForm(forms.ModelForm):
-    class Meta:
-        model = Report
-        fields = ['reason', 'report_description']
-        widgets = {
-            'report_description': forms.Textarea(attrs={'placeholder': 'Describe the issue...'}),
-        }
+    def clean_image(self):
+        image = self.cleaned_data.get('image')
+        if not image:
+            raise forms.ValidationError("กรุณาอัปโหลดรูปภาพสินค้าก่อนที่จะเพิ่มสินค้า.")
+        return image

@@ -494,6 +494,9 @@
           <label for="productSelect">เลือกสินค้าที่ต้องการ:</label>
           <select id="productSelect" class="form-control">
             <option value="">-- กรุณาเลือกสินค้า --</option>
+            {% for product in products %}
+              <option value="{{ product.id }}">{{ product.name }}</option>
+            {% endfor %}
           </select>
         </div>
   
@@ -505,11 +508,20 @@
             <option value="items">แลกเปลี่ยนด้วยของ</option>
           </select>
         </div>
-  
-        <!-- Location Input -->
-        <div class="form-group" id="locationInput" style="display: none;">
+        <div class="form-group" id="exchangeItemInput" style="display: none;">
+          <label for="exchangeItem">สิ่งที่ต้องการแลก:</label>
+          <input type="text" id="exchangeItem" class="form-control" placeholder="ใส่สิ่งที่คุณต้องการแลก" />
+        </div>
+        <div class="form-group" id="locationInput">
           <label>พิกัดสถานที่:</label>
           <input type="text" id="location" class="form-control" placeholder="ใส่พิกัดที่อยู่สำหรับการแลกเปลี่ยน" />
+        </div>
+        <div class="form-group">
+          <label for="appointmentDate">วันนัดรับ:</label>
+          <input type="date" id="appointmentDate" class="form-control" />
+
+          <label for="appointmentTime">เวลานัดรับ:</label>
+          <input type="time" id="appointmentTime" class="form-control" />
         </div>
       </form>
     </div>
@@ -518,7 +530,7 @@
       <button type="button" id="confirmTrade" class="btn btn-primary">ยืนยัน</button>
     </div>
   </div>
-  
+
 {{ slug|json_script:"room_slug" }}
 
 <script>
@@ -638,15 +650,14 @@ const closeModal = () => {
 backdrop.addEventListener("click", closeModal);
 cancelTrade.addEventListener("click", closeModal);
 
-// Show/Hide location input based on payment method
-document.getElementById("paymentMethod").addEventListener("change", function () {
-  const locationInput = document.getElementById("locationInput");
-  if (this.value === "items") {
-    locationInput.style.display = "block";  // Show location input for items payment
-  } else {
-    locationInput.style.display = "none";  // Hide location input for money payment
-  }
-});
+document.getElementById('paymentMethod').addEventListener('change', function() {
+    var exchangeItemInput = document.getElementById('exchangeItemInput');
+    if (this.value === 'items') {
+      exchangeItemInput.style.display = 'block';  // แสดงฟิลด์สิ่งที่ต้องการแลก
+    } else {
+      exchangeItemInput.style.display = 'none';   // ซ่อนฟิลด์สิ่งที่ต้องการแลก
+    }
+  });
 
 // Fetch the user's products when the modal opens
 document.addEventListener("DOMContentLoaded", function () {
