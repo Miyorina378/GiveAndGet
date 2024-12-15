@@ -15,6 +15,7 @@ from django.shortcuts import get_object_or_404
 User = get_user_model()
 
 # Create your views here.
+
 def register(request: HttpRequest):
     if request.method == "POST":
         form = RegisterForm(request.POST)
