@@ -6,7 +6,6 @@ from products.models import Product
 
 class GGUser(AbstractUser):
     profile_picture = models.ImageField(
-        default='profile_pics/default.png', 
         upload_to='profile_pics/', 
         null=True, 
         blank=True
