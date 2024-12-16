@@ -1,5 +1,6 @@
 {% extends 'main_app/components/base.html' %}
 {% block content %}
+{% load static %}
 
 <style>
     /* กำหนด body และ html ให้เต็มพื้นที่จอ */
@@ -371,7 +372,11 @@
                     <div class="d-flex align-items-center">
                         <!-- Profile Icon -->
                         <img
-                            src="https://ui-avatars.com/api/?name={{ item.user.username|urlencode }}&size=64&background=random"
+                            src="{% if item.user.profile_picture %}
+                                {{ item.user.profile_picture.url }}
+                                {% else %}
+                                  {% static 'users_app/images/default.png' %}
+                                {% endif %}"
                             alt="{{ item.user.username }}'s Profile Image"
                             class="profile-icon rounded-circle mr-3"
                             style="width: 1.8rem; height: 1.8rem; object-fit: cover"
@@ -414,7 +419,11 @@
           <div class="d-flex align-items-center p-1 chat-header">
           <!-- รูปโปรไฟล์ -->
           <img
-              src="https://ui-avatars.com/api/?name={{ room_name|urlencode }}&size=64&background=random"
+              src="{% if seller.profile_picture %}
+                    {{ seller.profile_picture.url }}
+                {% else %}
+                  {% static 'users_app/images/default.png' %}
+                {% endif %}"
               style="border-radius: 30%; height: 50px; width: auto;"
           />
           <!-- ชื่อห้องแชท -->
