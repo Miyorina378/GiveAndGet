@@ -2,17 +2,19 @@
 {% load static %}
 
 {% block content %}
+<link rel="stylesheet" href="{% static 'users_app/edit_profile.css' %}">
+
 <div class="container py-5">
-    <h1>Edit Profile</h1>
+    <h1 class="mb-4 text-center">Edit Profile</h1>
 
     <!-- Display any form errors -->
     {% if form.errors %}
     <div class="alert alert-danger">
         <ul>
             {% for field, errors in form.errors.items %}
-                {% for error in errors %}
-                    <li>{{ error }}</li>
-                {% endfor %}
+            {% for error in errors %}
+            <li>{{ error }}</li>
+            {% endfor %}
             {% endfor %}
         </ul>
     </div>
@@ -21,9 +23,49 @@
     <!-- Profile Edit Form -->
     <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn btn-primary">Save Changes</button>
-        <a href="{% url 'dashboard' %}" class="btn btn-secondary">Cancel</a>
+        {{ form.non_field_errors }}
+
+        <div class="row mb-3">
+            <div class="col-md-6">
+                {{ form.first_name.label_tag }}
+                {{ form.first_name }}
+            </div>
+            <div class="col-md-6">
+                {{ form.last_name.label_tag }}
+                {{ form.last_name }}
+            </div>
+        </div>
+
+        <div class="mb-3">
+            {{ form.birth_date.label_tag }}
+            {{ form.birth_date }}
+        </div>
+
+        <div class="mb-3">
+            {{ form.phone_number.label_tag }}
+            {{ form.phone_number }}
+        </div>
+
+        <div class="mb-3">
+            {{ form.occupation.label_tag }}
+            {{ form.occupation }}
+        </div>
+
+        <div class="mb-3">
+            {{ form.profile_picture.label_tag }}
+            {{ form.profile_picture }}
+        </div>
+
+        <div class="mb-3">
+            {{ form.email.label_tag }}
+            {{ form.email }}
+        </div>
+
+        <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-primary">Save Changes</button>
+            <a href="{% url 'dashboard' %}" class="btn btn-secondary">Cancel</a>
+        </div>
     </form>
+
 </div>
 {% endblock %}
