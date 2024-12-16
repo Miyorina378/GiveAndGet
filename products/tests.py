@@ -111,6 +111,59 @@ class ProductViewsTest(TestCase):
                 content_type='image/jpeg'
             ),
         )
+    
+    def test_product_list_view_with_category_filter(self):
+        # ทดสอบการกรองสินค้าตาม category_filter
+        category = 'electronics'  # ตัวอย่าง category
+        category_product = Product.objects.create(
+            name="Category Product",
+            price=150.0,
+            stock=5,
+            user=self.user,
+            category=category,
+            image=SimpleUploadedFile(
+                name='test_image.jpg',
+                content=b'fake_image_data',
+                content_type='image/jpeg'
+            ),
+        )
+
+        # สร้างสินค้าที่ไม่มี category ตรงกับ filter
+        other_product = Product.objects.create(
+            name="Other Product",
+            price=200.0,
+            stock=3,
+            user=self.user,
+            image=SimpleUploadedFile(
+                name='test_image2.jpg',
+                content=b'fake_image_data',
+                content_type='image/jpeg'
+            ),
+        )
+
+        # ส่ง request โดยใช้ category filter
+        url = reverse('product_list') + f'?category={category}'
+        response = self.client.get(url)
+
+        # ตรวจสอบผลลัพธ์
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'products/product_list.html')
+
+        # ตรวจสอบว่าเฉพาะสินค้าที่ตรงกับ category ที่กรองมาแสดงในหน้า
+        self.assertContains(response, "Category Product")
+        self.assertNotContains(response, "Other Product")
+
+    def test_product_list_view_without_category_filter(self):
+        # ทดสอบกรณีที่ไม่มีการกรอง category
+        url = reverse('product_list')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'products/product_list.html')
+
+        # ตรวจสอบว่าแสดงสินค้าทุกตัว
+        self.assertContains(response, "Test Product")
+        self.assertContains(response, "Category Product")
+
 
     def test_product_list_view(self):
         # ทดสอบการเข้าถึง product_list
@@ -258,7 +311,6 @@ class ProductEditViewTest(TestCase):
         self.assertTemplateUsed(response, 'products/add_product.html')
         self.assertIn('form', response.context)
         self.assertTrue(response.context['form'].errors)
-
 from django.test import TestCase
 from django.urls import reverse
 from django.contrib.auth import get_user_model
@@ -287,7 +339,6 @@ class AddReportViewTest(TestCase):
         response = self.client.post(reverse('add_report'), data)
 
         # ตรวจสอบว่า redirect ไปยังหน้าที่ต้องการหรือไม่
-       
 
     def test_add_report_user_does_not_exist(self):
         # เข้าสู่ระบบในฐานะผู้รายงาน
@@ -324,4 +375,3 @@ class AddReportViewTest(TestCase):
 
         # ตรวจสอบว่าแสดงข้อความผิดพลาดหรือไม่
         self.assertContains(response, "ERROR: Reports can only be submitted via POST.")
-
