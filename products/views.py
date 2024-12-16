@@ -115,7 +115,7 @@ def add_report(request):
         return redirect(request.META.get('HTTP_REFERER', 'products:product_list'))
 
     # If the request method is not POST, return an error
-    return HttpResponse("ERROR: Reports can only be submitted via POST.")
+
 
 
 
