@@ -2,6 +2,8 @@
 {% load static %}
 
 {% block content %}
+<link rel="stylesheet" href="{% static 'users_app/dashboard.css' %}">
+
 <div class="container py-5">
     <!-- Header Section -->
     <div class="text-center mb-4 text-black">
@@ -41,12 +43,13 @@
             </div>
         </div>
     </div>
+    <!-- My Products Button -->
+    <div class="text-center mt-4">
+        <a href="{% url 'product_list' %}" class="btn btn-success">My Products</a>
+    </div>
 </div>
 
-<!-- My Products Button -->
-<div class="text-center mt-4">
-    <a href="{% url 'product_list' %}" class="btn btn-success">My Products</a>
-</div>
+
 
 <!-- Profile Picture Update Form (Initially Hidden) -->
 <div id="profilePictureForm" class="mt-4" style="display: none;">

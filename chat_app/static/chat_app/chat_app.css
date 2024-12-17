@@ -316,10 +316,20 @@ body {
 
 
 .sidebar .profile-icon {
-    margin-right: 10px;
+    margin-right: 15px;
     /* ระยะห่างด้านขวาของรูป */
     flex-shrink: 0;
     /* ป้องกันรูปย่อขนาด */
+    width: 50px;
+    /* ความกว้างของรูป */
+    height: 50px;
+    /* ความสูงของรูป */
+    border-radius: 50%;
+    /* ทำให้รูปเป็นวงกลม */
+    object-fit: cover;
+    /* ปรับให้รูปไม่ผิดสัดส่วน */
+    border: 2px solid #fff;
+    /* เส้นขอบสีขาว */
 }
 
 .sidebar .w-100 {
@@ -387,6 +397,15 @@ body {
 .chat-header img {
     margin-right: 10px;
     /* ระยะห่างด้านขวาของรูปโปรไฟล์ */
+    margin-left: 10px;
+    width: 50px;
+    /* ขนาดที่ใหญ่กว่า sidebar */
+    height: 50px;
+    border-radius: 50%;
+    /* ทำให้เป็นวงกลม */
+    object-fit: cover;
+    border: 2px solid #ccc;
+    /* เส้นขอบสีเทา */
 }
 
 /* ปรับขนาดตัวอักษรของชื่อห้องแชท */

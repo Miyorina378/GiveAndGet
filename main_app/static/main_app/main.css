@@ -33,6 +33,14 @@ body {
     font-weight: bold;
     transition: color 0.3s ease, text-shadow 0.3s ease;
     /* เพิ่มการเปลี่ยนแปลงสีแบบ Smooth */
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.nav-link i {
+    font-size: 1rem;
+    /* ปรับขนาดไอคอนให้เหมาะสม */
 }
 
 .nav-link:hover {
@@ -158,6 +166,11 @@ body {
 }
 
 .btn-outline-light {
+    display: flex;
+    /* ใช้ Flexbox */
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
     margin: auto;
     background-color: transparent;
     /* ลบพื้นหลัง */
