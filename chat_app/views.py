@@ -1,13 +1,18 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
+from django.contrib import messages
 from .models import Chat, TradeRequest
 from products.models import Product
 from django.db.models import Q, Count
 from django.http import JsonResponse
 import json
 
+
+
 User = get_user_model()
+
+
 
 def get_unread_message_counts(user):
     # Calculate unread messages count between user and each sender
@@ -94,31 +99,50 @@ def get_user_products(request, room_name):
         return JsonResponse({"success": False, "message": "No products available for this user."})
 
 
-# Handle trade request submission
+from django.contrib.auth import get_user_model
+from django.shortcuts import get_object_or_404, redirect
+from django.contrib import messages
+from django.http import JsonResponse, HttpResponse
+from .models import TradeRequest, Product
+
+
 @login_required
 def send_trade_request(request):
     if request.method == "POST":
-        data = json.loads(request.body)
-        product_id = data.get("product_id")
-        payment_method = data.get("payment_method")
-        location = data.get("location", None)  # Location can be optional
+        # ดึงข้อมูลจากฟอร์ม
+        product = request.POST.get("product")
+        payment_method = request.POST.get("payment_method")
+        location = request.POST.get("location", None)
+        seller = request.POST.get("seller")  # รับค่า username ของ seller จาก hidden input
+        print(f"Seller username: {seller}")  # Debug
+        
+        try:
+            seller = User.objects.get(username=seller)
+        except User.DoesNotExist:
+            return HttpResponse(f"ERROR: Reported user with username '{seller}' does not exist.")
 
-        # Fetch the product and seller
-        product = get_object_or_404(Product, id=product_id)
-        seller = product.user  # Assuming the product's user is the seller
 
-        # Create a new trade request (assuming TradeRequest model exists)
-        trade_request = TradeRequest.objects.create(
-            buyer=request.user,
-            seller=seller,
+        # สร้างคำขอแลกเปลี่ยน
+        trade_request = TradeRequest(
+            buyer=request.user,  # ผู้ส่งคำขอ
+            seller=seller,       # ผู้ขาย (instance ของ User)
             product=product,
             payment_method=payment_method,
             location=location,
+            status="pending",  # สถานะเริ่มต้นเป็น pending
         )
+        trade_request.save()
 
-        # Notify the seller (you need to implement this function)
-        notify_seller(seller, f"คุณมีคำขอแลกเปลี่ยนใหม่สำหรับ {product.name}!")
+        # ส่งการแจ้งเตือนไปยังผู้ขาย
+        #notify_seller(seller, f"คุณมีคำขอแลกเปลี่ยนใหม่สำหรับ {product.name}!")
+ 
+        # แสดงข้อความสำเร็จ
+        messages.success(request, f"คำขอแลกเปลี่ยนสำหรับ {product.name} ถูกส่งเรียบร้อยแล้ว!")
 
-        return JsonResponse({"success": True, "message": "Trade request sent successfully."})
+        # Redirect กลับไปที่หน้าก่อนหน้า
+        referer_url = request.META.get('HTTP_REFERER', '/')
+        return redirect(f"{referer_url}?trade_request_sent=true")
 
     return JsonResponse({"success": False, "message": "Invalid request."})
+
+

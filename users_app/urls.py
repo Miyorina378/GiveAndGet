@@ -10,7 +10,7 @@ urlpatterns = [
     path('register/', view=views.register, name='register'),
     path('dashboard/', views.dashboard, name='dashboard'),
     path('', include("django.contrib.auth.urls")),
-    path('chat/', include('chat_app.urls')),
+    path('chat/', views.chat, name='chat'),
     path('update-username/', views.update_username, name='update_username'),
     path('update-email/', views.update_email, name='update_email'),
     path('edit-profile/', views.edit_profile, name='edit_profile'),

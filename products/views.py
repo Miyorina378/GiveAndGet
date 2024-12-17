@@ -81,14 +81,6 @@ def edit_product(request, product_id):
 
     return render(request, 'products/add_product.html', {'form': form, 'is_edit': True})
 
-from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponse
-from users_app.models import Report
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth import get_user_model
-
-User = get_user_model()
-
 @login_required
 def add_report(request):
     if request.method == 'POST':
@@ -115,7 +107,7 @@ def add_report(request):
         return redirect(request.META.get('HTTP_REFERER', 'products:product_list'))
 
     # If the request method is not POST, return an error
-    return HttpResponse("ERROR: Reports can only be submitted via POST.")
+
 
 
 

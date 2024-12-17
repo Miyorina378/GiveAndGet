@@ -93,15 +93,20 @@ def edit_profile(request):
     if request.method == 'POST':
         form = UserProfileForm(request.POST, request.FILES, instance=user)
         if form.is_valid():
-            # ตรวจสอบและลบรูปภาพเดิมหากมีการอัพโหลดรูปภาพใหม่
             if 'profile_picture' in request.FILES:
                 new_image = request.FILES['profile_picture']
-                if old_image and old_image != new_image and os.path.isfile(old_image.path):  # ถ้ามีไฟล์เก่าและไฟล์นั้นมีอยู่จริง
-                    os.remove(old_image.path)  # ลบไฟล์เก่า
+                if old_image and old_image != new_image and old_image.path:
+                    old_image.delete()
 
-            form.save()  # บันทึกข้อมูลใหม่
+            form.save(commit=False)  # หยุดก่อนเซฟลงฐานข้อมูล
+            if 'profile_picture' in request.FILES:
+                user.profile_picture = request.FILES['profile_picture']  # บันทึกไฟล์รูปภาพใหม่
+            user.save()  # เซฟข้อมูลทั้งหมด รวมถึงรูปภาพ
             return redirect('dashboard')
     else:
         form = UserProfileForm(instance=user)
-    
+
     return render(request, 'users_app/edit_profile.html', {'form': form})
+
+
+
