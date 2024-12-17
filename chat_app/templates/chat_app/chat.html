@@ -1,493 +1,124 @@
 {% extends 'main_app/components/base.html' %}
+{% load static %}
+
 {% block content %}
 {% load static %}
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-<style>
-    /* กำหนด body และ html ให้เต็มพื้นที่จอ */
-    html, body {
-    height: 100%;
-    margin: 0;
-    padding: 0;
-    overflow-x: hidden; /* ตัดเฉพาะ Scroll แนวนอน ไม่ตัดแนวตั้ง */
-    }
-    /* Chatbox styling */
-    .profile-icon {
-      color: #12151a;
-    }
 
-    .chat-container {
-      flex: 1;
-    }
-
-    /* พื้นหลังพื้นที่แชทด้านขวา */
-
-    #chatbox {
-      background-color: #e6e6e67a; /* สีเทากลางสำหรับกล่องข้อความ */
-      border: 1px solid #ccc; /* เส้นขอบสีเทา */
-      border-radius: 8px; /* ขอบโค้งเล็กน้อย */
-      height: 400px; /* ความสูงคงที่ของกล่องแชท */
-      overflow-y: auto; /* เพิ่มการเลื่อนเมื่อข้อความเกินพื้นที่ */
-      background-color: #f8f9fa; /* สีพื้นหลัง */
-      padding: 10px; /* ระยะห่างภายใน */
-      margin-bottom: 0; /* ลบ margin ล่าง */
-    }
-
-    .chat {
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-    }
-
-    /* Chat Header ให้ความสูงพอดี */
-    .chat-header {
-      background-color: #f8f9fa;
-      color: white;
-      padding: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    } 
-
-    .chatbox {
-      flex-grow: 1; /* ขยายเต็มพื้นที่ที่เหลือ */
-      overflow-y: auto;
-      padding: 10px;
-      background-color: #f8f9fa;
-      border-top: 1px solid #ddd;
-      border-bottom: 1px solid #ddd;
-    }
-
-    .chat-message {
-      border-radius: 8px;
-      padding: 10px;
-      display: flex;
-      width: fit-content;
-      margin-bottom: 10px;
-      clear: both;
-    }
-
-    .chat-message.sender {
-      background-color: #b3e5fc; /* สีฟ้าอ่อน */
-      color: #000000;
-      margin-left: auto;
-      text-align: right;
-    }
-
-    .chat-message.receiver {
-      background-color: #cfd8dc; /* สีเทาอ่อน */
-      color: #000000; /* สีข้อความดำ */
-      margin-right: auto;
-      text-align: left;
-    }
-
-    .chat-input {
-      background-color: white;
-      border-top: 1px solid #ddd; /* เส้นแบ่งด้านบน */
-      padding: 10px;
-    }
-
-    .chat-input button {
-      border-top-left-radius: 0;
-      border-bottom-left-radius: 0;
-      background: #1d72b8;
-      color: white;
-      border: none;
-    }
-
-    .chat-input button:hover {
-      background: #2c3e50;
-    }
-
-    .sidebar {
-      height: 100%;
-      background: radial-gradient(circle, #6fb0e7 10%, #0052cc 100%);
-      overflow-y: auto;
-    }
-
-    .sidebar a {
-      background: 1d72b8;
-      color: white;
-    }
-
-    .sidebar i {
-      color: white;
-    }
-
-    .chats .list-group-item {
-      border: none;
-      border-bottom: 1px solid #e9ecef;
-      padding: 25px 25px 15px 30px;
-      font-size: 18px;
-    }
-
-    .chats .list-group-item:hover {
-      background-color: #00000062;
-      color: white;
-    }
-
-    /* Change border bottom color of the item in the list */
-    .chats .list-group-item {
-      border-bottom: 1px solid #5a58587e;
-      width: 100%;
-    }
-
-    .active {
-      background-color: #435f7a !important;
-      color: white;
-    }
-
-    .logout {
-      position: absolute;
-      bottom: 0;
-      width: 100%;
-      padding: 10px;
-      background-color: #2c3e50;
-    }
-
-    .badge {
-      display: inline-block !important; /* แสดง Badge เสมอ */
-      visibility: visible !important; /* มองเห็นได้เสมอ */
-      background-color: #dc3545; /* สีแดง */
-      color: #fff; /* สีข้อความ */
-      border-radius: 50%;
-      padding: 5px 8px;
-      font-size: 12px;
-      text-align: center;
-      font-weight: bold;
-    }
-
-  /* Modal Style*/
-  .modal {
-      display: none;
-      position: fixed;
-      z-index: 1050;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 50%;
-      background: #fff;
-      border-radius: 8px;
-      box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
-      overflow: hidden;
-  }
-  .modal-header, .modal-footer {
-      padding: 1rem;
-      border-bottom: 1px solid #ddd;
-      color: black; /* Modal header/footer text color */
-  }
-  .modal-footer {
-      border-top: 1px solid #ddd;
-      display: flex;
-      justify-content: flex-end;
-  }
-  .modal-body {
-      padding: 1rem;
-      color: black; /* Modal body text color */
-  }
-  .modal-header {
-      font-size: 1.5rem;
-      font-weight: bold;
-  }
-  .backdrop {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.5);
-      z-index: 1049;
-      display: none;
-  }
-  .chat-message span {
-      color: black; /* Ensure chat messages are black */
-  }
-
-  /* จัดตำแหน่งและขนาดคำว่า Chats */
-  .sidebar h5 {
-      text-align: center;  /* จัดให้อยู่ตรงกลาง */
-      font-size: 1.8rem;   /* ขยายขนาดตัวอักษร */
-      font-weight: bold;   /* ทำให้หนาขึ้น */
-      margin-bottom: 20px; /* เพิ่มช่องว่างด้านล่าง */
-      color: white;        /* กำหนดสีข้อความเป็นสีขาว */
-      border-bottom: 2px solid #ffffff8a; /* เส้นสีขาว */
-      padding-bottom: 10px; /* เพิ่มช่องว่างด้านล่าง */
-  }
-    /* เส้นแบ่งใต้ Product List */
-  .sidebar .contacts > div {
-      border-bottom: 2px solid #ffffff8a; /* เส้นสีขาว */
-      margin-bottom: 15px;
-      padding-bottom: 10px; /* เพิ่มช่องว่างด้านล่าง */
-  }
-
-
-
-  .sidebar .profile-icon {
-    margin-right: 10px; /* ระยะห่างด้านขวาของรูป */
-    flex-shrink: 0; /* ป้องกันรูปย่อขนาด */
-  }
-
-  .sidebar .w-100 {
-    margin-left: 5px; /* ขยับเนื้อหาด้านใน */
-  }
-
-  /* จัดตำแหน่งช่องค้นหาและปุ่มให้อยู่ด้านขวา */
-  .ml-auto {
-    margin-left: auto;
-  }
-
-  /* ขอบมนสำหรับช่องค้นหา */
-  #searchInput {
-    border-radius: 20px; /* ขอบมน */
-    padding: 5px 15px; /* ขยายพื้นที่ภายใน */
-    border: 1px solid #ccc; /* เพิ่มเส้นขอบสีเทา */
-  }
-
-  /* ปุ่มคำขอแลกเปลี่ยน */
-  #tradeButton {
-    margin-right: 15px; /* เพิ่มระยะห่างด้านขวาของปุ่ม */
-    border: 2px solid #1d72b8; /* ขอบสีฟ้าเข้ม */
-    background-color: white; /* พื้นหลังสีขาว */
-    color: #1d72b8; /* ข้อความสีฟ้าเข้ม */
-    border-radius: 20px; /* ทำขอบมน */
-    padding: 5px 15px; /* เพิ่มพื้นที่ภายในปุ่ม */
-    font-size: 14px; /* ขนาดตัวอักษร */
-    font-weight: bold; /* ทำให้ข้อความหนา */
-    transition: all 0.3s ease; /* เพิ่มเอฟเฟกต์ตอน hover */
-  }
-
-  /* เพิ่มเอฟเฟกต์เมื่อ hover */
-  #tradeButton:hover {
-    background-color: #1d72b8; /* พื้นหลังสีฟ้าเข้ม */
-    color: white; /* ข้อความสีขาว */
-    border: 2px solid #1d72b8; /* ขอบยังคงเดิม */
-}
-
-  /* เพิ่มระยะห่างระหว่างรูปโปรไฟล์และชื่อห้องแชท */
-  .chat-header img {
-    margin-right: 10px; /* ระยะห่างด้านขวาของรูปโปรไฟล์ */
-  }
-
-  /* ปรับขนาดตัวอักษรของชื่อห้องแชท */
-  .chat-header h3 {
-    font-size: 1.8rem; /* ขนาดตัวอักษรเล็กลง */
-    margin: 0; /* ลบระยะห่างด้านบนและด้านล่างของ h3 */
-    font-weight: bold; /* น้ำหนักตัวอักษรปานกลาง */
-    color: #333; /* ปรับสีข้อความเป็นสีเทาเข้ม */
-  }
-
-  /* ตกแต่ง Trade Modal */
-/* ปรับ Modal ให้ขนาดพอดีกับเนื้อหา */
-.modal {
-    position: fixed;
-    top: 50%; /* จัดให้อยู่กึ่งกลางตามแนวตั้ง */
-    left: 50%; /* จัดให้อยู่กึ่งกลางตามแนวนอน */
-    transform: translate(-50%, -50%); /* จัดกึ่งกลางอย่างสมบูรณ์ */
-    width: auto; /* กำหนดความกว้างตามเนื้อหา */
-    max-width: 600px; /* ความกว้างสูงสุด */
-    height: auto; /* ความสูงตามเนื้อหา */
-    border-radius: 8px; /* ขอบโค้งมน */
-    box-shadow: 0px 3px 7px rgba(0, 0, 0, 0.3); /* เพิ่มเงาเบา ๆ */
-    background-color: #fff; /* สีพื้นหลัง */
-    padding: 0; /* เอา Padding ของ Modal หลักออก */
-    overflow: hidden; /* ไม่ให้มี Scroll ที่ไม่จำเป็น */
-}
-
-/* Header จัดให้อยู่กระชับ */
-.modal-header {
-    background: linear-gradient(to right, #003366, #1d72b8); /* ไล่จากน้ำเงินเข้มไปน้ำเงินอ่อน */
-    color: white; /* ข้อความสีขาว */
-    padding: 10px 15px; /* ปรับ Padding ให้กระชับขึ้น */
-    font-size: 1.3rem;
-    font-weight: bold;
-}
-
-/* Body กระชับและพอดีกับเนื้อหา */
-.modal-body {
-    padding: 15px 20px; /* ระยะห่างภายใน */
-    font-size: 1rem;
-    line-height: 1.5;
-}
-
-/* Footer กระชับ และปุ่มอยู่ขวา */
-.modal-footer {
-    display: flex;
-    justify-content: flex-end; /* ปุ่มชิดขวา */
-    padding: 10px 15px; /* ปรับ Padding */
-    background-color: #f9f9f9; /* สีเทาอ่อน */
-    gap: 10px;
-}
-
-/* ปุ่มสไตล์เดียวกับปุ่มคำขอแลกเปลี่ยน */
-.modal-footer .btn {
-    border: 2px solid #1d72b8;
-    background-color: white;
-    color: #1d72b8;
-    border-radius: 20px;
-    padding: 5px 15px;
-    font-weight: bold;
-    transition: all 0.3s ease;
-}
-
-.modal-footer .btn:hover {
-    background-color: #1d72b8;
-    color: white;
-}
-
-/* จัดให้ Sidebar และ Chat Area เต็มความสูง */
-.container-fluid {
-    height: 100vh; /* เต็มความสูงของ viewport */
-    margin: 0;
-    padding: 0;
-}
-
-.row {
-    height: 100%; /* ให้ row ขยายเต็มความสูง */
-    margin: 0;
-}
-
-</style>
+<link rel="stylesheet" href="{% static 'chat_app/chat_app.css' %}">
 
 <div class="container-fluid h-100">
   <div class="row h-100">
-      <!-- User List Sidebar -->
-      <div class="col-3 sidebar p-3 chats">
-        <h5 class="mb-3 text-white">Chats</h5>
-        <div class="contacts">
-        <div class="mb-3 text-white">
-            <h6 style="font-weight: bold;"></h6style>{{ room_name }}'s Product List : </h6>
-            {% if products %}
-                {% for product in products %}
-                <li>{{ product.name }} - ฿{{ product.price }}</li>
-              {% endfor %}
-            {% else %}
-              <p>No products available for this user.</p>
-            {% endif %}
-        </div> 
-            {% for item in user_last_messages %}
-                <a
-                    href="{% url 'chat_room' item.user.username %}"
-                    class="list-group-item list-group-item-action {% if item.user.username == room_name %} active {% endif %}"
-                    data-username="{{ item.user.username }}"
-                >
-                    <div class="d-flex align-items-center">
-                        <!-- Profile Icon -->
-                        <img
-                            src="{% if item.user.profile_picture %}
+    <!-- User List Sidebar -->
+    <div class="col-3 sidebar p-3 chats">
+      <h5 class="mb-3 text-white">Messages</h5>
+      <div class="contacts">
+        <div class="pro_list mb-3 text-white">
+          <h6 style="font-weight: bold;">
+            </h6style>{{ room_name }}'s Product List : </h6>
+          {% if products %}
+          {% for product in products %}
+          <li>{{ product.name }} - ฿{{ product.price }}</li>
+          {% endfor %}
+          {% else %}
+          <p>No products available for this user.</p>
+          {% endif %}
+        </div>
+        {% for item in user_last_messages %}
+        <a href="{% url 'chat_room' item.user.username %}"
+          class="list-group-item list-group-item-action {% if item.user.username == room_name %} active {% endif %}"
+          data-username="{{ item.user.username }}">
+          <div class="d-flex align-items-center">
+            <!-- Profile Icon -->
+            <img src="{% if item.user.profile_picture %}
                                 {{ item.user.profile_picture.url }}
                                 {% else %}
                                   {% static 'users_app/images/default.png' %}
-                                {% endif %}"
-                            alt="{{ item.user.username }}'s Profile Image"
-                            class="profile-icon rounded-circle mr-3"
-                            style="width: 1.8rem; height: 1.8rem; object-fit: cover"
-                        />
-                        <!-- Message Content -->
-                        <div class="w-100">
-                            <div class="d-flex justify-content-between">
-                                <strong class="text-truncate">{{ item.user.username }}</strong>
-                                {% if item.last_message %}
-                                    <small class="text-nowrap timestamp">{{ item.last_message.timestamp|date:"H:i" }}</small>
-                                {% endif %}
-                            </div>
-                            <div>
-                                {% if item.last_message %}
-                                    <small class="d-block text-truncate last-msg" style="max-width: 90%" id="last-message">
-                                        {% if item.last_message.sender == request.user %}
-                                            
-                                        {% endif %} 
-                                        {{ item.last_message.content|truncatewords:5 }}
-                                    </small>
-                                {% else %}
-                                    <small>No messages yet</small>
-                                {% endif %}
-                            </div>
-                        </div>
-                        <!-- Unread Badge -->
-                        {% if item.unread_count > 0 %}
-                            <span class="badge badge-danger unread-badge">{{ item.unread_count }}</span>
-                        {% endif %}
-                    </div>
-                </a>
-            {% endfor %}
-        </div>
-    </div>
-    
+                                {% endif %}" alt="{{ item.user.username }}'s Profile Image" class="profile-icon"
+              style="width: 1.8rem; height: 1.8rem; object-fit: cover" />
+            <!-- Message Content -->
+            <div class="w-100">
+              <div class="d-flex justify-content-between">
+                <strong class="text-truncate">{{ item.user.username }}</strong>
+                {% if item.last_message %}
+                <small class="text-nowrap timestamp">{{ item.last_message.timestamp|date:"H:i" }}</small>
+                {% endif %}
+              </div>
+              <div>
+                {% if item.last_message %}
+                <small class="d-block text-truncate last-msg" style="max-width: 90%" id="last-message">
+                  {% if item.last_message.sender == request.user %}
 
-      <!-- Chat Area -->
-      <div class="col-9 d-flex flex-column chat" data-id="{{ room_name }}">
-          <!-- Chat Header -->
-          <div class="d-flex align-items-center p-1 chat-header">
-          <!-- รูปโปรไฟล์ -->
-          <img
-              src="{% if seller.profile_picture %}
-                    {{ seller.profile_picture.url }}
+                  {% endif %}
+                  {{ item.last_message.content|truncatewords:5 }}
+                </small>
                 {% else %}
-                  {% static 'users_app/images/default.png' %}
-                {% endif %}"
-              style="border-radius: 30%; height: 50px; width: auto;"
-          />
-          <!-- ชื่อห้องแชท -->
-          <h3 class="display-5 mb-0 pl-2">{{ room_name }}</h3>
-
-          <!-- ปุ่มและช่องค้นหา -->
-          <div class="ml-auto d-flex align-items-center">
-              <!-- ปุ่มคำขอแลกเปลี่ยน -->
-              <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#tradeModal">Send trade request</button>
-
-              <!-- ช่องค้นหา -->
-              <div class="form-group mb-0">
-                <input
-                    type="text"
-                    name="search"
-                    id="searchInput"
-                    class="form-control rounded"
-                    placeholder="Search messages..."
-                    value="{{ search_query }}"
-                    style="border-radius: 20px; width: 250px;"
-                />
+                <small>No messages yet</small>
+                {% endif %}
               </div>
+            </div>
+            <!-- Unread Badge -->
+            {% if item.unread_count > 0 %}
+            <span class="badge badge-danger unread-badge">{{ item.unread_count }}</span>
+            {% endif %}
+          </div>
+        </a>
+        {% endfor %}
+      </div>
+    </div>
+
+
+    <!-- Chat Area -->
+    <div class="col-9 d-flex flex-column chat" data-id="{{ room_name }}">
+      <!-- Chat Header -->
+      <div class="d-flex align-items-center p-1 chat-header">
+        <!-- รูปโปรไฟล์ -->
+        <img src="{% if seller.profile_picture %}
+              {{ seller.profile_picture.url }}
+          {% else %}
+            {% static 'users_app/images/default.png' %}
+          {% endif %}" style="border-radius: 30%; height: 50px; width: auto;" />
+        <!-- ชื่อห้องแชท -->
+        <h3 class="display-5 mb-0 pl-2">{{ room_name }}</h3>
+
+        <!-- ปุ่มและช่องค้นหา -->
+        <div class="ml-auto d-flex align-items-center">
+          <!-- ปุ่มคำขอแลกเปลี่ยน -->
+          <button type="button" id="tradeButton" class="btn btn-success mr-2">
+            Send Trade Request
+          </button>
+          <!-- ช่องค้นหา -->
+          <div class="form-group mb-0">
+            <input type="text" name="search" id="searchInput" class="form-control rounded"
+              placeholder="Search messages..." value="{{ search_query }}" style="border-radius: 20px; width: 250px;" />
           </div>
         </div>
-
-          <!-- Chatbox -->
-          <div id="chatbox" class="chatbox flex-fill p-3">
-              {% if chats %}
-              {% for message in chats %}
-              <div
-                  class="chat-message {% if message.sender == request.user %} sender {% else %} receiver {% endif %}"
-              >
-                  <span>{{ message.message }}</span>
-              </div>
-              {% endfor %}
-              {% else %}
-              <p class="no-messages">No Messages.</p>
-              {% endif %}
-          </div>
-
-          <!-- Message Input -->
-          <div class="chat-input p-3">
-              <div class="input-group">
-                  <input
-                      type="text"
-                      id="my_input"
-                      class="form-control"
-                      placeholder="Type a message..."
-                      required
-                  />
-                  <div class="input-group-append">
-                      <button
-                          id="submit_button"
-                          class="btn btn-primary"
-                          type="button"
-                      >
-                          Send
-                      </button>
-                  </div>
-              </div>
-          </div>
       </div>
+
+      <!-- Chatbox -->
+      <div id="chatbox" class="chatbox flex-fill p-3">
+        {% if chats %}
+        {% for message in chats %}
+        <div class="chat-message {% if message.sender == request.user %} sender {% else %} receiver {% endif %}">
+          <span>{{ message.message }}</span>
+        </div>
+        {% endfor %}
+        {% else %}
+        <p class="no-messages">No Messages.</p>
+        {% endif %}
+      </div>
+
+      <!-- Message Input -->
+      <div class="chat-input p-3">
+        <div class="input-group">
+          <input type="text" id="my_input" class="form-control" placeholder="Type a message..." required />
+          <div class="input-group-append">
+            <button id="submit_button" class="btn btn-primary" type="button">
+              Send
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -555,120 +186,211 @@
 
   // Scroll to the bottom of the chatbox
   function scrollToBottom() {
-      chatbox.scrollTop = chatbox.scrollHeight;
+    chatbox.scrollTop = chatbox.scrollHeight;
   }
   scrollToBottom();
 
   const roomName = JSON.parse(
-      document.getElementById("room_slug").textContent
+    document.getElementById("room_slug").textContent
   );
   const chatSocket = new WebSocket(
-      "ws://" + window.location.host + "/ws/chat/{{ room_name }}/"
+    "ws://" + window.location.host + "/ws/chat/{{ room_name }}/"
   );
 
   chatSocket.onopen = function (e) {
-      console.log("The connection was set up successfully!");
+    console.log("The connection was set up successfully!");
   };
   chatSocket.onclose = function (e) {
-      console.log("The connection was closed.");
+    console.log("The connection was closed.");
   };
 
   document.querySelector("#my_input").focus();
   document.querySelector("#my_input").onkeyup = function (e) {
-      if (e.keyCode == 13) {
-          e.preventDefault();
-          document.querySelector("#submit_button").click();
-      }
+    if (e.keyCode == 13) {
+      e.preventDefault();
+      document.querySelector("#submit_button").click();
+    }
   };
 
   document.querySelector("#submit_button").onclick = function (e) {
-      const messageInput = document.querySelector("#my_input").value;
-      if (messageInput.trim().length === 0) {
-          alert("Please enter a message.");
-      } else {
-          chatSocket.send(
-              JSON.stringify({
-                  message: messageInput,
-                  username: "{{ request.user.username }}",
-                  room_name: "{{ room_name }}",
-              })
-          );
-          document.querySelector("#my_input").value = ""; // Clear input
-      }
+    const messageInput = document.querySelector("#my_input").value;
+    if (messageInput.trim().length === 0) {
+      alert("Please enter a message.");
+    } else {
+      chatSocket.send(
+        JSON.stringify({
+          message: messageInput,
+          username: "{{ request.user.username }}",
+          room_name: "{{ room_name }}",
+        })
+      );
+      document.querySelector("#my_input").value = ""; // Clear input
+    }
   };
 
   chatSocket.onmessage = function (e) {
-      const data = JSON.parse(e.data);
-      if (data.message && data.sender) {
-          // Add message to chatbox
-          const div = document.createElement("div");
-          div.className =
-              "chat-message " +
-              (data.sender === "{{ request.user.username }}" ? "sender" : "receiver");
-          div.innerHTML = `<div><span>${data.message}</span></div>`;
-          chatbox.appendChild(div);
+    const data = JSON.parse(e.data);
+    if (data.message && data.sender) {
+      // Add message to chatbox
+      const div = document.createElement("div");
+      div.className =
+        "chat-message " +
+        (data.sender === "{{ request.user.username }}" ? "sender" : "receiver");
+      div.innerHTML = `<div><span>${data.message}</span></div>`;
+      chatbox.appendChild(div);
 
-          // Scroll to bottom
-          scrollToBottom();
+      // Scroll to bottom
+      scrollToBottom();
 
-          // Update last message in the sidebar
-          const senderElement = document.querySelector(
-              `.list-group-item[data-username="${data.sender}"]`
-          );
-          if (senderElement) {
-              const lastMessage = senderElement.querySelector("#last-message");
-              if (lastMessage) {
-                  lastMessage.textContent =
-                      data.sender === "{{ request.user.username }}"
-                          ? "You: " + data.message
-                          : data.message;
-              }
+      // Update last message in the sidebar
+      const senderElement = document.querySelector(
+        `.list-group-item[data-username="${data.sender}"]`
+      );
+      if (senderElement) {
+        const lastMessage = senderElement.querySelector("#last-message");
+        if (lastMessage) {
+          lastMessage.textContent =
+            data.sender === "{{ request.user.username }}"
+              ? "You: " + data.message
+              : data.message;
+        }
 
-              const timestamp = senderElement.querySelector("small.timestamp");
-              if (timestamp) {
-                  const date = new Date();
-                  timestamp.textContent = date.toTimeString().slice(0, 5);
-              }
+        const timestamp = senderElement.querySelector("small.timestamp");
+        if (timestamp) {
+          const date = new Date();
+          timestamp.textContent = date.toTimeString().slice(0, 5);
+        }
 
-              // Update unread count
-              let badge = senderElement.querySelector(".badge");
-              if (!badge) {
-                  badge = document.createElement("span");
-                  badge.className = "badge badge-danger unread-badge";
-                  badge.textContent = "1";  // Assuming this is a new unread message
-                  senderElement.appendChild(badge);
-              } else {
-                  badge.textContent = parseInt(badge.textContent) + 1;
-              }
-          }
+        // Update unread count
+        let badge = senderElement.querySelector(".badge");
+        if (!badge) {
+          badge = document.createElement("span");
+          badge.className = "badge badge-danger unread-badge";
+          badge.textContent = "1";  // Assuming this is a new unread message
+          senderElement.appendChild(badge);
+        } else {
+          badge.textContent = parseInt(badge.textContent) + 1;
+        }
       }
+    }
   };
 
-  function toggleExchangeItemInput() {
-    const paymentMethod = document.getElementById("paymentMethod");
-    const exchangeItemInput = document.getElementById("exchangeItemInput");
-
-    // Toggle visibility of "สิ่งที่ต้องการแลก" field
-    exchangeItemInput.style.display = paymentMethod.value === "items" ? "block" : "none";
-}
-
-document.addEventListener("DOMContentLoaded", () => {
-    const paymentMethod = document.getElementById("paymentMethod");
-    
-    // Call toggleExchangeItemInput when paymentMethod changes
-    paymentMethod.addEventListener("change", toggleExchangeItemInput);
-
-    // Initial call in case the page is loaded with a pre-selected payment method
-    toggleExchangeItemInput();
-
-    // Add event listener for opening the modal to call toggleExchangeItemInput
-    $('#tradeModal').on('shown.bs.modal', () => {
-        // Ensure toggle function runs when modal is shown
-        toggleExchangeItemInput();
+  // Mark messages as read when user enters the chat room
+  if (document.querySelector(".chat-message")) {
+    const badge = document.querySelectorAll(".unread-badge");
+    badge.forEach(function (badge) {
+      badge.parentElement.removeChild(badge);  // Remove badge when user enters the chat
     });
-});
+  }
+
+  // Show modal
+  tradeButton.addEventListener("click", () => {
+    backdrop.style.display = "block";
+    tradeModal.style.display = "block";
+  });
+
+  // Hide modal
+  const closeModal = () => {
+    backdrop.style.display = "none";
+    tradeModal.style.display = "none";
+  };
+
+  backdrop.addEventListener("click", closeModal);
+  cancelTrade.addEventListener("click", closeModal);
+
+  document.getElementById('paymentMethod').addEventListener('change', function () {
+    var exchangeItemInput = document.getElementById('exchangeItemInput');
+    if (this.value === 'items') {
+      exchangeItemInput.style.display = 'block';  // แสดงฟิลด์สิ่งที่ต้องการแลก
+    } else {
+      exchangeItemInput.style.display = 'none';   // ซ่อนฟิลด์สิ่งที่ต้องการแลก
+    }
+  });
+
+  // Fetch the user's products when the modal opens
+  document.addEventListener("DOMContentLoaded", function () {
+    // Function to fetch and populate the product select dropdown
+    fetch("/get-user-products/", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        const productSelect = document.getElementById("productSelect");
+        productSelect.innerHTML = ""; // Clear existing options
+
+        // If products are found, create options for the select dropdown
+        if (data.success && data.products.length > 0) {
+          data.products.forEach((product) => {
+            const option = document.createElement("option");
+            option.value = product.id;
+            option.textContent = `${product.name} - ฿${product.price}`;
+            productSelect.appendChild(option);
+          });
+        } else {
+          // If no products, show a message
+          const option = document.createElement("option");
+          option.value = "";
+          option.textContent = "ไม่มีสินค้าสำหรับผู้ใช้นี้";
+          productSelect.appendChild(option);
+        }
+      })
+      .catch((error) => console.error("Error fetching products:", error));
+  });
+
+  // Confirm trade and submit the trade request
+  document.getElementById("confirmTrade").addEventListener("click", function () {
+    const productId = document.getElementById("productSelect").value; // Get selected product ID
+    const paymentMethod = document.getElementById("paymentMethod").value;
+    const location = document.getElementById("location").value;
+
+    // Make sure all fields are filled
+    if (!productId || !paymentMethod) {
+      alert("กรุณากรอกข้อมูลให้ครบถ้วน");
+      return;
+    }
+
+    // Send the trade request via AJAX
+    fetch("/submit-trade-request/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": getCookie("csrftoken"), // Ensure CSRF token is included
+      },
+      body: JSON.stringify({
+        product_id: productId,
+        payment_method: paymentMethod,
+        location: location,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.success) {
+          alert("คำขอแลกเปลี่ยนถูกส่งแล้ว!");
+          location.reload(); // Reload the page if necessary
+        } else {
+          alert("เกิดข้อผิดพลาด: " + data.message);
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+        alert("เกิดข้อผิดพลาดในการส่งคำขอ");
+      });
+  });
+
+  // CSRF Token Helper (to get the CSRF token from cookies)
+  function getCookie(name) {
+    const cookieValue = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith(name + "="))
+      ?.split("=")[1];
+    return cookieValue || "";
+  }
+
 
 </script>
 
-{% endblock %}
 
+{% endblock %}
