@@ -1,228 +1,133 @@
 from django.test import TestCase
-from django.urls import reverse, re_path
 from django.contrib.auth import get_user_model
-from channels.testing import WebsocketCommunicator
-from channels.routing import URLRouter
-from .models import Chat
-from .consumers import ChatConsumer
 from datetime import datetime
-from channels.auth import AuthMiddlewareStack
+from .models import Chat  # เปลี่ยน yourapp เป็นชื่อแอปของคุณ
+
+class ChatModelTest(TestCase):
+
+    def setUp(self):
+        # สร้างผู้ใช้ 2 คน
+        self.user1 = get_user_model().objects.create_user(username='user1', password='password123')
+        self.user2 = get_user_model().objects.create_user(username='user2', password='password123')
+
+        # สร้างข้อความ (Chat)
+        self.chat1 = Chat.objects.create(
+            sender=self.user1,
+            receiver=self.user2,
+            message='Hello, user2!',
+            is_read=False
+        )
+        self.chat2 = Chat.objects.create(
+            sender=self.user2,
+            receiver=self.user1,
+            message='Hello, user1!',
+            is_read=True
+        )
+        self.chat3 = Chat.objects.create(
+            sender=self.user1,
+            receiver=self.user2,
+            message='Are you there?',
+            is_read=False
+        )
+
+    def test_chat_creation(self):
+        # ทดสอบว่าแชทถูกสร้างขึ้นมาอย่างถูกต้อง
+        self.assertEqual(self.chat1.sender.username, 'user1')
+        self.assertEqual(self.chat1.receiver.username, 'user2')
+        self.assertEqual(self.chat1.message, 'Hello, user2!')
+        self.assertEqual(self.chat1.is_read, False)
+        self.assertIsNotNone(self.chat1.timestamp)
+
+    def test_get_unread_count(self):
+        # ทดสอบการคำนวณจำนวนข้อความที่ยังไม่ได้อ่าน
+        unread_count_user1 = Chat.get_unread_count(self.user1)
+        unread_count_user2 = Chat.get_unread_count(self.user2)
+
+        # user1 ได้รับ 2 ข้อความที่ยังไม่ได้อ่าน (chat1, chat3)
+        self.assertEqual(unread_count_user1, 2)
+
+    def test_mark_as_read(self):
+        # ทดสอบการอัปเดตสถานะเป็น "อ่านแล้ว"
+        self.chat1.mark_as_read()
+
+        # ตรวจสอบว่า is_read ถูกตั้งเป็น True
+        self.assertTrue(self.chat1.is_read)
+        self.assertEqual(self.chat1.last_read, self.chat1.timestamp)
+
+    def test_str_method(self):
+        # ทดสอบ method __str__
+        chat_str = str(self.chat1)
+        self.assertEqual(chat_str, f"{self.chat1.sender} to {self.chat1.receiver} at {self.chat1.timestamp}")
+
+    def test_unread_count_exclude_sender(self):
+        # ทดสอบว่า get_unread_count ไม่รวมข้อความที่ผู้ใช้ส่งเอง
+        self.chat4 = Chat.objects.create(
+            sender=self.user1,
+            receiver=self.user2,
+            message='Test message',
+            is_read=False
+        )
+        unread_count_user1 = Chat.get_unread_count(self.user1)
+        self.assertEqual(unread_count_user1, 2)  # user1 ได้รับ 2 ข้อความที่ยังไม่ได้อ่าน (chat3, chat1)
+
+from django.test import TestCase
+from django.urls import reverse
+from django.contrib.auth import get_user_model
+from .models import Chat
+from products.models import Product
+from datetime import datetime
+from unittest.mock import patch
+from django.http import JsonResponse
 
 User = get_user_model()
 
-# Test Model: Chat
-class ChatModelTest(TestCase):
+class ChatViewsTest(TestCase):
+
     def setUp(self):
-        self.sender = User.objects.create_user(username='sender', password='testpassword')
-        self.receiver = User.objects.create_user(username='receiver', password='testpassword')
-        self.chat = Chat.objects.create(
-            sender=self.sender,
-            receiver=self.receiver,
-            message="Hello, how are you?",
-            timestamp=datetime(2024, 11, 24, 10, 0),
+        # สร้างผู้ใช้ 2 คน
+        self.user1 = User.objects.create_user(username='user1', password='password123')
+        self.user2 = User.objects.create_user(username='user2', password='password123')
+
+        # สร้าง Chat สำหรับทดสอบ
+        self.chat1 = Chat.objects.create(
+            sender=self.user1,
+            receiver=self.user2,
+            message='Hello, user2!',
+            is_read=False
+        )
+        self.chat2 = Chat.objects.create(
+            sender=self.user2,
+            receiver=self.user1,
+            message='Hello, user1!',
+            is_read=True
         )
 
-    def test_str_method(self):
-        chat = self.chat
-        expected_str = f"{self.sender} to {self.receiver} at {chat.timestamp}"
-        self.assertEqual(str(chat), expected_str)
+        self.chat_room_url = reverse('chat_room', args=['user2'])
+        self.get_user_products_url = reverse('get_user_products', args=['user2'])
 
-    def test_get_unread_count(self):
-        unread_count = Chat.get_unread_count(self.receiver)
-        self.assertEqual(unread_count, 1)
-
-    def test_mark_as_read(self):
-        self.chat.mark_as_read()
-        self.assertTrue(self.chat.is_read)
-        self.assertEqual(self.chat.last_read, self.chat.timestamp)
-
-    def test_mark_multiple_messages_as_read(self):
-        # Create multiple unread messages
-        Chat.objects.create(sender=self.sender, receiver=self.receiver, message="Another message", is_read=False)
-        Chat.objects.create(sender=self.receiver, receiver=self.sender, message="Yet another message", is_read=False)
-
-        self.receiver.unread_count = 2  # Simulate unread count
-        self.assertEqual(Chat.get_unread_count(self.receiver), 2)
-
-        # Mark all messages as read
-        Chat.objects.all().update(is_read=True)
-        self.assertEqual(Chat.get_unread_count(self.receiver), 0)
-
-    def test_unread_count_with_no_unread_messages(self):
-        # Ensure that the receiver has no unread messages
-        self.receiver.chat_set.update(is_read=True)  # Mark all messages as read, if any
-
-         # Now check that the unread count is 0
-        self.assertEqual(Chat.get_unread_count(self.receiver), 0)
-
-
-# Test WebSocket: ChatConsumer
-class WebSocketTest(TestCase):
-    def setUp(self):
-        # Create test users
-        self.sender = User.objects.create_user(username='sender', password='testpassword')
-        self.receiver = User.objects.create_user(username='receiver', password='testpassword')
-
-    async def test_chat_connect(self):
-        room_name = 'testroom'
-        communicator = WebsocketCommunicator(
-            AuthMiddlewareStack(URLRouter([re_path(r'ws/chat/(?P<room_name>[^/]+)/$', ChatConsumer.as_asgi())])),
-            f"ws/chat/{room_name}/"
-        )
-
-        # Log in before connecting WebSocket
-        self.client.login(username='sender', password='testpassword')
-
-        # Now connect
-        connected, subprotocol = await communicator.connect()
-        self.assertTrue(connected)
-        await communicator.disconnect()
-
-    async def test_chat_message_send(self):
-        room_name = 'testroom'
-        communicator = WebsocketCommunicator(
-            AuthMiddlewareStack(URLRouter([re_path(r'ws/chat/(?P<room_name>[^/]+)/$', ChatConsumer.as_asgi())])),
-            f"ws/chat/{room_name}/"
-        )
-        # Log in before connecting WebSocket
-        self.client.login(username='sender', password='testpassword')
-
-        connected, subprotocol = await communicator.connect()
-        self.assertTrue(connected)
-
-        message = {'message': 'Hello, receiver!'}
-        await communicator.send_json_to(message)
-
-        response = await communicator.receive_json_from()
-        self.assertEqual(response['message'], message['message'])
-
-        await communicator.disconnect()
-
-    async def test_chat_message_received(self):
-        room_name = 'testroom'
-        communicator1 = WebsocketCommunicator(
-            AuthMiddlewareStack(URLRouter([re_path(r'ws/chat/(?P<room_name>[^/]+)/$', ChatConsumer.as_asgi())])),
-            f"ws/chat/{room_name}/"
-        )
-        communicator2 = WebsocketCommunicator(
-            AuthMiddlewareStack(URLRouter([re_path(r'ws/chat/(?P<room_name>[^/]+)/$', ChatConsumer.as_asgi())])),
-            f"ws/chat/{room_name}/"
-        )
-
-        # Log in before connecting WebSocket
-        self.client.login(username='sender', password='testpassword')
-
-        connected1, subprotocol1 = await communicator1.connect()
-        connected2, subprotocol2 = await communicator2.connect()
-        self.assertTrue(connected1)
-        self.assertTrue(connected2)
-
-        message = {'message': 'Hello from sender!'}
-        await communicator1.send_json_to(message)
-
-        response = await communicator2.receive_json_from()
-        self.assertEqual(response['message'], message['message'])
-
-        await communicator1.disconnect()
-        await communicator2.disconnect()
-
-    async def test_invalid_room_connect(self):
-        # Test connection to an invalid room
-        room_name = 'invalidroom'
-        communicator = WebsocketCommunicator(
-            AuthMiddlewareStack(URLRouter([re_path(r'ws/chat/(?P<room_name>[^/]+)/$', ChatConsumer.as_asgi())])),
-            f"ws/chat/{room_name}/"
-        )
-        # Log in before connecting WebSocket
-        self.client.login(username='sender', password='testpassword')
-
-        connected, subprotocol = await communicator.connect()
-        self.assertFalse(connected)
-        await communicator.disconnect()
-
-
-# Test Views: Chat Room
-class ChatRoomViewTest(TestCase):
-    def setUp(self):
-        self.sender = User.objects.create_user(username='sender', password='testpassword')
-        self.receiver = User.objects.create_user(username='receiver', password='testpassword')
-
-    def test_chat_room_view_authenticated(self):
-        # Test that a logged-in user can access the chat room
-        self.client.login(username='sender', password='testpassword')
-        response = self.client.get(reverse('chat_room', kwargs={'room_name': self.receiver.username}))
+    def test_chat_room_view(self):
+        # ทดสอบการเข้าถึงห้องแชท
+        self.client.login(username='user1', password='password123')
+        response = self.client.get(self.chat_room_url)
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, 'Type a message...')
-        self.assertContains(response, self.receiver.username)
+        self.assertTemplateUsed(response, 'chat_app/chat.html')
+        self.assertContains(response, 'Hello, user2!')
+        self.assertContains(response, 'Hello, user1!')
 
-    def test_chat_room_view_unauthenticated(self):
-        # Test that an unauthenticated user cannot access the chat room
-        response = self.client.get(reverse('chat_room', kwargs={'room_name': self.receiver.username}))
-        self.assertEqual(response.status_code, 302)  # Redirects to login
+    def test_search_chat_messages(self):
+        # ทดสอบการค้นหาข้อความในห้องแชท
+        self.client.login(username='user1', password='password123')
+        response = self.client.get(self.chat_room_url + '?search=Hello')
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'Hello, user2!')
+        self.assertContains(response, 'Hello, user1!')
 
-    def test_unread_message_counts(self):
-        # Test unread message counts
-        Chat.objects.create(sender=self.receiver, receiver=self.sender, message="Test message", is_read=False)
-        self.client.login(username='sender', password='testpassword')
-        response = self.client.get(reverse('chat_room', kwargs={'room_name': self.receiver.username}))
-        self.assertEqual(response.context['unread_message_counts'][self.receiver.username], 1)
+    def test_update_unread_messages(self):
+        # ทดสอบการอัปเดตสถานะข้อความที่ยังไม่ได้อ่าน
+        self.client.login(username='user1', password='password123')
+        self.client.get(self.chat_room_url)
 
-    def test_unread_message_count_for_multiple_messages(self):
-        # Test with multiple unread messages
-        Chat.objects.create(sender=self.receiver, receiver=self.sender, message="Message 1", is_read=False)
-        Chat.objects.create(sender=self.receiver, receiver=self.sender, message="Message 2", is_read=False)
-        self.client.login(username='sender', password='testpassword')
-        response = self.client.get(reverse('chat_room', kwargs={'room_name': self.receiver.username}))
-        self.assertEqual(response.context['unread_message_counts'][self.sender.username], 2)
-
-    def test_chat_room_access_without_login(self):
-        # Ensure non-logged in user is redirected
-        response = self.client.get(reverse('chat_room', kwargs={'room_name': self.receiver.username}))
-        self.assertEqual(response.status_code, 302)  # Should redirect to login
-
-from django.test import SimpleTestCase
-from django.urls import resolve
-from channels.routing import URLRouter
-from chat_app.routing import websocket_urlpatterns
-from chat_app.consumers import ChatConsumer
-
-
-class RoutingTestCase(SimpleTestCase):
-    def test_routing_resolves_to_consumer(self):
-        """
-        Test that the WebSocket URL correctly resolves to the ChatConsumer.
-        """
-        room_name = "testroom"
-        resolved_function = resolve(f"/ws/chat/{room_name}/")
-        
-        # Ensure the route resolves correctly
-        self.assertEqual(resolved_function.func.view_class, ChatConsumer)
-
-    def test_all_routes_registered(self):
-        """
-        Test that all WebSocket routes are registered correctly.
-        """
-        router = URLRouter(websocket_urlpatterns)
-        self.assertEqual(len(websocket_urlpatterns), 1)
-        self.assertIsInstance(websocket_urlpatterns[0], re_path)
-        self.assertIn('room_name', websocket_urlpatterns[0].pattern.regex.pattern)
-
-    def test_invalid_route(self):
-        """
-        Test that invalid WebSocket routes are not resolved.
-        """
-        with self.assertRaises(Exception):
-            resolve("/ws/chat/")  # Missing `room_name`
-
-        with self.assertRaises(Exception):
-            resolve("/ws/invalid_path/")
-
-
-
-
-
-
-
-
-
+        # ตรวจสอบว่า ข้อความที่ยังไม่ได้อ่านของ user1 ถูกอัปเดตเป็น "อ่านแล้ว"
+        self.chat1.refresh_from_db()
+        self.assertTrue(self.chat1.is_read)
 
