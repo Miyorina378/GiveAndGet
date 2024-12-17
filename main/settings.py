@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     "daphne",
     "products",
     "chat_app",
+    "orders",
     "main_app.apps.MainAppConfig",  # Don't forget to change here.
     "users_app.apps.UsersAppConfig",
     "django.contrib.admin",

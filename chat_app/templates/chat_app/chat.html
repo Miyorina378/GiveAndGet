@@ -434,7 +434,9 @@
           <!-- ปุ่มและช่องค้นหา -->
           <div class="ml-auto d-flex align-items-center">
               <!-- ปุ่มคำขอแลกเปลี่ยน -->
-              <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#tradeModal">Send trade request</button>
+              <div class="text-center mt-4">
+                <a href="{% url 'add_meeting_point' %}" class="btn btn-success">meet</a>
+            </div>
 
               <!-- ช่องค้นหา -->
               <div class="form-group mb-0">
@@ -487,63 +489,6 @@
                   </div>
               </div>
           </div>
-      </div>
-  </div>
-</div>
-
-<!-- Trade Modal -->
-<div class="modal fade" id="tradeModal" tabindex="-1" aria-labelledby="tradeModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-      <div class="modal-content">
-          <form id="tradeForm" method="post" action="{% url 'send_trade_request' %}">
-              {% csrf_token %}
-              <div class="modal-header">
-                  <h5 class="modal-title" id="tradeModalLabel">ตกลงซื้อขาย</h5>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-              </div>
-              <div class="modal-body">
-                  <!-- Product Selection -->
-                  <div class="form-group mb-3">
-                      <label for="productSelect">เลือกสินค้าที่ต้องการ:</label>
-                      <select id="productSelect" name="product_id" class="form-control" required>
-                          <option value="">-- กรุณาเลือกสินค้า --</option>
-                          {% for product in products %}
-                              <option value="{{ product.id }}">{{ product.name }}</option>
-                          {% endfor %}
-                      </select>
-                  </div>
-
-                  <!-- Payment Method Selection -->
-                  <div class="form-group mb-3">
-                      <label for="paymentMethod">เลือกวิธีชำระเงิน:</label>
-                      <select id="paymentMethod" name="payment_method" class="form-control" required>
-                          <option value="money">จ่ายด้วยเงิน</option>
-                          <option value="items">แลกเปลี่ยนด้วยของ</option>
-                      </select>
-                  </div>
-                  <div class="form-group mb-3" id="exchangeItemInput" style="display: none;">
-                      <label for="exchangeItem">สิ่งที่ต้องการแลก:</label>
-                      <input type="text" id="exchangeItem" name="exchange_item" class="form-control" placeholder="ใส่สิ่งที่คุณต้องการแลก" />
-                  </div>
-                  <div class="form-group mb-3">
-                      <label for="location">พิกัดสถานที่:</label>
-                      <input type="text" id="location" name="location" class="form-control" placeholder="ใส่พิกัดที่อยู่สำหรับการแลกเปลี่ยน" required />
-                  </div>
-                  <div class="form-group mb-3">
-                      <label for="appointmentDate">วันนัดรับ:</label>
-                      <input type="date" id="appointmentDate" name="appointment_date" class="form-control" required />
-                  </div>
-                  <div class="form-group mb-3">
-                      <label for="appointmentTime">เวลานัดรับ:</label>
-                      <input type="time" id="appointmentTime" name="appointment_time" class="form-control" required />
-                  </div>
-                  <input type="hidden" name="seller" value="{{ product.user.username }}">
-              </div>
-              <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ยกเลิก</button>
-                  <button type="submit" class="btn btn-primary">ยืนยัน</button>
-              </div>
-          </form>
       </div>
   </div>
 </div>
@@ -643,30 +588,6 @@
           }
       }
   };
-
-  function toggleExchangeItemInput() {
-    const paymentMethod = document.getElementById("paymentMethod");
-    const exchangeItemInput = document.getElementById("exchangeItemInput");
-
-    // Toggle visibility of "สิ่งที่ต้องการแลก" field
-    exchangeItemInput.style.display = paymentMethod.value === "items" ? "block" : "none";
-}
-
-document.addEventListener("DOMContentLoaded", () => {
-    const paymentMethod = document.getElementById("paymentMethod");
-    
-    // Call toggleExchangeItemInput when paymentMethod changes
-    paymentMethod.addEventListener("change", toggleExchangeItemInput);
-
-    // Initial call in case the page is loaded with a pre-selected payment method
-    toggleExchangeItemInput();
-
-    // Add event listener for opening the modal to call toggleExchangeItemInput
-    $('#tradeModal').on('shown.bs.modal', () => {
-        // Ensure toggle function runs when modal is shown
-        toggleExchangeItemInput();
-    });
-});
 
 </script>
 
