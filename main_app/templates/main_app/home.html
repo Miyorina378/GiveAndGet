@@ -2,73 +2,76 @@
 {% load static %}
 {% block content %}
 
-<header class="head-home text-white text-center py-4">
-    <div class="w-100">
-        <div class="container d-flex align-items-center">
-            <!-- Logo และชื่อเว็บ -->
-            <div class="d-flex align-items-center">
-                <img src="{% static 'main_app/images/Final_report_2.png' %}" alt="Logo" class="logo-image me-2">
-                <h1>GiveAndGet</h1>
-            </div>
-
-            <!-- Filter Section -->
-            <div class="filter d-flex gap-2 pb-3">
-                <form method="get" action="{% url 'home' %}" class="d-flex gap-2">
-                    <input type="text" name="search" value="{{ request.GET.search }}" class="form-control" placeholder="Search products...">
-
-                    <select name="sort" class="form-select">
-                        <option value="" {% if not request.GET.sort %}selected{% endif %}>None</option>
-                        <option value="name" {% if request.GET.sort == "name" %}selected{% endif %}>Name (A-Z)</option>
-                        <option value="price" {% if request.GET.sort == "price" %}selected{% endif %}>Price (Low to High)</option>
-                        <option value="-price" {% if request.GET.sort == "-price" %}selected{% endif %}>Price (High to Low)</option>
-                    </select>
-
-                    <select name="category" class="form-select">
-                        <option value="" {% if not category_filter %}selected{% endif %}>all category</option>
-                        <option value="electronics" {% if category_filter == "electronics" %}selected{% endif %}>Electronics</option>
-                        <option value="books" {% if category_filter == "books" %}selected{% endif %}>Books</option>
-                        <option value="clothing&fashion" {% if category_filter == "clothing&fashion" %}selected{% endif %}>Clothing & Fashion</option>
-                        <option value="home&living" {% if category_filter == "home&living" %}selected{% endif %}>Home & Living</option>
-                        <option value="tools&equipment" {% if category_filter == "tools&equipment" %}selected{% endif %}>Tools & Equipment</option>
-                        <option value="collectibles" {% if category_filter == "collectibles" %}selected{% endif %}>Collectibles</option>
-                        <option value="health&beauty" {% if category_filter == "health&beauty" %}selected{% endif %}>Health & Beauty</option>
-                        <option value="other" {% if category_filter == "other" %}selected{% endif %}>Other</option>
-                    </select>
-
-                    <button type="submit" class="btn btn-light">Search</button>
-                </form>
+<main>
+    <header class="head-home text-white text-center py-4">
+        <div class="w-100">
+            <div class="container d-flex align-items-center">
+                <!-- Logo และชื่อเว็บ -->
+                <div class="d-flex align-items-center">
+                    <img src="{% static 'main_app/images/Final_report_2.png' %}" alt="Logo" class="logo-image me-2">
+                    <h1>GiveAndGet</h1>
+                </div>
+            
+                <!-- Filter Section -->
+                <div class="filter d-flex gap-2 pb-3">
+                    <form method="get" action="{% url 'home' %}" class="d-flex gap-2">
+                        <input type="text" name="search" value="{{ request.GET.search }}" class="form-control" placeholder="Search products...">
+                    
+                        <select name="sort" class="form-select">
+                            <option value="" {% if not request.GET.sort %}selected{% endif %}>None</option>
+                            <option value="name" {% if request.GET.sort == "name" %}selected{% endif %}>Name (A-Z)</option>
+                            <option value="price" {% if request.GET.sort == "price" %}selected{% endif %}>Price (Low to High)</option>
+                            <option value="-price" {% if request.GET.sort == "-price" %}selected{% endif %}>Price (High to Low)</option>
+                        </select>
+                    
+                        <select name="category" class="form-select">
+                            <option value="" {% if not category_filter %}selected{% endif %}>all category</option>
+                            <option value="electronics" {% if category_filter == "electronics" %}selected{% endif %}>Electronics</option>
+                            <option value="books" {% if category_filter == "books" %}selected{% endif %}>Books</option>
+                            <option value="clothing&fashion" {% if category_filter == "clothing&fashion" %}selected{% endif %}>Clothing & Fashion</option>
+                            <option value="home&living" {% if category_filter == "home&living" %}selected{% endif %}>Home & Living</option>
+                            <option value="tools&equipment" {% if category_filter == "tools&equipment" %}selected{% endif %}>Tools & Equipment</option>
+                            <option value="collectibles" {% if category_filter == "collectibles" %}selected{% endif %}>Collectibles</option>
+                            <option value="health&beauty" {% if category_filter == "health&beauty" %}selected{% endif %}>Health & Beauty</option>
+                            <option value="other" {% if category_filter == "other" %}selected{% endif %}>Other</option>
+                        </select>
+                    
+                        <button type="submit" class="btn btn-light">Search</button>
+                    </form>
+                </div>
             </div>
         </div>
-    </div>
-</header>
-
-<div class="container my-5">
-    <div class="row">
-        {% if products %}
-            {% for product in products %}
-                <div class="col-md-4 mb-4">
-                    <div class="products-card">
-                        <div class="home-product-image">
-                            {% if product.image %}
-                                <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
-                            {% else %}
-                                <img src="{% static 'images/default_image.jpg' %}" class="card-img-top" alt="Default Image">
-                            {% endif %}
-                        </div>
-                        <div class="card-body">
-                            <h5 class="card-title">{{ product.name }}</h5>
-                            <p class="card-text">Post by: {{ product.user.username }}</p>
-                            <p class="card-text">Price: ฿{{ product.price }}</p>
-                            <a href="{% url 'product_detail' product.id %}" class="btn btn-primary">View Details</a>
+    </header>
+    
+    <div class="container my-5">
+        <div class="row">
+            {% if products %}
+                {% for product in products %}
+                    <div class="col-md-4 mb-4">
+                        <div class="products-card">
+                            <div class="home-product-image">
+                                {% if product.image %}
+                                    <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+                                {% else %}
+                                    <img src="{% static 'images/default_image.jpg' %}" class="card-img-top" alt="Default Image">
+                                {% endif %}
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">{{ product.name }}</h5>
+                                <p class="card-text">Post by: {{ product.user.username }}</p>
+                                <p class="card-text">Price: ฿{{ product.price }}</p>
+                                <a href="{% url 'product_detail' product.id %}" class="btn btn-primary">View Details</a>
+                            </div>
                         </div>
                     </div>
-                </div>
-            {% endfor %}
-        {% else %}
-            <p class="text-center">No products found</p>
-        {% endif %}
+                {% endfor %}
+            {% else %}
+                <p class="text-center">No products found</p>
+            {% endif %}
+        </div>
     </div>
-</div>
+</main>
+
 <footer class="py-4 bg-dark text-white text-center">
     <div class="container">
         <div class="social-icons d-flex justify-content-center">
