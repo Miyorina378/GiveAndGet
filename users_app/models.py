@@ -62,6 +62,4 @@ class Report(models.Model):
     date_filed = models.DateTimeField(auto_now_add=True)
     action_taken = models.TextField(blank=True, null=True)
 
-    def __str__(self):
-        # Ensure the reported_product exists before trying to access its name
-        return f'Report by {self.reporter} on {self.reported_user} for {self.reason}'
+    
