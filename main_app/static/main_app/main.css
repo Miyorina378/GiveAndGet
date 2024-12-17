@@ -598,6 +598,9 @@ header h1 {
 /* footer */
 footer {
     background-color: #141414;
+    position: fixed; /* หรือ absolute ถ้าไม่ต้องการให้ตายตัว */
+    bottom: 0;
+    width: 100%;
 }
 
 .about-footerContainer {
