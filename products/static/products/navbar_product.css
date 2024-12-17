@@ -1,0 +1,204 @@
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background: #2a2a2b;
+    /* ใช้ Gradient แทน */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    /* เพิ่มเงา */
+}
+
+.navbar-brand {
+    color: #fff;
+    font-weight: bold;
+    font-size: 1.5rem;
+    text-decoration: none;
+}
+
+.nav-link {
+    margin-right: 10px;
+    text-decoration: none;
+    color: #fff;
+    font-weight: bold;
+    transition: color 0.3s ease, text-shadow 0.3s ease;
+    /* เพิ่มการเปลี่ยนแปลงสีแบบ Smooth */
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.nav-link i {
+    font-size: 1rem;
+    /* ปรับขนาดไอคอนให้เหมาะสม */
+}
+
+.nav-link:hover {
+    color: #ff4747;
+    /* เปลี่ยนสีลิงก์เมื่อ Hover */
+    text-shadow: 0 0 5px #7a00b7;
+    /* เพิ่มเงา */
+}
+
+.navbar-nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* จัดตำแหน่งทั้งหมดไปทางขวา */
+    gap: 15px;
+}
+
+.navbar-nav.ms-auto {
+    margin-left: auto;
+    /* ใช้ margin-left เพื่อดันองค์ประกอบไปทางขวา */
+}
+
+.navbar-nav .nav-item {
+    margin-left: 10px;
+    /* ระยะห่างระหว่างรายการเมนู */
+}
+
+.navbar-nav .btn {
+    border-radius: 5px;
+    padding: 5px 10px;
+}
+
+.navbar-collapse {
+    transition: height 0.4s ease, opacity 0.4s ease;
+    /* ทำให้แสดงผลนุ่มนวล */
+    overflow: hidden;
+}
+
+.navbar-collapse.show {
+    display: flex;
+    /* แสดง Navbar ตามปกติเมื่อกด Hamburger */
+    height: auto;
+    /* ใช้ขนาดอัตโนมัติเมื่อแสดง */
+    opacity: 1;
+    /* แสดงแบบเต็ม */
+    overflow: visible;
+    /* ป้องกันการตัดเนื้อหา */
+    transition: height 0.4s ease, opacity 0.4s ease;
+    /* ทำให้ Smooth */
+}
+
+.collapsing {
+    height: 0;
+    /* ขณะปิดลดความสูงเหลือ 0 */
+    opacity: 0;
+    /* ขณะปิดทำให้โปร่งใส */
+    transition: height 0.4s ease, opacity 0.4s ease;
+    /* เพิ่ม Smooth Transition */
+}
+
+@media (max-width: 768px) {
+
+    .navbar-nav {
+        flex-direction: column;
+        /* จัดลิงก์ในแนวตั้ง */
+        gap: 10px;
+        /* ระยะห่างระหว่างเมนู */
+    }
+
+    .btn-outline-light,
+    .btn-outline-danger {
+        width: 100%;
+        /* ปุ่มขยายเต็มความกว้าง */
+        text-align: center;
+    }
+
+    .home-link,
+    .about-link {
+        margin-right: 0;
+        /* ดันลิงก์ไปทางขวา */
+        display: flex;
+        /* ใช้ Flexbox */
+        justify-content: flex-end;
+        /* ชิดขวา */
+        text-align: right;
+    }
+}
+
+.home-link,
+.about-link {
+    margin-right: 0;
+    /* ดันลิงก์ไปทางขวา */
+    display: flex;
+    /* ใช้ Flexbox */
+    justify-content: flex-end;
+    /* ชิดขวา */
+    text-align: right;
+}
+
+.btn {
+    background-color: transparent;
+    /* ทำให้โปร่งใส */
+    border: 2px solid #f01d1d;
+    /* ขอบปุ่มสีขาว */
+    color: #000000;
+    /* สีตัวอักษร */
+    border-radius: 20px;
+    /* ขอบมน */
+    padding: 5px 15px;
+    /* ระยะห่างภายในปุ่ม */
+    margin-left: 10px;
+    /* ระยะห่างระหว่างปุ่ม */
+    transition: all 0.3s ease;
+}
+
+.btn:hover {
+    background-color: #00bfff;
+    /* สีพื้นหลังเมื่อ Hover */
+    color: #ffffff;
+    /* สีตัวอักษรเมื่อ Hover */
+    transform: translateY(-2px);
+    /* ยกขึ้นเล็กน้อย */
+}
+
+.btn-outline-light {
+    display: flex;
+    /* ใช้ Flexbox */
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin: auto;
+    background-color: transparent;
+    /* ลบพื้นหลัง */
+    border: none;
+    /* ลบขอบปุ่ม */
+    color: #ffffff;
+    font-size: 16px;
+    /* ขนาดตัวอักษร */
+    font-weight: bold;
+    /* ทำตัวหนา */
+    text-decoration: none;
+    /* ลบขีดเส้นใต้ */
+    padding: 0;
+    /* ลบระยะห่างด้านใน */
+    cursor: pointer;
+    /* เปลี่ยนเคอร์เซอร์เป็นมือ */
+    transition: color 0.3s ease, background-color 0.3s ease;
+    /* เพิ่มเอฟเฟกต์เปลี่ยนสีเมื่อ Hover */
+}
+
+.btn-outline-light:hover {
+    background-color: #000000;
+    color: #fff;
+}
+
+.btn-outline-danger {
+    margin: auto;
+    border: 2px solid #ff4d4d;
+    /* สีแดงสำหรับ Logout */
+    color: #ff4d4d;
+    /* ตัวอักษรสีแดง */
+    border-radius: 20px;
+    padding: 5px 15px;
+}
+
+.btn-outline-danger:hover {
+    background-color: #ff4d4d;
+    /* สีแดงพื้นหลังเมื่อ Hover */
+    color: #ffffff;
+    /* ตัวอักษรสีขาว */
+}

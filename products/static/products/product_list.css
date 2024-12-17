@@ -1,0 +1,152 @@
+/* General Styling */
+body {
+    background-color: #f9f9f9;
+    font-family: Arial, sans-serif;
+}
+
+/* Container */
+.container {
+    max-width: 1200px;
+    margin: auto;
+}
+
+.text-center {
+    color: #343a40;
+    /* เปลี่ยนเป็นสีน้ำเงิน หรือใส่โค้ดสีที่คุณต้องการ */
+    font-weight: bold;
+    /* ตัวหนา (ถ้าต้องการ) */
+}
+
+/* Product Card */
+.product-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease;
+}
+
+.product-card:hover {
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
+    transition: all 0.3s ease;
+}
+
+/* Product Image */
+.product-image {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+}
+
+/* Product Text */
+.product-card h5 {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin: 0;
+    color: #333;
+}
+
+.product-card p {
+    font-size: 0.9rem;
+    color: #666;
+    margin: 0;
+}
+
+.product-link {
+    text-decoration: none;
+    /* เอาขีดเส้นใต้ลิงก์ออก */
+    color: #007bff;
+    /* สีฟ้าสำหรับลิงก์ */
+    font-weight: bold;
+    /* ทำตัวหนา */
+    transition: color 0.3s ease;
+    /* เพิ่มเอฟเฟกต์เปลี่ยนสี */
+}
+
+.product-link:hover {
+    color: #0056b3;
+    /* สีฟ้าเข้มขึ้นเมื่อ Hover */
+    text-decoration: underline;
+    /* ขีดเส้นใต้เมื่อ Hover */
+}
+
+/* Buttons */
+.btn {
+    border: none;
+    font-weight: bold;
+    font-size: 1rem;
+    padding: 6px 12px;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+    height: auto;
+}
+
+.btn-warning {
+    background-color: #ffc107;
+    color: #fff;
+}
+
+.btn-warning:hover {
+    background-color: #e0a800;
+    color: #fff;
+}
+
+.btn-danger {
+    background-color: #dc3545;
+    color: #fff;
+}
+
+.btn-danger:hover {
+    background-color: #bd2130;
+    color: #fff;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    color: #fff;
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268;
+}
+
+/* Back and Add Buttons */
+.d-flex.justify-content-between a {
+    font-size: 0.9rem;
+    font-weight: bold;
+    border-radius: 20px;
+    padding: 6px 12px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .product-card {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .product-image {
+        margin-bottom: 10px;
+    }
+
+    .d-flex.justify-content-between {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+}

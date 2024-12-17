@@ -9,22 +9,22 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item">
-                    <a class="nav-link home-link" href="{% url 'home' %}">Home</a>
+                    <a class="nav-link home-link" href="{% url 'home' %}"><i class="fa-solid fa-house"></i>Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link about-link" href="{% url 'about' %}">About</a>
+                    <a class="nav-link about-link" href="{% url 'about' %}"><i class="fa-solid fa-people-group"></i>About</a>
                 </li>
 
                 {% if user.is_authenticated %}
 
                 <li class="nav-item">
                     <form action="{% url 'chat_room' room_name=user.username %}" method="get">
-                        <button class="btn btn-outline-light" type="submit">Chat</button>
+                        <button class="btn btn-outline-light" type="submit"><i class="fa-solid fa-message"></i>Chat</button>
                     </form>
                 </li>
                 <li class="nav-item">
                     <form action="{% url 'dashboard' %}" method="get">
-                        <button class="btn btn-outline-light" type="submit">{{ user.username }}</button>
+                        <button class="btn btn-outline-light" type="submit"><i class="fa-solid fa-user"></i>{{ user.username }}</button>
                     </form>
                 </li>
                 <li class="nav-item">

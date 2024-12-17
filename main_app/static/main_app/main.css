@@ -13,7 +13,7 @@ body {
     justify-content: space-between;
     align-items: center;
     padding: 10px 20px;
-    background: linear-gradient(90deg, #e67272, #ff9a76);
+    background: #2a2a2b;
     /* ใช้ Gradient แทน */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     /* เพิ่มเงา */
@@ -33,6 +33,14 @@ body {
     font-weight: bold;
     transition: color 0.3s ease, text-shadow 0.3s ease;
     /* เพิ่มการเปลี่ยนแปลงสีแบบ Smooth */
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.nav-link i {
+    font-size: 1rem;
+    /* ปรับขนาดไอคอนให้เหมาะสม */
 }
 
 .nav-link:hover {
@@ -66,31 +74,34 @@ body {
 }
 
 .navbar-collapse {
-    transition: all 0.3s ease-in-out;
+    transition: height 0.4s ease, opacity 0.4s ease;
     /* ทำให้แสดงผลนุ่มนวล */
+    overflow: hidden;
 }
 
 .navbar-collapse.show {
     display: flex;
     /* แสดง Navbar ตามปกติเมื่อกด Hamburger */
+    height: auto;
+    /* ใช้ขนาดอัตโนมัติเมื่อแสดง */
+    opacity: 1;
+    /* แสดงแบบเต็ม */
+    overflow: visible;
+    /* ป้องกันการตัดเนื้อหา */
+    transition: height 0.4s ease, opacity 0.4s ease;
+    /* ทำให้ Smooth */
+}
+
+.collapsing {
+    height: 0;
+    /* ขณะปิดลดความสูงเหลือ 0 */
+    opacity: 0;
+    /* ขณะปิดทำให้โปร่งใส */
+    transition: height 0.4s ease, opacity 0.4s ease;
+    /* เพิ่ม Smooth Transition */
 }
 
 @media (max-width: 768px) {
-    .navbar-collapse {
-        display: flex;
-        flex-direction: column;
-        /* เรียงแนวตั้ง */
-        align-items: center;
-        /* จัดข้อความให้อยู่ตรงกลางแนวนอน */
-        justify-content: center;
-        /* จัดข้อความให้อยู่ตรงกลางแนวตั้ง */
-        text-align: center;
-        /* จัดข้อความตรงกลาง */
-        height: 100vh;
-        /* ใช้ความสูงเต็มจอ */
-        gap: 10px;
-        /* ระยะห่างระหว่างข้อความ */
-    }
 
     .navbar-nav {
         flex-direction: column;
@@ -155,6 +166,11 @@ body {
 }
 
 .btn-outline-light {
+    display: flex;
+    /* ใช้ Flexbox */
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
     margin: auto;
     background-color: transparent;
     /* ลบพื้นหลัง */
@@ -217,10 +233,11 @@ button:hover {
 
 /* Header Styles */
 header {
+    position: relative;
     width: 100%;
-    height: 300px;
-    background-color: #ff7a7a !important;
-    padding: 0;
+    height: 250px;
+    background: linear-gradient(180deg, #FCBB6D, #D8737F) !important;
+    padding: 20px;
     /* ระยะห่างภายใน */
     text-align: center;
     /* จัดข้อความกึ่งกลาง */
@@ -236,16 +253,38 @@ header {
     flex-direction: column;
     justify-content: center;
     /* กระจายเนื้อหาให้ห่างกัน */
+    align-items: center;
 
+}
+
+.logo-image {
+    height: 80px;
+    /* ความสูงโลโก้ */
+    width: auto;
+    /* ความกว้างตามสัดส่วน */
+    margin-right: 10px;
+    /* ระยะห่างระหว่างโลโก้กับข้อความ */
+    margin-left: 0;
+    /* ต้องไม่มี margin-left เพิ่มเติม */
+}
+
+/* Logo container */
+.logo-container {
+    display: flex;
+    align-items: center;
+    /* จัดให้โลโก้และข้อความอยู่ตรงกลางแนวตั้ง */
+    gap: 10px;
+    /* ระยะห่างระหว่างโลโก้และข้อความ */
 }
 
 
 header h1 {
     font-size: 2.5rem;
     /* ขนาดตัวอักษรใหญ่ */
-    text-align: left;
-    margin-top: 80px;
-    margin-bottom: 30px;
+    text-align: center;
+    font-weight: bold;
+    color: white;
+    margin: 0;
     /* ระยะห่างด้านล่าง */
 }
 
@@ -259,24 +298,28 @@ header h1 {
 }
 
 .filter {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
     display: flex;
+    align-items: center;
     justify-content: flex-end;
     /* จัดปุ่มให้ชิดขวา */
     gap: 10px;
     /* ระยะห่างที่เท่ากันระหว่างทุกองค์ประกอบ */
-    align-items: center;
-    /* จัดให้องค์ประกอบอยู่ในแนวเดียวกัน */
     padding: 0 5px;
     /* เพิ่มระยะห่างด้านซ้ายและขวา */
     padding-bottom: 20px;
     margin-top: 75px;
+    margin-right: 20px;
+
 
 }
 
 .filter input {
     width: 200px;
     /* กำหนดความกว้างของ Search Bar */
-    padding: 5px;
+    padding: 8px 12px;
     border: 1px solid #ccc;
     border-radius: 20px;
     margin: 0;
@@ -436,7 +479,7 @@ header h1 {
 }
 
 .products-card .btn {
-    background-color: #ff7a7a;
+    background-color: #D8737F;
     color: white;
     padding: 10px 16px;
     border-radius: 24px;
@@ -479,12 +522,36 @@ header h1 {
     color: #000000;
 }
 
+.about-header {
+    background: #f8f8f8 !important;
+    /* เปลี่ยน Gradient */
+    text-align: center;
+    /* จัดข้อความให้อยู่ตรงกลาง */
+    padding: 50px 0;
+    /* ระยะห่างด้านบน-ล่าง */
+    color: rgb(0, 0, 0) !important;
+    /* สีข้อความ */
+    border-bottom-left-radius: 40px;
+    border-bottom-right-radius: 40px;
+    box-shadow: none;
+}
+
 .about-header h1 {
-    text-align: left;
+    text-align: center;
     /* จัดข้อความ About ให้อยู่ตรงกลาง */
-    color: #ffffff;
+    color: #000000;
     /* สีสำหรับข้อความ About */
-    margin-bottom: 125px;
+    font-size: 2.5rem;
+    /* ขนาดหัวข้อ */
+    font-weight: bold;
+    margin-bottom: 20px;
+
+}
+
+.about-header .logo-image {
+    height: 145px;
+    width: 145px;
+    margin: auto;
 
 }
 
@@ -531,6 +598,9 @@ header h1 {
 /* footer */
 footer {
     background-color: #141414;
+    position: fixed; /* หรือ absolute ถ้าไม่ต้องการให้ตายตัว */
+    bottom: 0;
+    width: 100%;
 }
 
 .about-footerContainer {

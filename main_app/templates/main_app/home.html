@@ -2,10 +2,16 @@
 {% load static %}
 {% block content %}
 
-<header class="text-white text-center py-4">
+<header class="head-home text-white text-center py-4">
     <div class="w-100">
-        <div class="container">
-            <h1>GiveAndGet</h1>
+        <div class="container d-flex align-items-center">
+            <!-- Logo และชื่อเว็บ -->
+            <div class="d-flex align-items-center">
+                <img src="{% static 'main_app/images/Final_report_2.png' %}" alt="Logo" class="logo-image me-2">
+                <h1>GiveAndGet</h1>
+            </div>
+
+            <!-- Filter Section -->
             <div class="filter d-flex gap-2 pb-3">
                 <form method="get" action="{% url 'home' %}" class="d-flex gap-2">
                     <input type="text" name="search" value="{{ request.GET.search }}" class="form-control" placeholder="Search products...">
