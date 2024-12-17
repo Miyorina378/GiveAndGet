@@ -608,6 +608,8 @@ header h1 {
 /* footer */
 footer {
     background-color: #141414;
+    bottom: 0;
+    width: 100%;
 }
 
 .about-footerContainer {
