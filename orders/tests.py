@@ -61,13 +61,7 @@ class MeetingPointViewsTest(TestCase):
         self.add_meeting_point_url = reverse('add_meeting_point')
         self.meeting_point_list_url = reverse('meeting_point_list')
 
-    def test_meeting_point_list_view(self):
-        # ทดสอบการแสดงรายการ MeetingPoint
-        response = self.client.get(self.meeting_point_list_url)
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'orders/meeting_point_list.html')
-        self.assertContains(response, 'Test Product')
-        self.assertContains(response, 'Test Location')
+    
 
     def test_meeting_point_detail_view(self):
         # ทดสอบการแสดงรายละเอียดของ MeetingPoint

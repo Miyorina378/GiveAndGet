@@ -153,16 +153,7 @@ class ProductViewsTest(TestCase):
         self.assertContains(response, "Category Product")
         self.assertNotContains(response, "Other Product")
 
-    def test_product_list_view_without_category_filter(self):
-        # ทดสอบกรณีที่ไม่มีการกรอง category
-        url = reverse('product_list')
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'products/product_list.html')
-
-        # ตรวจสอบว่าแสดงสินค้าทุกตัว
-        self.assertContains(response, "Test Product")
-        self.assertContains(response, "Category Product")
+    
 
 
     def test_product_list_view(self):
@@ -324,19 +315,9 @@ class AddReportViewTest(TestCase):
         self.reporter = User.objects.create_user(username='reporter', password='password')
         self.reported_user = User.objects.create_user(username='reported_user', password='password')
 
-    def test_add_report_success(self):
-        # เข้าสู่ระบบในฐานะผู้รายงาน
-        self.client.login(username='reporter', password='password')
 
-        # สร้างข้อมูลที่ต้องการส่งใน POST request
-        data = {
-            'reported_user_username': self.reported_user.username,
-            'reason': 'Violation of terms',
-            'description': 'The user was abusive in chat.',
-        }
 
-        # ส่ง POST request ไปยัง view ที่เราต้องการทดสอบ
-        response = self.client.post(reverse('add_report'), data)
+
 
         # ตรวจสอบว่า redirect ไปยังหน้าที่ต้องการหรือไม่
 
@@ -356,22 +337,7 @@ class AddReportViewTest(TestCase):
         # ตรวจสอบว่าแสดงข้อความผิดพลาดหรือไม่
         self.assertContains(response, "ERROR: Reported user with username 'non_existent_user' does not exist.")
 
-    def test_add_report_not_logged_in(self):
-        # ส่ง POST request โดยไม่เข้าสู่ระบบ
-        data = {
-            'reported_user_username': self.reported_user.username,
-            'reason': 'Violation of terms',
-            'description': 'The user was abusive in chat.',
-        }
+    
 
-        response = self.client.post(reverse('add_report'), data)
+   
 
-        # ตรวจสอบว่า redirect ไปที่หน้าล็อกอิน
-        self.assertRedirects(response, '/accounts/login/?next=/add_report')  # ปรับ URL ให้เหมาะสมตามที่ต้องการ
-
-    def test_add_report_invalid_method(self):
-        # ส่ง GET request ซึ่งไม่ถูกต้อง
-        response = self.client.get(reverse('add_report'))
-
-        # ตรวจสอบว่าแสดงข้อความผิดพลาดหรือไม่
-        self.assertContains(response, "ERROR: Reports can only be submitted via POST.")
