@@ -1,8 +1,14 @@
-from django.test import TestCase
 from django.contrib.auth import get_user_model
-from datetime import datetime
-from .models import Chat  # เปลี่ยน yourapp เป็นชื่อแอปของคุณ
+from .models import Chat  
 from django.contrib.auth.models import User
+from django.test import TestCase, Client
+from django.urls import reverse
+from products.models import Product
+from channels.testing import WebsocketCommunicator
+from django.contrib.auth.models import AnonymousUser
+from asgiref.sync import sync_to_async
+from users_app.models import GGUser
+from main.asgi import application  
 
 
 class ChatModelTest(TestCase):
@@ -40,16 +46,6 @@ class ChatModelTest(TestCase):
         chat_str = str(self.chat1)
         self.assertEqual(chat_str, f"{self.chat1.sender} to {self.chat1.receiver} at {self.chat1.timestamp}")
 
-
-
-from django.test import TestCase
-from django.urls import reverse
-from django.contrib.auth import get_user_model
-from .models import Chat
-from products.models import Product
-from datetime import datetime
-from unittest.mock import patch
-from django.http import JsonResponse
 
 User = get_user_model()
 
@@ -94,5 +90,128 @@ class ChatViewsTest(TestCase):
         self.assertContains(response, 'Hello, user2!')
         self.assertContains(response, 'Hello, user1!')
 
+class ChatConsumerTestCase(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        # Create test users
+        cls.user1 = GGUser.objects.create_user(username="user1", password="password123")
+        cls.user2 = GGUser.objects.create_user(username="user2", password="password123")
 
+    async def test_websocket_communication(self):
+        # Authenticate user1
+        communicator = WebsocketCommunicator(
+            application, f"/ws/chat/{self.user2.username}/"
+        )
+        communicator.scope['user'] = self.user1  # Simulate logged-in user
+        connected, _ = await communicator.connect()
+        self.assertTrue(connected)
+
+        # Send a message
+        message = "Hello, user2!"
+        await communicator.send_json_to({
+            "message": message
+        })
+
+        # Receive the broadcasted message
+        response = await communicator.receive_json_from()
+        self.assertEqual(response["message"], message)
+        self.assertEqual(response["sender"], self.user1.username)
+
+        # Verify the message is saved in the database
+        chat = await sync_to_async(Chat.objects.get)(
+            sender=self.user1, receiver=self.user2, message=message
+        )
+        self.assertIsNotNone(chat)
+
+        # Close the WebSocket
+        await communicator.disconnect()
+    
+
+    async def test_invalid_user_connection(self):
+        # Simulate an anonymous user connection
+        communicator = WebsocketCommunicator(
+            application, f"/ws/chat/user2/"
+        )
+        communicator.scope['user'] = AnonymousUser()  # Simulate an anonymous user
+        connected, _ = await communicator.connect()
+
+        # Assert that the connection was accepted
+        self.assertTrue(connected)
+
+        await communicator.disconnect()
+
+
+from django.test import TestCase, Client
+from django.contrib.auth import get_user_model
+from django.urls import reverse
+from products.models import Product
+
+User = get_user_model()
+
+
+class GetUserProductsViewTestCase(TestCase):
+    def setUp(self):
+        # Create test users
+        self.seller = User.objects.create_user(username="seller1", password="password123")
+        self.other_user = User.objects.create_user(username="user2", password="password123")
+        
+        # Create test products for the seller
+        self.product1 = Product.objects.create(user=self.seller, name="Product 1", price=100.00, stock = 10)
+        self.product2 = Product.objects.create(user=self.seller, name="Product 2", price=200.00, stock = 10)
+        
+        # Client for making requests
+        self.client = Client()
+
+    def test_get_products_for_valid_seller_with_products(self):
+        # Login as a valid user
+        self.client.login(username="user2", password="password123")
+        
+        # Request the seller's products
+        response = self.client.get(reverse("get_user_products", args=["seller1"]))
+        
+        # Assert response is successful
+        self.assertEqual(response.status_code, 200)
+        response_data = response.json()
+        
+        # Assert success and product data in response
+        self.assertTrue(response_data["success"])
+        self.assertEqual(len(response_data["products"]), 2)
+        self.assertEqual(response_data["products"][0]["name"], "Product 1")
+        self.assertEqual(response_data["products"][1]["name"], "Product 2")
+
+    def test_get_products_for_valid_seller_with_no_products(self):
+        # Create a seller with no products
+        new_seller = User.objects.create_user(username="empty_seller", password="password123")
+        
+        # Login as a valid user
+        self.client.login(username="user2", password="password123")
+        
+        # Request the new seller's products
+        response = self.client.get(reverse("get_user_products", args=["empty_seller"]))
+        
+        # Assert response is successful
+        self.assertEqual(response.status_code, 200)
+        response_data = response.json()
+        
+        # Assert success is False and proper message is returned
+        self.assertFalse(response_data["success"])
+        self.assertEqual(response_data["message"], "No products available for this user.")
+
+    def test_get_products_for_invalid_seller(self):
+        # Login as a valid user
+        self.client.login(username="user2", password="password123")
+        
+        # Request products for a non-existent seller
+        response = self.client.get(reverse("get_user_products", args=["non_existent_user"]))
+        
+        # Assert a 404 response
+        self.assertEqual(response.status_code, 404)
+
+    def test_unauthorized_access(self):
+        # Request products without logging in
+        response = self.client.get(reverse("get_user_products", args=["seller1"]))
+        
+        # Assert redirection to the login page
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(response.url.startswith(reverse("login")))
 

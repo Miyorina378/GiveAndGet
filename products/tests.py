@@ -337,7 +337,7 @@ class AddReportViewTest(TestCase):
         # ตรวจสอบว่าแสดงข้อความผิดพลาดหรือไม่
         self.assertContains(response, "ERROR: Reported user with username 'non_existent_user' does not exist.")
 
-    
+
 
    
 
