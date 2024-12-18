@@ -55,6 +55,7 @@ def delete_product(request, product_id):
     product.delete()
     return redirect('product_list')  # กลับไปที่หน้ารายการสินค้า
 
+@login_required
 def product_detail(request, product_id):
     product = get_object_or_404(Product, id=product_id)
     return render(request, 'products/product_detail.html', {
