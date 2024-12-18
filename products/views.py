@@ -106,9 +106,8 @@ def add_report(request):
         # Redirect back to the referring page or a default page
         return redirect(request.META.get('HTTP_REFERER', 'products:product_list'))
 
-    # If the request method is not POST, return an error
-
-
+    # For GET requests, return a form or redirect to the main page
+    return redirect('products:product_list')
 
 
 
