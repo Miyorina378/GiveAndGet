@@ -46,12 +46,7 @@ GiveAndGet is a web application for buy, sell or trade anything you wanted.
   
   2.[Link to Presentation iteration 2](https://drive.google.com/file/d/1tsTijRL4pDEgJSKYNHon-0-Ms0UpKgNV/view?usp=sharing)
 
-# Iteration 3
-## Task
-  1.ส่งRequirement report (PDF)
-  * [Link to Progress report (PDF)]()
-
-# Project Final Report
+# Project Final Report (Iteration 3)
 ## Task
   1.ส่งFinal Report (PDF)
   * [Link to final report (PDF)]()
