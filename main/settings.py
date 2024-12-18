@@ -23,9 +23,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure-l7)bwz9#u9$@ql(g)xb+ri215b3p!9cx#5%&=)j#)jwty$d5-="
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ["miyorina.pythonanywhere.com"]
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -161,3 +161,4 @@ LOGOUT_REDIRECT_URL = "/"
 LOGIN_URL = "login"
 
 AUTH_USER_MODEL = "users_app.GGUser"
+
