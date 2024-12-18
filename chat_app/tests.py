@@ -8,7 +8,7 @@ from channels.testing import WebsocketCommunicator
 from django.contrib.auth.models import AnonymousUser
 from asgiref.sync import sync_to_async
 from users_app.models import GGUser
-from main.asgi import application  
+from main.asgi import application 
 
 
 class ChatModelTest(TestCase):
@@ -139,15 +139,6 @@ class ChatConsumerTestCase(TestCase):
         self.assertTrue(connected)
 
         await communicator.disconnect()
-
-
-from django.test import TestCase, Client
-from django.contrib.auth import get_user_model
-from django.urls import reverse
-from products.models import Product
-
-User = get_user_model()
-
 
 class GetUserProductsViewTestCase(TestCase):
     def setUp(self):
