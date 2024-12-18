@@ -25,6 +25,7 @@ urlpatterns = [
     path('chat/', include('chat_app.urls')),
     path('admin/', admin.site.urls),
     path('products/', include('products.urls')),
+    path('orders/', include('orders.urls')),
 ]
 
 # Serve media files in development mode

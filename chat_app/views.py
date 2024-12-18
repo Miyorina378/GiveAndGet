@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
 from django.contrib import messages
-from .models import Chat, TradeRequest
+from .models import Chat
 from products.models import Product
 from django.db.models import Q, Count
 from django.http import JsonResponse
@@ -97,52 +97,4 @@ def get_user_products(request, room_name):
         return JsonResponse({"success": True, "products": product_data})
     else:
         return JsonResponse({"success": False, "message": "No products available for this user."})
-
-
-from django.contrib.auth import get_user_model
-from django.shortcuts import get_object_or_404, redirect
-from django.contrib import messages
-from django.http import JsonResponse, HttpResponse
-from .models import TradeRequest, Product
-
-
-@login_required
-def send_trade_request(request):
-    if request.method == "POST":
-        # ดึงข้อมูลจากฟอร์ม
-        product = request.POST.get("product")
-        payment_method = request.POST.get("payment_method")
-        location = request.POST.get("location", None)
-        seller = request.POST.get("seller")  # รับค่า username ของ seller จาก hidden input
-        print(f"Seller username: {seller}")  # Debug
-        
-        try:
-            seller = User.objects.get(username=seller)
-        except User.DoesNotExist:
-            return HttpResponse(f"ERROR: Reported user with username '{seller}' does not exist.")
-
-
-        # สร้างคำขอแลกเปลี่ยน
-        trade_request = TradeRequest(
-            buyer=request.user,  # ผู้ส่งคำขอ
-            seller=seller,       # ผู้ขาย (instance ของ User)
-            product=product,
-            payment_method=payment_method,
-            location=location,
-            status="pending",  # สถานะเริ่มต้นเป็น pending
-        )
-        trade_request.save()
-
-        # ส่งการแจ้งเตือนไปยังผู้ขาย
-        #notify_seller(seller, f"คุณมีคำขอแลกเปลี่ยนใหม่สำหรับ {product.name}!")
- 
-        # แสดงข้อความสำเร็จ
-        messages.success(request, f"คำขอแลกเปลี่ยนสำหรับ {product.name} ถูกส่งเรียบร้อยแล้ว!")
-
-        # Redirect กลับไปที่หน้าก่อนหน้า
-        referer_url = request.META.get('HTTP_REFERER', '/')
-        return redirect(f"{referer_url}?trade_request_sent=true")
-
-    return JsonResponse({"success": False, "message": "Invalid request."})
-
 

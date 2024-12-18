@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meeting Point Details</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h2>Meeting Point Details</h2>
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">{{ meeting_point.product_name }}</h5>
+                <p><strong>Seller's Name:</strong> {{ meeting_point.seller_name }}</p>  <!-- แสดงชื่อผู้ขาย -->
+                <p><strong>Payment Method:</strong> {{ meeting_point.payment_method }}</p>
+                <p><strong>Pickup Location:</strong> {{ meeting_point.pickup_location }}</p>
+                <p><strong>Meeting Date:</strong> {{ meeting_point.meeting_date }}</p>
+                <p><strong>Meeting Time:</strong> {{ meeting_point.meeting_time }}</p>
+                <a href="{% url 'meeting_point_list' %}" class="btn btn-primary">Back to List</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

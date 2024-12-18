@@ -79,17 +79,13 @@
           {% endif %}" style="border-radius: 30%; height: 50px; width: auto;" />
         <!-- ชื่อห้องแชท -->
         <h3 class="display-5 mb-0 pl-2">{{ room_name }}</h3>
-
         <!-- ปุ่มและช่องค้นหา -->
         <div class="ml-auto d-flex align-items-center">
           <!-- ปุ่มคำขอแลกเปลี่ยน -->
-          <button type="button" id="tradeButton" class="btn btn-success mr-2">
-            Send Trade Request
-          </button>
+          <a href="{% url 'add_meeting_point' %}" class="btn btn-success">Add Meeting Point</a>
           <!-- ช่องค้นหา -->
           <div class="form-group mb-0">
-            <input type="text" name="search" id="searchInput" class="form-control rounded"
-              placeholder="Search messages..." value="{{ search_query }}" style="border-radius: 20px; width: 250px;" />
+            
           </div>
         </div>
       </div>
@@ -122,63 +118,7 @@
   </div>
 </div>
 
-<!-- Trade Modal -->
-<div class="modal fade" id="tradeModal" tabindex="-1" aria-labelledby="tradeModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-      <div class="modal-content">
-          <form id="tradeForm" method="post" action="{% url 'send_trade_request' %}">
-              {% csrf_token %}
-              <div class="modal-header">
-                  <h5 class="modal-title" id="tradeModalLabel">ตกลงซื้อขาย</h5>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-              </div>
-              <div class="modal-body">
-                  <!-- Product Selection -->
-                  <div class="form-group mb-3">
-                      <label for="productSelect">เลือกสินค้าที่ต้องการ:</label>
-                      <select id="productSelect" name="product_id" class="form-control" required>
-                          <option value="">-- กรุณาเลือกสินค้า --</option>
-                          {% for product in products %}
-                              <option value="{{ product.id }}">{{ product.name }}</option>
-                          {% endfor %}
-                      </select>
-                  </div>
-
-                  <!-- Payment Method Selection -->
-                  <div class="form-group mb-3">
-                      <label for="paymentMethod">เลือกวิธีชำระเงิน:</label>
-                      <select id="paymentMethod" name="payment_method" class="form-control" required>
-                          <option value="money">จ่ายด้วยเงิน</option>
-                          <option value="items">แลกเปลี่ยนด้วยของ</option>
-                      </select>
-                  </div>
-                  <div class="form-group mb-3" id="exchangeItemInput" style="display: none;">
-                      <label for="exchangeItem">สิ่งที่ต้องการแลก:</label>
-                      <input type="text" id="exchangeItem" name="exchange_item" class="form-control" placeholder="ใส่สิ่งที่คุณต้องการแลก" />
-                  </div>
-                  <div class="form-group mb-3">
-                      <label for="location">พิกัดสถานที่:</label>
-                      <input type="text" id="location" name="location" class="form-control" placeholder="ใส่พิกัดที่อยู่สำหรับการแลกเปลี่ยน" required />
-                  </div>
-                  <div class="form-group mb-3">
-                      <label for="appointmentDate">วันนัดรับ:</label>
-                      <input type="date" id="appointmentDate" name="appointment_date" class="form-control" required />
-                  </div>
-                  <div class="form-group mb-3">
-                      <label for="appointmentTime">เวลานัดรับ:</label>
-                      <input type="time" id="appointmentTime" name="appointment_time" class="form-control" required />
-                  </div>
-                  <input type="hidden" name="seller" value="{{ product.user.username }}">
-              </div>
-              <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ยกเลิก</button>
-                  <button type="submit" class="btn btn-primary">ยืนยัน</button>
-              </div>
-          </form>
-      </div>
-  </div>
-</div>
-
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 {{ slug|json_script:"room_slug" }}
 
 <script>
@@ -282,113 +222,6 @@
       badge.parentElement.removeChild(badge);  // Remove badge when user enters the chat
     });
   }
-
-  // Show modal
-  tradeButton.addEventListener("click", () => {
-    backdrop.style.display = "block";
-    tradeModal.style.display = "block";
-  });
-
-  // Hide modal
-  const closeModal = () => {
-    backdrop.style.display = "none";
-    tradeModal.style.display = "none";
-  };
-
-  backdrop.addEventListener("click", closeModal);
-  cancelTrade.addEventListener("click", closeModal);
-
-  document.getElementById('paymentMethod').addEventListener('change', function () {
-    var exchangeItemInput = document.getElementById('exchangeItemInput');
-    if (this.value === 'items') {
-      exchangeItemInput.style.display = 'block';  // แสดงฟิลด์สิ่งที่ต้องการแลก
-    } else {
-      exchangeItemInput.style.display = 'none';   // ซ่อนฟิลด์สิ่งที่ต้องการแลก
-    }
-  });
-
-  // Fetch the user's products when the modal opens
-  document.addEventListener("DOMContentLoaded", function () {
-    // Function to fetch and populate the product select dropdown
-    fetch("/get-user-products/", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        const productSelect = document.getElementById("productSelect");
-        productSelect.innerHTML = ""; // Clear existing options
-
-        // If products are found, create options for the select dropdown
-        if (data.success && data.products.length > 0) {
-          data.products.forEach((product) => {
-            const option = document.createElement("option");
-            option.value = product.id;
-            option.textContent = `${product.name} - ฿${product.price}`;
-            productSelect.appendChild(option);
-          });
-        } else {
-          // If no products, show a message
-          const option = document.createElement("option");
-          option.value = "";
-          option.textContent = "ไม่มีสินค้าสำหรับผู้ใช้นี้";
-          productSelect.appendChild(option);
-        }
-      })
-      .catch((error) => console.error("Error fetching products:", error));
-  });
-
-  // Confirm trade and submit the trade request
-  document.getElementById("confirmTrade").addEventListener("click", function () {
-    const productId = document.getElementById("productSelect").value; // Get selected product ID
-    const paymentMethod = document.getElementById("paymentMethod").value;
-    const location = document.getElementById("location").value;
-
-    // Make sure all fields are filled
-    if (!productId || !paymentMethod) {
-      alert("กรุณากรอกข้อมูลให้ครบถ้วน");
-      return;
-    }
-
-    // Send the trade request via AJAX
-    fetch("/submit-trade-request/", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "X-CSRFToken": getCookie("csrftoken"), // Ensure CSRF token is included
-      },
-      body: JSON.stringify({
-        product_id: productId,
-        payment_method: paymentMethod,
-        location: location,
-      }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.success) {
-          alert("คำขอแลกเปลี่ยนถูกส่งแล้ว!");
-          location.reload(); // Reload the page if necessary
-        } else {
-          alert("เกิดข้อผิดพลาด: " + data.message);
-        }
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-        alert("เกิดข้อผิดพลาดในการส่งคำขอ");
-      });
-  });
-
-  // CSRF Token Helper (to get the CSRF token from cookies)
-  function getCookie(name) {
-    const cookieValue = document.cookie
-      .split("; ")
-      .find((row) => row.startsWith(name + "="))
-      ?.split("=")[1];
-    return cookieValue || "";
-  }
-
 
 </script>
 
