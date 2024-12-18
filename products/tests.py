@@ -8,6 +8,9 @@ import os
 from django.urls import reverse
 from .models import Product
 from PIL import Image
+from users_app.models import Report
+import time
+
 
 User = get_user_model()
 
@@ -302,42 +305,37 @@ class ProductEditViewTest(TestCase):
         self.assertTemplateUsed(response, 'products/add_product.html')
         self.assertIn('form', response.context)
         self.assertTrue(response.context['form'].errors)
-from django.test import TestCase
-from django.urls import reverse
-from django.contrib.auth import get_user_model
-from users_app.models import Report
 
-User = get_user_model()
+from users_app.models import Report  
 
-class AddReportViewTest(TestCase):
+class AddReportViewTestCase(TestCase):
     def setUp(self):
-        # สร้างผู้ใช้ที่ใช้ทดสอบ
-        self.reporter = User.objects.create_user(username='reporter', password='password')
-        self.reported_user = User.objects.create_user(username='reported_user', password='password')
+        self.reporter = User.objects.create_user(username="reporter", password="password123")
+        self.reported_user = User.objects.create_user(username="reported", password="password123")
+        self.add_report_url = reverse("add_report")  # Ensure your URL name matches
+        self.client.login(username="reporter", password="password123")
 
-
-
-
-
-        # ตรวจสอบว่า redirect ไปยังหน้าที่ต้องการหรือไม่
-
-    def test_add_report_user_does_not_exist(self):
-        # เข้าสู่ระบบในฐานะผู้รายงาน
-        self.client.login(username='reporter', password='password')
-
-        # ส่ง POST request โดยใช้ username ของผู้ใช้ที่ไม่อยู่ในระบบ
+    def test_add_report_success(self):
         data = {
-            'reported_user_username': 'non_existent_user',
-            'reason': 'Violation of terms',
-            'description': 'The user was abusive in chat.',
+            "reported_user_username": self.reported_user.username,
+            "reason": "Inappropriate behavior",
+            "description": "This user posted offensive content."
         }
+        self.assertFalse(Report.objects.filter(reporter=self.reporter, reported_user=self.reported_user).exists())
 
-        response = self.client.post(reverse('add_report'), data)
+    def test_add_report_invalid_user(self):
+        data = {
+            "reported_user_username": "nonexistent_user",
+            "reason": "Spam",
+            "description": "This user does not exist."
+        }
+        response = self.client.post(self.add_report_url, data)
+        self.assertContains(response, "ERROR: Reported user with username 'nonexistent_user' does not exist.")
 
-        # ตรวจสอบว่าแสดงข้อความผิดพลาดหรือไม่
-        self.assertContains(response, "ERROR: Reported user with username 'non_existent_user' does not exist.")
+    
 
 
+    
 
    
 
