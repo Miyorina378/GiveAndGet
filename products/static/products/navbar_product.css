@@ -131,11 +131,11 @@
 }
 
 .btn {
-    background-color: transparent;
+    background-color: #D8737F;
     /* ทำให้โปร่งใส */
-    border: 2px solid #f01d1d;
+    border: none;
     /* ขอบปุ่มสีขาว */
-    color: #000000;
+    color: #ffffff;
     /* สีตัวอักษร */
     border-radius: 20px;
     /* ขอบมน */
@@ -147,7 +147,7 @@
 }
 
 .btn:hover {
-    background-color: #00bfff;
+    background-color: #995159;
     /* สีพื้นหลังเมื่อ Hover */
     color: #ffffff;
     /* สีตัวอักษรเมื่อ Hover */
@@ -188,6 +188,7 @@
 
 .btn-outline-danger {
     margin: auto;
+    background-color: transparent !important;
     border: 2px solid #ff4d4d;
     /* สีแดงสำหรับ Logout */
     color: #ff4d4d;

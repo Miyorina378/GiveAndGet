@@ -5,6 +5,16 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+
+main {
+    flex: 1;
+    /* ให้เนื้อหาขยายได้เต็มพื้นที่ */
+    height: auto;
 }
 
 /* Navbar */
@@ -29,7 +39,7 @@ body {
 .nav-link {
     margin-right: 10px;
     text-decoration: none;
-    color: #fff;
+    color: #fff !important;
     font-weight: bold;
     transition: color 0.3s ease, text-shadow 0.3s ease;
     /* เพิ่มการเปลี่ยนแปลงสีแบบ Smooth */
@@ -143,9 +153,9 @@ body {
 .btn {
     background-color: transparent;
     /* ทำให้โปร่งใส */
-    border: 2px solid #f01d1d;
+    border: 2px solid #D8737F;
     /* ขอบปุ่มสีขาว */
-    color: #000000;
+    color: #ffffff;
     /* สีตัวอักษร */
     border-radius: 20px;
     /* ขอบมน */
@@ -157,12 +167,13 @@ body {
 }
 
 .btn:hover {
-    background-color: #00bfff;
+    background-color: #D8737F;
     /* สีพื้นหลังเมื่อ Hover */
     color: #ffffff;
     /* สีตัวอักษรเมื่อ Hover */
     transform: translateY(-2px);
     /* ยกขึ้นเล็กน้อย */
+    border-color: #D8737F;
 }
 
 .btn-outline-light {
@@ -211,6 +222,18 @@ body {
     /* สีแดงพื้นหลังเมื่อ Hover */
     color: #ffffff;
     /* ตัวอักษรสีขาว */
+}
+
+.btn-cancel {
+    background-color: #D8737F;
+}
+
+.btn-save {
+    background-color: #D8737F;
+}
+
+.btn-meeting {
+    background-color: #D8737F;
 }
 
 button {
@@ -598,7 +621,6 @@ header h1 {
 /* footer */
 footer {
     background-color: #141414;
-    position: fixed; /* หรือ absolute ถ้าไม่ต้องการให้ตายตัว */
     bottom: 0;
     width: 100%;
 }
@@ -789,75 +811,6 @@ footer {
     justify-content: space-between;
     /* จัดให้เนื้อหาห่างกัน */
 }
-
-/*.info-box {
-    background-color: black;
-    width: 500px;
-    margin: 20px auto;
-    border: 2px solid #007BFF;
-    border-radius: 10px;
-    padding: 20px;
-}
-
-.info-box-header h3 {
-    text-align: center;
-    border-bottom: 2px solid #007BFF;
-    padding-bottom: 10px;
-}
-
-.info-box-container {
-    display: flex;
-    justify-content: space-around;
-    align-items: flex-start;
-    margin-top: 20px;
-}
-
-.profile-section {
-    text-align: center;
-}
-
-.profile-section img.profile-pic {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    cursor: pointer;
-}
-
-.details-section {
-    text-align: left;
-}
-
-.detail-item {
-    margin-bottom: 10px;
-    display: flex;
-    flex-direction: column;
-    /* Stack items vertically */
-/*align-items: flex-start;
-    /* Align items to the start of the box */
-/*gap: 5px;
-    /* Space between the items */
-/*padding: 10px;
-    /* Optional: adds padding inside the box */
-/*box-sizing: border-box;
-}
-
-.detail-item span:first-child {
-    font-weight: bold;
-}
-
-.edit-btn {
-    background-color: #ff4c4c;
-    color: white;
-    border-radius: 5px;
-    margin-left: 150px;
-    margin-top: 10px;
-    font-size: 1rem;
-    float: right;
-}
-
-.edit-btn:hover {
-    background-color: #ff3333;
-}*/
 
 .product-card {
     background-color: #fff;

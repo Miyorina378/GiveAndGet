@@ -4,6 +4,10 @@
 {% block content %}
 {% load static %}
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+
 <link rel="stylesheet" href="{% static 'chat_app/chat_app.css' %}">
 
 <div class="container-fluid h-100">
@@ -82,7 +86,7 @@
         <!-- ปุ่มและช่องค้นหา -->
         <div class="ml-auto d-flex align-items-center">
           <!-- ปุ่มคำขอแลกเปลี่ยน -->
-          <a href="{% url 'add_meeting_point' %}" class="btn btn-success">Add Meeting Point</a>
+          <a href="{% url 'add_meeting_point' %}" class="btn-meeting btn btn-success">Add Meeting Point</a>
           <!-- ช่องค้นหา -->
           <div class="form-group mb-0">
             
@@ -117,6 +121,7 @@
     </div>
   </div>
 </div>
+
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 {{ slug|json_script:"room_slug" }}
